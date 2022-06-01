@@ -25,6 +25,7 @@ private:
 	// This will check if the dialogue is already displayed on the screen.
 	bool m_bIsDialogueDisplayed;
 
+	// The rich text block component that will display the text.
 	UPROPERTY( meta = ( BindWidget ) )
 		URichTextBlock* DialogueText;
 
