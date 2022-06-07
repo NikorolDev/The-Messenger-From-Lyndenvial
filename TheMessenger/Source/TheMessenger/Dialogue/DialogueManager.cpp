@@ -72,7 +72,7 @@ void ADialogueManager::Tick(float DeltaTime)
 
 }
 
-void ADialogueManager::InitialiseDialogueSequence( const FString& rsDialogueID )
+void ADialogueManager::InitialiseDialogueSequence( const FName& rsDialogueID )
 {
 	UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::InitialiseDialogueSequence L.75] INITIALISING DIALOGUE SEQEUNCE" ) );
 

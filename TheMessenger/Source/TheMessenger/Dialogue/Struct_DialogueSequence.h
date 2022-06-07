@@ -14,6 +14,10 @@ struct FStructDialogueSequence
 {
 	GENERATED_BODY()
 
+	// Whether the dialogue needs a choice to contine with the dialogue or completely finishes.
+	UPROPERTY( EditAnywhere, BlueprintReadOnly, meta = ( DisplayName = "IsChoiceRequired" ) )
+		bool bIsChoiceRequired;
+
 	// The dialogue sequence that will displayed on the screen.
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
 		TArray<struct FStructDialogueProperties> DialogueSequence;

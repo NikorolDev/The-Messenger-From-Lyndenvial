@@ -57,7 +57,7 @@ private:
 
 	// This dialogue table will hold the dialogue in the level
 	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Dialogue Table" ) )
-		TMap<FString, FStructDialogueSequence> m_tmDialogueTable;
+		TMap<FName, FStructDialogueSequence> m_tmDialogueTable;
 
 	// This is a sub class of the desired widget to be used to display dialogue.
 	// MAKE SURE TO USE THE BPW_DIALOGUEWIDGETHUD.
@@ -104,5 +104,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION( Category = Dialogue, BlueprintCallable )
-		void InitialiseDialogueSequence( const FString& rsDialogueID );
+		void InitialiseDialogueSequence( const FName& rsDialogueID );
 };
