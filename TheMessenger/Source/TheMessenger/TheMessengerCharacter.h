@@ -18,6 +18,15 @@ class ATheMessengerCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+private:
+	AActor* FocusedActor;
+
+	UPROPERTY( Category = "Line Trace", EditInstanceOnly, meta = ( DisplayName = "Line Trace Distance" ) )
+		float m_fLineTraceDistance;
+
+	void TraceForward();
+
 public:
 	ATheMessengerCharacter();
 
@@ -28,6 +37,9 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
+
+	// Called every frame
+	virtual void Tick( float DeltaTime ) override;
 
 protected:
 

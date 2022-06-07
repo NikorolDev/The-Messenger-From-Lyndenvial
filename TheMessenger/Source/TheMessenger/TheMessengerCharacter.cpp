@@ -8,12 +8,73 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include <DrawDebugHelpers.h>
+#include "TheMessenger/Interactable/InteractableInterface.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ATheMessengerCharacter
 
-ATheMessengerCharacter::ATheMessengerCharacter()
+void ATheMessengerCharacter::TraceForward()
 {
+	FHitResult OutHit;
+	FVector v3StartPosition = FollowCamera->GetComponentLocation();
+	FVector v3Forward = FollowCamera->GetForwardVector();
+	FVector v3EndPosition = v3StartPosition + ( v3Forward * m_fLineTraceDistance );
+
+	FCollisionQueryParams CollisionParams;
+	//CollisionParams.AddIgnoredActor( this->GetOwner() );
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel( OutHit, v3StartPosition, v3EndPosition, ECC_Visibility, CollisionParams );
+	DrawDebugLine( GetWorld(), v3StartPosition, v3EndPosition, FColor::Green, false, 1.0f );
+
+	if( bHit )
+	{
+		DrawDebugBox( GetWorld(), OutHit.ImpactPoint, FVector( 5, 5, 5 ), FColor::Red, false, 1.0f );
+
+		AActor* Interactable = OutHit.GetActor();
+
+		if( Interactable )
+		{
+			if( Interactable != FocusedActor )
+			{
+				if( FocusedActor )
+				{
+					IInteractableInterface* Interface = Cast<IInteractableInterface>( FocusedActor );
+					if( Interface )
+					{
+						Interface->LostFocus_Implementation();
+					}
+				}
+				IInteractableInterface* Interface = Cast<IInteractableInterface>( Interactable );
+				if( Interface )
+				{
+					Interface->OnFocus_Implementation();
+				}
+				FocusedActor = Interactable;
+			}
+		}
+		else
+		{
+			if( FocusedActor )
+			{
+				IInteractableInterface* Interface = Cast<IInteractableInterface>( FocusedActor );
+				if( Interface )
+				{
+					Interface->LostFocus_Implementation();
+				}
+			}
+			FocusedActor = nullptr;
+		}
+	}
+
+}
+
+ATheMessengerCharacter::ATheMessengerCharacter()
+	:m_fLineTraceDistance (100.0f)
+{
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -76,6 +137,11 @@ void ATheMessengerCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ATheMessengerCharacter::OnResetVR);
 }
 
+
+void ATheMessengerCharacter::Tick( float DeltaTime )
+{
+	TraceForward();
+}
 
 void ATheMessengerCharacter::OnResetVR()
 {

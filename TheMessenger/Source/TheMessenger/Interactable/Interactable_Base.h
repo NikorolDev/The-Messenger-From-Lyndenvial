@@ -36,8 +36,8 @@ public:
 	// Parameters			: Caller - The actor who called the function
 	// Purpose				: Signature of the function which allows an interaction with another actor
 	//-----------------------------------------------------------------------------------------------------------------------------
-	UFUNCTION( Category = "Interaction", BlueprintNativeEvent, BlueprintCallable )
-		void OnInteract( AActor* Caller );
+	//UFUNCTION( Category = "Interaction", BlueprintNativeEvent, BlueprintCallable )
+	//	void OnInteract( AActor* Caller );
 	virtual void OnInteract_Implementation( AActor* Caller ) override;
 
 	//-----------------------------------------------------------------------------------------------------------------------------
@@ -45,8 +45,8 @@ public:
 	// Author				: Nikodem Hamrol
 	// Purpose				: Signature of the function which allows the actor to be focused
 	//-----------------------------------------------------------------------------------------------------------------------------
-	UFUNCTION( Category = "Interaction", BlueprintNativeEvent, BlueprintCallable )
-		void OnFocus();
+	//UFUNCTION( Category = "Interaction", BlueprintNativeEvent, BlueprintCallable )
+	//	void OnFocus();
 	virtual void OnFocus_Implementation() override;
 
 	//-----------------------------------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ public:
 	// Author				: Nikodem Hamrol
 	// Purpose				: Signature of the function which allows an interaction with another actor
 	//-----------------------------------------------------------------------------------------------------------------------------
-	UFUNCTION( Category = "Interaction", BlueprintNativeEvent, BlueprintCallable )
-		void LostFocus();
+	//UFUNCTION( Category = "Interaction", BlueprintNativeEvent, BlueprintCallable )
+	//	void LostFocus();
 	virtual void LostFocus_Implementation() override;
 };
