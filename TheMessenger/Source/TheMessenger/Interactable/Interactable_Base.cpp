@@ -3,13 +3,16 @@
 
 #include "Interactable_Base.h"
 
+#include <Kismet/GameplayStatics.h>
+
 #include "TheMessenger/Dialogue/DialogueManager.h"
 
 // Sets default values
 AInteractable_Base::AInteractable_Base()
+	: m_nDialogueID( "" )
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -18,6 +21,18 @@ void AInteractable_Base::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Get the dialogue manager that is in the level.
+	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
+
+	// Check if the dialogue manager was retrieved, which otherwise will print an error log
+	if( !m_pcDialogueManager )
+	{
+		// Log that the dialogue manager is missing.
+		UE_LOG( LogTemp, Error,
+			TEXT( "MISSING DIALOGUE MANAGER IN THE LEVEL | DIALOGUE WILL NOT INITIALISE | ADD DIALOGUE MANAGER TO THE LEVEL UNDER 'C++CLASSES/RADIANCE/DIALOGUE" ) );
+		GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red,
+			TEXT( "MISSING DIALOGUE MANAGER IN THE LEVEL | DIALOGUE WILL NOT INITIALISE | ADD DIALOGUE MANAGER TO THE LEVEL UNDER 'C++CLASSES/RADIANCE/DIALOGUE" ) );
+	}
 }
 
 // Called every frame
@@ -31,6 +46,8 @@ void AInteractable_Base::OnInteract_Implementation( AActor* Caller )
 {
 	GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Green,
 		TEXT( "Interacted" ) );
+
+	m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
 }
 
 void AInteractable_Base::OnFocus_Implementation()

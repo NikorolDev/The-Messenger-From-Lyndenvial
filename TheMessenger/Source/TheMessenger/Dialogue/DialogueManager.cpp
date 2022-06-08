@@ -63,7 +63,7 @@ void ADialogueManager::BeginPlay()
 			TEXT( "[ADialogueManager::InitialiseDialogueSequence L.52] DIALOGUE WIDGET FAILED TO BE CREATED AND ADDED TO VIEWPORT" ) );
 	}
 
-	InitialiseDialogueSequence( "Test" );
+	//InitialiseDialogueSequence( "Test" );
 }
 
 void ADialogueManager::Tick(float DeltaTime)
@@ -74,36 +74,40 @@ void ADialogueManager::Tick(float DeltaTime)
 
 void ADialogueManager::InitialiseDialogueSequence( const FName& rsDialogueID )
 {
-	UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::InitialiseDialogueSequence L.75] INITIALISING DIALOGUE SEQEUNCE" ) );
-
-	// Reset the dialogue ID to 0 to get the first dialogue term in the sequence.
-	// Reset the dialogue term duration to 0 and find the correct dialogue in the table.
-	m_iDialogueID = 0;
-	m_fDialogueTermTime = 0.0f;
-	m_pfsDialogueSequence = m_tmDialogueTable.Find( rsDialogueID );
-
-	// Check if the dialogue sequence was found
-	if( m_pfsDialogueSequence )
+	// First check if the dialogue is not initialised
+	if( !m_bIsDialogueSequenceInitialised )
 	{
-		// As the dialogue sequence was found, set the max number of dialogue terms in the sequence to check if the whole sequence
-		// is complete.
-		m_iNumberOfDialogueTerms = m_pfsDialogueSequence->DialogueSequence.Num();
+		UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::InitialiseDialogueSequence L.75] INITIALISING DIALOGUE SEQEUNCE" ) );
 
-		// The dialogue seuqnce is now initialised.
-		m_bIsDialogueSequenceInitialised = true;
+		// Reset the dialogue ID to 0 to get the first dialogue term in the sequence.
+		// Reset the dialogue term duration to 0 and find the correct dialogue in the table.
+		m_iDialogueID = 0;
+		m_fDialogueTermTime = 0.0f;
+		m_pfsDialogueSequence = m_tmDialogueTable.Find( rsDialogueID );
 
-		UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::InitialiseDialogueSequence L.93] DIALOGUE SEQUENCE FOUND AND INITIALISED WITH %d TERMS IN THE SEQUENCE" ), m_iNumberOfDialogueTerms );
+		// Check if the dialogue sequence was found
+		if( m_pfsDialogueSequence )
+		{
+			// As the dialogue sequence was found, set the max number of dialogue terms in the sequence to check if the whole sequence
+			// is complete.
+			m_iNumberOfDialogueTerms = m_pfsDialogueSequence->DialogueSequence.Num();
 
-		// Now set the dialogue term to play it.
-		SetDialogueTerm();
-	}
-	else // If it was not found
-	{
-		// Print a message onto the screen and on the output log if the dialogue sequence could not be found.
-		UE_LOG( LogTemp, Warning,
-			TEXT( "NO DIALOGUE FOUND | NONE MATCHING DATA ON THE TRIGGER VOLUME OR DIALOGUE MANAGER | POTENTIAL TYPO IN THE IDS" ) );
-		GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red,
-			TEXT( "NO DIALOGUE FOUND | NONE MATCHING DATA ON THE TRIGGER VOLUME OR DIALOGUE MANAGER | POTENTIAL TYPO IN THE IDS" ) );
+			// The dialogue seuqnce is now initialised.
+			m_bIsDialogueSequenceInitialised = true;
+
+			UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::InitialiseDialogueSequence L.93] DIALOGUE SEQUENCE FOUND AND INITIALISED WITH %d TERMS IN THE SEQUENCE" ), m_iNumberOfDialogueTerms );
+
+			// Now set the dialogue term to play it.
+			SetDialogueTerm();
+		}
+		else // If it was not found
+		{
+			// Print a message onto the screen and on the output log if the dialogue sequence could not be found.
+			UE_LOG( LogTemp, Warning,
+				TEXT( "NO DIALOGUE FOUND | NONE MATCHING DATA ON THE TRIGGER VOLUME OR DIALOGUE MANAGER | POTENTIAL TYPO IN THE IDS" ) );
+			GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red,
+				TEXT( "NO DIALOGUE FOUND | NONE MATCHING DATA ON THE TRIGGER VOLUME OR DIALOGUE MANAGER | POTENTIAL TYPO IN THE IDS" ) );
+		}
 	}
 }
 

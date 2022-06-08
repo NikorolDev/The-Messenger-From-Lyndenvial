@@ -66,11 +66,22 @@ void ATheMessengerCharacter::TraceForward()
 			FocusedActor = nullptr;
 		}
 	}
+}
 
+void ATheMessengerCharacter::OnInteractPressed()
+{
+	if( FocusedActor )
+	{
+		IInteractableInterface* Interface = Cast<IInteractableInterface>( FocusedActor );
+		if( Interface )
+		{
+			Interface->OnInteract_Implementation( FocusedActor );
+		}
+	}
 }
 
 ATheMessengerCharacter::ATheMessengerCharacter()
-	:m_fLineTraceDistance (100.0f)
+	:m_fLineTraceDistance (2000.0f)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -117,6 +128,8 @@ void ATheMessengerCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction( "Interact", IE_Pressed, this, &ATheMessengerCharacter::OnInteractPressed );
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATheMessengerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATheMessengerCharacter::MoveRight);

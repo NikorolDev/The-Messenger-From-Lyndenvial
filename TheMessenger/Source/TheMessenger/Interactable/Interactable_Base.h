@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InteractableInterface.h"
+#include "TheMessenger/Choice/Struct_Choice.h"
 #include "Interactable_Base.generated.h"
 
 class ADialogueManager;
@@ -15,9 +16,13 @@ class THEMESSENGER_API AInteractable_Base : public AActor, public IInteractableI
 	GENERATED_BODY()
 	
 private:
+	ADialogueManager* m_pcDialogueManager;
 
-	UPROPERTY( EditInstanceOnly, meta = ( DisplayName = "Dialogue Manager" ) )
-		ADialogueManager* m_pcDialogueManager;
+	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ) )
+		FName m_nDialogueID;
+
+	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Choices" ) )
+		TMap<FName, FStructChoiceBranches> m_pfsChoices;
 
 protected:
 	// Called when the game starts or when spawned

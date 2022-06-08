@@ -27,6 +27,8 @@ private:
 
 	void TraceForward();
 
+	void OnInteractPressed();
+
 public:
 	ATheMessengerCharacter();
 
