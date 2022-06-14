@@ -14,6 +14,10 @@ class UBillboardComponent;
 // Forward class Declarations (Game)
 class UDialogueWidgetHUD;
 
+// Delegates
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FDialogueUpdatedSignature, FName, Name );
+
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // Class Name			: ADialogueManager
 // Author				: Nikodem Hamrol
@@ -99,6 +103,10 @@ public:
 	// Notes			: Sets up the components and default values.
 	//----------------------------------------------------------------------------------------------------------------------------
 	ADialogueManager();
+
+	UPROPERTY( BlueprintAssignable, BlueprintCallable )
+	FDialogueUpdatedSignature DialogueUpdate;
+
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

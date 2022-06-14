@@ -8,6 +8,7 @@
 #include "TheMessenger/Choice/Struct_Choice.h"
 #include "Interactable_Base.generated.h"
 
+class AChoiceManager;
 class ADialogueManager;
 
 UCLASS()
@@ -16,6 +17,8 @@ class THEMESSENGER_API AInteractable_Base : public AActor, public IInteractableI
 	GENERATED_BODY()
 	
 private:
+	AChoiceManager* m_pcChoiceManager;
+
 	ADialogueManager* m_pcDialogueManager;
 
 	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ) )

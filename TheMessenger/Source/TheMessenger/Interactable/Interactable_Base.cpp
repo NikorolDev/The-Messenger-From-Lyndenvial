@@ -5,6 +5,7 @@
 
 #include <Kismet/GameplayStatics.h>
 
+#include "TheMessenger/Choice/ChoiceManager.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
 
 // Sets default values
@@ -21,6 +22,9 @@ void AInteractable_Base::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	m_pcChoiceManager = Cast<AChoiceManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AChoiceManager::StaticClass() ) );
+
+
 	// Get the dialogue manager that is in the level.
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 
@@ -33,6 +37,8 @@ void AInteractable_Base::BeginPlay()
 		GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red,
 			TEXT( "MISSING DIALOGUE MANAGER IN THE LEVEL | DIALOGUE WILL NOT INITIALISE | ADD DIALOGUE MANAGER TO THE LEVEL UNDER 'C++CLASSES/RADIANCE/DIALOGUE" ) );
 	}
+
+
 }
 
 // Called every frame

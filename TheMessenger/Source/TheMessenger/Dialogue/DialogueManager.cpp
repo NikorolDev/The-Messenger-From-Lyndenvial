@@ -62,8 +62,6 @@ void ADialogueManager::BeginPlay()
 		GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red,
 			TEXT( "[ADialogueManager::InitialiseDialogueSequence L.52] DIALOGUE WIDGET FAILED TO BE CREATED AND ADDED TO VIEWPORT" ) );
 	}
-
-	//InitialiseDialogueSequence( "Test" );
 }
 
 void ADialogueManager::Tick(float DeltaTime)
@@ -178,10 +176,19 @@ void ADialogueManager::SetDialogueTerm()
 	}
 	else // If all dialogue terms were played
 	{
-		// Hide the dialogue widget and now the manager is ready to reintialised next dialogue
-		m_pcDialogueWidgetHUD->HideDialogue();
-		m_bIsDialogueSequenceInitialised = false;
+		if( m_pfsDialogueSequence->bIsChoiceRequired )
+		{
+			DialogueUpdate.Broadcast(m_pfsDialogueSequence->ChoiceID);
+		}
+		else
+		{
+			// Hide the dialogue widget and now the manager is ready to reintialised next dialogue
+			m_pcDialogueWidgetHUD->HideDialogue();
+			m_bIsDialogueSequenceInitialised = false;
+			UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::PlayDialogueTerm L.181] DIALOGUE SEQUENCE FINISHED AND IT'S READY TO BE INITIALISED AGAIN" ) );
+		}
 
-		UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::PlayDialogueTerm L.181] DIALOGUE SEQUENCE FINISHED AND IT'S READY TO BE INITIALISED AGAIN" ) );
+
+
 	}
 }
