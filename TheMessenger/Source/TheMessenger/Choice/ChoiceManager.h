@@ -7,7 +7,11 @@
 #include "Struct_Choice.h"
 #include "ChoiceManager.generated.h"
 
+class UBillboardComponent;
+
 class ADialogueManager;
+class AInteractable_Base;
+class UChoiceSelectionWidget;
 
 UCLASS()
 class THEMESSENGER_API AChoiceManager : public AActor
@@ -15,9 +19,20 @@ class THEMESSENGER_API AChoiceManager : public AActor
 	GENERATED_BODY()
 	
 private:	
-	FStructChoiceBranches* m_fsChoiceBranch;
 
 	ADialogueManager* m_pcDialogueManager;
+
+	AInteractable_Base* m_pcCharacterInteracted;
+
+	FStructChoiceBranches* m_fsChoiceBranch;
+
+	UChoiceSelectionWidget* m_pcChoiceSelectionWidget;
+
+	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Choice Manager Icon" ) )
+		UBillboardComponent* m_pcIconBillboard;
+
+	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Choice Selection Widget" ) )
+		TSubclassOf<UChoiceSelectionWidget> m_tcChoiceSelectionWidget;
 
 	UFUNCTION()
 		void DisplayChoices( FName ChoiceID );
@@ -33,7 +48,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void AddChoices( FStructChoiceBranches* tmChoices );
+	void AddChoices( AInteractable_Base* pcCharacterInteracted );
 
 	void UnloadChoices();
 

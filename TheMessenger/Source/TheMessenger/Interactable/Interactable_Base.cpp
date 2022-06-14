@@ -53,6 +53,7 @@ void AInteractable_Base::OnInteract_Implementation( AActor* Caller )
 	GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Green,
 		TEXT( "Interacted" ) );
 
+	m_pcChoiceManager->AddChoices( this );
 	m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
 }
 
@@ -66,5 +67,11 @@ void AInteractable_Base::LostFocus_Implementation()
 {
 	GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red,
 		TEXT( "Lost Focus" ) );
+}
+
+FStructChoiceBranches* AInteractable_Base::GetChoicesFromID( const FName& ChoiceID )
+{
+	auto test = m_pfsChoices.Find( ChoiceID );
+	return test;
 }
 

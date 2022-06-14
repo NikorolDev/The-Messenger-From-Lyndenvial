@@ -65,4 +65,6 @@ public:
 	//UFUNCTION( Category = "Interaction", BlueprintNativeEvent, BlueprintCallable )
 	//	void LostFocus();
 	virtual void LostFocus_Implementation() override;
+
+	FStructChoiceBranches* GetChoicesFromID( const FName& ChoiceID );
 };
