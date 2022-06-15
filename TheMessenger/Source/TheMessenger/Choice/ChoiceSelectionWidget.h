@@ -10,6 +10,8 @@
 class UChoiceWidget;
 class UVerticalBox;
 
+class ADialogueManager;
+
 /**
  * 
  */
@@ -19,10 +21,16 @@ class THEMESSENGER_API UChoiceSelectionWidget : public UUserWidget
 	GENERATED_BODY()
 	
 private:
+
+	ADialogueManager* m_pcDialogueManager;
+
+	TArray<UChoiceWidget*> m_aChoiceWidgets;
+
 	UPROPERTY( meta = ( BindWidget ) )
 		UVerticalBox* ChoiceBox;
 
-	TArray<UChoiceWidget*> m_aChoiceWidgets;
+	UFUNCTION()
+		void OnChoiceSelected(const FName& rnDialogueID );
 
 protected:
 
@@ -33,4 +41,6 @@ protected:
 
 public:
 	void CreateChoices( FStructChoiceBranches* pfsChoiceBranches );
+
+	void SetDialogueManager(ADialogueManager* pcDialogueManager);
 };

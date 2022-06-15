@@ -6,7 +6,13 @@
 #include <Kismet/GameplayStatics.h>
 
 #include "ChoiceWidget.h"
+#include "TheMessenger/Dialogue/DialogueManager.h"
 #include "TheMessenger/Interactable/Interactable_Base.h"
+
+void UChoiceSelectionWidget::OnChoiceSelected( const FName& rnDialogueID )
+{
+	m_pcDialogueManager->InitialiseDialogueSequence( rnDialogueID );
+}
 
 void UChoiceSelectionWidget::NativeConstruct()
 {
@@ -24,11 +30,17 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 		FStructChoiceProperties& ChoiceProperties = pfsChoiceBranches->ChoiceBranches[ iChoiceBranch ];
 	
 		UChoiceWidget* ChoiceWidget = CreateWidget<UChoiceWidget>( this, m_tcChoiceWidget );
+		ChoiceWidget->ChoiceSelected.AddDynamic( this, &UChoiceSelectionWidget::OnChoiceSelected );
 
-		ChoiceWidget->SetButtonText( iChoiceCount, ChoiceProperties.ChoiceDisplayText );
+		ChoiceWidget->SetButtonText( iChoiceCount, ChoiceProperties.ChoiceDisplayText, ChoiceProperties.DialogueID );
 	
 		ChoiceBox->AddChildToVerticalBox( ChoiceWidget );
 	
 		iChoiceCount++;
 	}
+}
+
+void UChoiceSelectionWidget::SetDialogueManager( ADialogueManager* pcDialogueManager )
+{
+	m_pcDialogueManager = pcDialogueManager;
 }

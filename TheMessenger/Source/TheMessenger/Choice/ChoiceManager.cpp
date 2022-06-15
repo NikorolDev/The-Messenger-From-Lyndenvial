@@ -14,7 +14,7 @@
 AChoiceManager::AChoiceManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Create and setup...
 	// Billboard Component (m_pcIconBillboard).
@@ -33,6 +33,7 @@ void AChoiceManager::BeginPlay()
 	m_pcDialogueManager->DialogueUpdate.AddDynamic( this, &AChoiceManager::DisplayChoices );
 
 	m_pcChoiceSelectionWidget = CreateWidget<UChoiceSelectionWidget>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ), m_tcChoiceSelectionWidget );
+	m_pcChoiceSelectionWidget->SetDialogueManager( m_pcDialogueManager );
 	m_pcChoiceSelectionWidget->AddToViewport();
 
 }

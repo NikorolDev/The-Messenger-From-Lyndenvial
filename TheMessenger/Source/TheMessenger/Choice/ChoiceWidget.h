@@ -10,6 +10,8 @@
 class UButton;
 class URichTextBlock;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FChoiceSelectedSignature, const FName&, ChoiceID );
+
 /**
  * 
  */
@@ -19,11 +21,17 @@ class THEMESSENGER_API UChoiceWidget : public UUserWidget
 	GENERATED_BODY()
 
 private:
+
+	FName* m_pnAssignedChoiceID;
+
 	UPROPERTY( meta = ( BindWidget ) )
 		UButton* ChoiceButton;
 
 	UPROPERTY( meta = ( BindWidget ) )
 		URichTextBlock* ChoiceText;
+
+	UFUNCTION()
+		void OnButtonClicked();
 
 protected:
 	//-----------------------------------------------------------------------------------------------------------------------------
@@ -36,7 +44,11 @@ protected:
 		virtual void NativeConstruct() override;
 
 public:
-	void SetButtonText( int ChoiceCount, const FString& ChoiceDisplayText );
+	
+	UPROPERTY( BlueprintAssignable, BlueprintCallable )
+		FChoiceSelectedSignature ChoiceSelected;
+
+	void SetButtonText( int ChoiceCount, const FString& ChoiceDisplayText, FName& rnDialogueID );
 
 
 };
