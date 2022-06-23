@@ -35,12 +35,16 @@ private:
 	// To check if the dialogue sequence has been initialised.
 	bool m_bIsDialogueSequenceInitialised;
 
-
+	// The term time for the dialogue, which is calculated with the audio length and the desired delay.
 	float m_fDialogueTermTime;
 
 
+	float m_fDialogueAudioDuration;
+
+	// The current ID of the dialogue term.
 	int m_iDialogueID;
 
+	// The maximum of dialogue terms in a sequence.
 	int m_iNumberOfDialogueTerms;
 	
 	// An instance of the dialogue 

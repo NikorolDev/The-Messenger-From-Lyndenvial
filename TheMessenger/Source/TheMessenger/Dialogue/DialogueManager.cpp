@@ -113,14 +113,18 @@ void ADialogueManager::PlayDialogueTerm()
 {
 	UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::PlayDialogueTerm L.112] PLAYING DIALOGUE TERM %d" ), m_iDialogueID );
 
-	// Increment the dialogue ID to set the next one in the term
+	// Increment the dialogue ID to set the next one in the term.
 	m_iDialogueID++;
 
-	// Create a timer handle struct , which will be used to set the timer
+	// Create a timer handle struct , which will be used to set the timer.
 	FTimerHandle fsTimerHandle;
+	FTimerHandle fsTimerHandle1;
 
-	// Set the timer, so it will call "SetDialogueTerm" to set the next term
-	GetWorldTimerManager().SetTimer( fsTimerHandle, this, &ADialogueManager::SetDialogueTerm, m_fDialogueTermTime, false );
+	// Set the timer, so it will hide the diaogue widget when dialogue audio finishes.
+	GetWorldTimerManager().SetTimer( fsTimerHandle, m_pcDialogueWidgetHUD, &UDialogueWidgetHUD::HideDialogue, m_fDialogueAudioDuration, false);
+
+	// Set the timer, so it will call "SetDialogueTerm" to set the next term.
+	GetWorldTimerManager().SetTimer( fsTimerHandle1, this, &ADialogueManager::SetDialogueTerm, m_fDialogueTermTime, false );
 }
 
 void ADialogueManager::SetDialogueTerm()
@@ -152,8 +156,9 @@ void ADialogueManager::SetDialogueTerm()
 		// Check if the dialogue audio exists
 		if( dialogueTerm->DialogueAudio )
 		{
-			// Set the dialogue term duration, using the duration offset and the duration of the audio file.
-			m_fDialogueTermTime = dialogueTerm->DialogueDurationOffset + dialogueTerm->DialogueAudio->GetDuration();
+			// Set the dialogue audio duration for closing the dialogue widget before the term duration finishes.
+			// Set dialogue term duration, using the duration offset and the duration of the audio file.
+			m_fDialogueAudioDuration = dialogueTerm->DialogueAudio->GetDuration();
 
 			// Use the audio component to set the dialogue audio to play and play it.
 			// Replaced the use of gameplay statics as the audio component gives more control of the audio being played.
@@ -164,12 +169,18 @@ void ADialogueManager::SetDialogueTerm()
 		}
 		else // If the dialogue audio does not exist
 		{
+			m_fDialogueAudioDuration = dialogueTerm->DialogueTextDuration;
+
+
 			// Print a message onto the screen and into the output log if there is no dialogue text
 			UE_LOG( LogTemp, Warning,
 				TEXT( "NO DIALOGUE AUDIO TO PLAY | MISSING DATA IN THE DIALOGUE SEQUENCE | MISSING DIALOGUE AUDIO" ) );
 			GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red,
 				TEXT( "NO DIALOGUE AUDIO TO PLAY | MISSING DATA IN THE DIALOGUE SEQUENCE | MISSING DIALOGUE AUDIO" ) );
 		}
+		
+		// Set dialogue term duration, using the duration offset and the duration of the audio file.
+		m_fDialogueTermTime = dialogueTerm->DialogueDurationOffset + m_fDialogueAudioDuration;
 
 		// Play the dialogue term
 		PlayDialogueTerm();

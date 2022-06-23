@@ -28,9 +28,17 @@ void UDialogueWidgetHUD::DisplayText( FString& rsCharacterName, FString& rsDialo
 		UE_LOG( LogTemp, Display, TEXT( "[UDialogueWidgetHUD::DisplayText L.28] DIALOGUE WIDGET IS NOW VISIBLE" ) );
 	}
 
-	// Set the text of the dialogue with the character name.
-	// Concatenate the text so the character name can be manipulated via "DT_WidgetTextData", which holds how text should look like.
-	DialogueText->SetText( FText::FromString( "<Character>" + rsCharacterName + "</>: " + rsDialogueText ) );
+	//if( rsCharacterName.IsEmpty() )
+	//{
+	//	DialogueText->SetText( FText::FromString( rsDialogueText ) );
+	//}
+	//else
+	//{
+	//	// Set the text of the dialogue with the character name.
+	//	// Concatenate the text so the character name can be manipulated via "DT_WidgetTextData", which holds how text should look like.
+	//}
+		DialogueText->SetText( FText::FromString( "<Character>" + rsCharacterName + "</> " + rsDialogueText ) );
+
 	UE_LOG( LogTemp, Display, TEXT( "[UDialogueWidgetHUD::DisplayText L.34] NEW DIALOGUE TEXT DISPLAYED" ) );
 }
 
