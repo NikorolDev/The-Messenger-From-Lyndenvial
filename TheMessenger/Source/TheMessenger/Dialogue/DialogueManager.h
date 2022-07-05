@@ -17,7 +17,6 @@ class UDialogueWidgetHUD;
 // Delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FDialogueUpdatedSignature, FName, Name );
 
-
 //-----------------------------------------------------------------------------------------------------------------------------
 // Class Name			: ADialogueManager
 // Author				: Nikodem Hamrol
@@ -38,8 +37,8 @@ private:
 	// The term time for the dialogue, which is calculated with the audio length and the desired delay.
 	float m_fDialogueTermTime;
 
-
-	float m_fDialogueAudioDuration;
+	// The initial duration of dialogue, which is set by.
+	float m_fDialogueInitialDuration;
 
 	// The current ID of the dialogue term.
 	int m_iDialogueID;
@@ -47,9 +46,10 @@ private:
 	// The maximum of dialogue terms in a sequence.
 	int m_iNumberOfDialogueTerms;
 	
-	// An instance of the dialogue 
+	// An instance of the dialogue.
 	FStructDialogueSequence* m_pfsDialogueSequence;
 
+	// The dialogue widget that will display dialogue for the manager.
 	UDialogueWidgetHUD* m_pcDialogueWidgetHUD;
 
 #pragma endregion
@@ -108,13 +108,19 @@ public:
 	//----------------------------------------------------------------------------------------------------------------------------
 	ADialogueManager();
 
+	// The delegate signature to be called when the dialogue finishes with a choice required.
 	UPROPERTY( BlueprintAssignable, BlueprintCallable )
 	FDialogueUpdatedSignature DialogueUpdate;
 
-
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: InitialiseDialogueSequence()
+	// Author			: Nikodem Hamrol
+	// Purpose			: To initialise the dialogue sequence based on the dialogue ID that was passed through.
+	// Parameters		: rnDialogueID - The ID that will find the dialogue sequence within the dialogue table.
+	//---------------------------------------------------------------------------------------------------------------------------- 
 	UFUNCTION( Category = Dialogue, BlueprintCallable )
-		void InitialiseDialogueSequence( const FName& rsDialogueID );
+		void InitialiseDialogueSequence( const FName& rnDialogueID );
 };

@@ -18,7 +18,15 @@ void UChoiceSelectionWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	SetVisibility( ESlateVisibility::Hidden );
+	//for( int i = 0; i < 5; ++i )
+	//{
+	//	m_aChoiceWidgets[ i ] = CreateWidget<UChoiceWidget>( this, m_tcChoiceWidget );
+	//	m_aChoiceWidgets[ i ]->ChoiceSelected.AddDynamic( this, &UChoiceSelectionWidget::OnChoiceSelected );
+	//	//m_aChoiceWidgets[ i ]->SetVisibility( ESlateVisibility::Collapsed );
+	//	ChoiceBox->AddChildToVerticalBox( m_aChoiceWidgets[ i ] );
+	//}
+
+	//SetVisibility( ESlateVisibility::Hidden );
 }
 
 void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBranches )
