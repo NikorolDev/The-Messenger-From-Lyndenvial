@@ -20,7 +20,7 @@ void UChoiceWidget::NativeConstruct()
 
 void UChoiceWidget::SetButtonText( int iChoiceCount, const FString& ChoiceDisplayText, FName& rnDialogueID )
 {
-	m_iBranchID				= iChoiceCount;
+	m_iBranchID	= iChoiceCount;
 
 	ChoiceText->SetText( FText::FromString( ChoiceDisplayText ) );
 

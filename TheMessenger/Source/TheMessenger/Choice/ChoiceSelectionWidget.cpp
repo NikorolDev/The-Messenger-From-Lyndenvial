@@ -14,6 +14,10 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	// Create a temporary struct of the impact from the choice chosen. This is to minimise the search in the array.
 	FStructChoiceProperties* ChoiceSelected = &m_pfsChoices->ChoiceBranches[ iBranchID ];
 
+	// Set the input mode to be game only
+	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+	m_pcPlayerController->bShowMouseCursor = false;
+
 	// When a choice is selected hide the window and initialise next dialogue.
 	SetVisibility( ESlateVisibility::Hidden );
 	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
@@ -46,6 +50,7 @@ void UChoiceSelectionWidget::NativeConstruct()
 	}
 
 	m_pcBranchManager = Cast<ABranchManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ABranchManager::StaticClass() ) );
+	m_pcPlayerController = UGameplayStatics::GetPlayerController( GetWorld(), 0 );
 
 	// Hide the widget as no choice scenario is active.
 	SetVisibility( ESlateVisibility::Hidden );
@@ -73,6 +78,10 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 		//m_aChoiceWidgets[iChoiceBranch]
 		//ChoiceBox->AddChildToVerticalBox( ChoiceWidget );
 	}
+
+	// When all buttons are set. Toggle mouse cursor visibility and set game input to UI only.
+	m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
+	m_pcPlayerController->bShowMouseCursor = true;
 }
 
 void UChoiceSelectionWidget::SetDialogueManager( ADialogueManager* pcDialogueManager ) { m_pcDialogueManager = pcDialogueManager; }

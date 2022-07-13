@@ -99,11 +99,11 @@ void ADialogueManager::PlayDialogueTerm()
 	m_iDialogueID++;
 
 	// Create a timer handle struct , which will be used to set the timer.
-	FTimerHandle fsTimerHandleDialogueDuration;
+	//FTimerHandle fsTimerHandleDialogueDuration;
 	FTimerHandle fsTimerHandle1;
 
 	// Set the timer, so it will hide the diaogue widget when dialogue audio finishes.
-	GetWorldTimerManager().SetTimer( fsTimerHandleDialogueDuration, m_pcDialogueWidgetHUD, &UDialogueWidgetHUD::HideDialogue, m_fDialogueInitialDuration, false);
+	//GetWorldTimerManager().SetTimer( fsTimerHandleDialogueDuration, m_pcDialogueWidgetHUD, &UDialogueWidgetHUD::HideDialogue, m_fDialogueInitialDuration, false);
 
 	// Set the timer, so it will call "SetDialogueTerm" to set the next term.
 	GetWorldTimerManager().SetTimer( fsTimerHandle1, this, &ADialogueManager::SetDialogueTerm, m_fDialogueTermTime, false );

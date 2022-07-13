@@ -26,6 +26,7 @@ AChoiceManager::AChoiceManager()
 // Called when the game starts or when spawned
 void AChoiceManager::BeginPlay()
 {
+
 	Super::BeginPlay();
 	
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
@@ -49,9 +50,9 @@ void AChoiceManager::DisplayChoices(FName ChoiceID)
 	UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::BeginPlay L.38] Choice Displayed" ) );
 	GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Green, TEXT( "Choice Displayed" ) );
 	
+	// Display the choices and set visibility of the choice selection widget.
 	m_pcChoiceSelectionWidget->CreateChoices( m_pfsChoices.Find( ChoiceID ) );
 	m_pcChoiceSelectionWidget->SetVisibility( ESlateVisibility::Visible );
-
 }
 
 void AChoiceManager::AddChoices( AInteractable_Base* pcCharacterInteracted )

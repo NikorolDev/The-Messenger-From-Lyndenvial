@@ -8,6 +8,7 @@
 #include "ChoiceSelectionWidget.generated.h"
 
 // Forward class declarations (Engine)
+class APlayerController;
 class UChoiceWidget;
 class UVerticalBox;
 
@@ -34,6 +35,9 @@ private:
 	// The dialogue manager needed to continue the dialogue after the choice was made.
 	ADialogueManager*		m_pcDialogueManager;
 
+	// The player controller needed to toggle cursor visibility and to toggle input mode from UI to Game.
+	APlayerController*		m_pcPlayerController;
+
 	// The choice selection struct of the current choices that will be displayed.
 	FStructChoiceBranches*	m_pfsChoices;
 
@@ -42,7 +46,7 @@ private:
 
 	// The vertical box that the choices will be placed.
 	UPROPERTY( meta = ( BindWidget ) )
-		UVerticalBox* ChoiceBox;
+		UVerticalBox*		ChoiceBox;
 	
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name	: OnChoiceSelected( int iBranchID, const FName& rnDialogueID )
