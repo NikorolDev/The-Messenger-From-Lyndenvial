@@ -7,48 +7,72 @@
 
 #include "ChoiceWidget.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
-#include "TheMessenger/Interactable/Interactable_Base.h"
+#include "TheMessenger/Branch/BranchManager.h"
 
-void UChoiceSelectionWidget::OnChoiceSelected( const FName& rnDialogueID )
+void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 {
-	m_pcDialogueManager->InitialiseDialogueSequence( rnDialogueID );
+	// Create a temporary struct of the impact from the choice chosen. This is to minimise the search in the array.
+	FStructChoiceProperties* ChoiceSelected = &m_pfsChoices->ChoiceBranches[ iBranchID ];
+
+	// When a choice is selected hide the window and initialise next dialogue.
+	SetVisibility( ESlateVisibility::Hidden );
+	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
+
+	// Check if the character affected is not nullptr to properly set the impact 
+	if( ChoiceSelected->ChoiceImpactProperties.CharacterAffectedTag != nullptr )
+	{
+		// Set the new dialogue ID for the affected character.
+		m_pcBranchManager->SetNewDialogueID( &ChoiceSelected->ChoiceImpactProperties );
+	}
 }
 
 void UChoiceSelectionWidget::NativeConstruct()
 {
+	// Call the native construct from the UUserWidget.
 	Super::NativeConstruct();
 
-	//for( int i = 0; i < 5; ++i )
-	//{
-	//	m_aChoiceWidgets[ i ] = CreateWidget<UChoiceWidget>( this, m_tcChoiceWidget );
-	//	m_aChoiceWidgets[ i ]->ChoiceSelected.AddDynamic( this, &UChoiceSelectionWidget::OnChoiceSelected );
-	//	//m_aChoiceWidgets[ i ]->SetVisibility( ESlateVisibility::Collapsed );
-	//	ChoiceBox->AddChildToVerticalBox( m_aChoiceWidgets[ i ] );
-	//}
+	// Initialise the array to have 5 choice widgets ready.
+	m_aChoiceWidgets.Init( nullptr, 5 );
 
-	//SetVisibility( ESlateVisibility::Hidden );
+	// Loop through the max amount choices there will be
+	for( int i = 0; i < m_aChoiceWidgets.Num(); ++i )
+	{
+		// Create the choice widget that will use the BPW version of the widget, set the delegate function to be called when a choice
+		// has been selected. Collapse the widget so it won't be seen and add it to the vertical box. 
+		m_aChoiceWidgets[ i ] = CreateWidget<UChoiceWidget>( this, m_tcChoiceWidget );
+		m_aChoiceWidgets[ i ]->ChoiceSelected.AddDynamic( this, &UChoiceSelectionWidget::OnChoiceSelected );
+		m_aChoiceWidgets[ i ]->SetVisibility( ESlateVisibility::Collapsed );
+		ChoiceBox->AddChildToVerticalBox( m_aChoiceWidgets[ i ] );
+	}
+
+	m_pcBranchManager = Cast<ABranchManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ABranchManager::StaticClass() ) );
+
+	// Hide the widget as no choice scenario is active.
+	SetVisibility( ESlateVisibility::Hidden );
 }
 
 void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBranches )
 {
-	int iChoiceCount = 1;
+	// Set the choice branches for this current choice selection scenario
+	m_pfsChoices = pfsChoiceBranches;
 	
-	for( int iChoiceBranch = 0; iChoiceBranch < pfsChoiceBranches->ChoiceBranches.Num(); ++iChoiceBranch )
+	// Loop through all choice selections in this scenario
+	for( int iChoiceBranch = 0; iChoiceBranch < m_pfsChoices->ChoiceBranches.Num(); ++iChoiceBranch )
 	{
-		FStructChoiceProperties& ChoiceProperties = pfsChoiceBranches->ChoiceBranches[ iChoiceBranch ];
+		// Create a temporary choice properties struct to be set for each selection
+		FStructChoiceProperties& ChoiceProperties = m_pfsChoices->ChoiceBranches[ iChoiceBranch ];
 	
-		UChoiceWidget* ChoiceWidget = CreateWidget<UChoiceWidget>( this, m_tcChoiceWidget );
-		ChoiceWidget->ChoiceSelected.AddDynamic( this, &UChoiceSelectionWidget::OnChoiceSelected );
-
-		ChoiceWidget->SetButtonText( iChoiceCount, ChoiceProperties.ChoiceDisplayText, ChoiceProperties.DialogueID );
+		//DEPRECATED
+		//UChoiceWidget* ChoiceWidget = CreateWidget<UChoiceWidget>( this, m_tcChoiceWidget );
+		//ChoiceWidget->ChoiceSelected.AddDynamic( this, &UChoiceSelectionWidget::OnChoiceSelected );
 	
-		ChoiceBox->AddChildToVerticalBox( ChoiceWidget );
-	
-		iChoiceCount++;
+		// Set the selection.
+		m_aChoiceWidgets[iChoiceBranch]->SetButtonText(iChoiceBranch, ChoiceProperties.ChoiceDisplayText, ChoiceProperties.DialogueID);
+		
+		//DEPRECATED
+		//m_aChoiceWidgets[iChoiceBranch]
+		//ChoiceBox->AddChildToVerticalBox( ChoiceWidget );
 	}
 }
 
-void UChoiceSelectionWidget::SetDialogueManager( ADialogueManager* pcDialogueManager )
-{
-	m_pcDialogueManager = pcDialogueManager;
-}
+void UChoiceSelectionWidget::SetDialogueManager( ADialogueManager* pcDialogueManager ) { m_pcDialogueManager = pcDialogueManager; }

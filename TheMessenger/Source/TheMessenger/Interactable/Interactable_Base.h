@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InteractableInterface.h"
-#include "TheMessenger/Choice/Struct_Choice.h"
+//#include "TheMessenger/Choice/Struct_Choice.h"
 #include "Interactable_Base.generated.h"
 
 class AChoiceManager;
@@ -23,9 +23,6 @@ private:
 
 	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ) )
 		FName m_nDialogueID;
-
-	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Choices" ) )
-		TMap<FName, FStructChoiceBranches> m_pfsChoices;
 
 protected:
 	// Called when the game starts or when spawned
@@ -66,5 +63,7 @@ public:
 	//	void LostFocus();
 	virtual void LostFocus_Implementation() override;
 
-	FStructChoiceBranches* GetChoicesFromID( const FName& ChoiceID );
+	void SetDialogueID( const FName& krnDialogueID );
+
+	//FStructChoiceBranches* GetChoicesFromID( const FName& ChoiceID );
 };

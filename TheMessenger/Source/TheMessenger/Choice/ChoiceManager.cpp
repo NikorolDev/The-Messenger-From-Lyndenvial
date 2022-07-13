@@ -35,7 +35,6 @@ void AChoiceManager::BeginPlay()
 	m_pcChoiceSelectionWidget = CreateWidget<UChoiceSelectionWidget>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ), m_tcChoiceSelectionWidget );
 	m_pcChoiceSelectionWidget->SetDialogueManager( m_pcDialogueManager );
 	m_pcChoiceSelectionWidget->AddToViewport();
-
 }
 
 // Called every frame
@@ -50,7 +49,7 @@ void AChoiceManager::DisplayChoices(FName ChoiceID)
 	UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::BeginPlay L.38] Choice Displayed" ) );
 	GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Green, TEXT( "Choice Displayed" ) );
 	
-	m_pcChoiceSelectionWidget->CreateChoices( m_pcCharacterInteracted->GetChoicesFromID( ChoiceID ) );
+	m_pcChoiceSelectionWidget->CreateChoices( m_pfsChoices.Find( ChoiceID ) );
 	m_pcChoiceSelectionWidget->SetVisibility( ESlateVisibility::Visible );
 
 }

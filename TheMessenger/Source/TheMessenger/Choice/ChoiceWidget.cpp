@@ -8,7 +8,8 @@
 
 void UChoiceWidget::OnButtonClicked()
 {
-	ChoiceSelected.Broadcast( *m_pnAssignedChoiceID );
+	// 
+	ChoiceSelected.Broadcast( m_iBranchID );
 }
 
 void UChoiceWidget::NativeConstruct()
@@ -17,10 +18,11 @@ void UChoiceWidget::NativeConstruct()
 	ChoiceButton->OnClicked.AddDynamic( this, &UChoiceWidget::OnButtonClicked );
 }
 
-void UChoiceWidget::SetButtonText( int ChoiceCount, const FString& ChoiceDisplayText, FName& rnDialogueID )
+void UChoiceWidget::SetButtonText( int iChoiceCount, const FString& ChoiceDisplayText, FName& rnDialogueID )
 {
-	m_pnAssignedChoiceID = &rnDialogueID;
+	m_iBranchID				= iChoiceCount;
 
-	ChoiceText->SetText( FText::FromString( FString::FromInt( ChoiceCount ) + ". " + ChoiceDisplayText));
+	ChoiceText->SetText( FText::FromString( ChoiceDisplayText ) );
 
+	SetVisibility( ESlateVisibility::Visible );
 }

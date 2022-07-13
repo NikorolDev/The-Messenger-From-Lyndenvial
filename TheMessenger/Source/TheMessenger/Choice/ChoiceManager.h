@@ -34,6 +34,9 @@ private:
 	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Choice Selection Widget" ) )
 		TSubclassOf<UChoiceSelectionWidget> m_tcChoiceSelectionWidget;
 
+	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Choices" ) )
+		TMap<FName, FStructChoiceBranches> m_pfsChoices;
+
 	UFUNCTION()
 		void DisplayChoices( FName ChoiceID );
 

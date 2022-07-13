@@ -69,9 +69,14 @@ void AInteractable_Base::LostFocus_Implementation()
 		TEXT( "Lost Focus" ) );
 }
 
-FStructChoiceBranches* AInteractable_Base::GetChoicesFromID( const FName& ChoiceID )
+void AInteractable_Base::SetDialogueID( const FName& krnDialogueID )
 {
-	auto test = m_pfsChoices.Find( ChoiceID );
-	return test;
+	m_nDialogueID = krnDialogueID;
 }
+
+//FStructChoiceBranches* AInteractable_Base::GetChoicesFromID( const FName& ChoiceID )
+//{
+//	auto test = m_pfsChoices.Find( ChoiceID );
+//	return test;
+//}
 
