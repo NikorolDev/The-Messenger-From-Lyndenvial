@@ -25,6 +25,8 @@ private:
 protected:
 	// Called when the game starts or when spawned.
 	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void FollowPlayer();
 
 public:	
 	// Sets default values for this character's properties
@@ -40,5 +42,4 @@ public:
 	virtual void LostFocus_Implementation() override;
 
 	void SetDialogueID( const FName& krnDialogueID );
-
 };

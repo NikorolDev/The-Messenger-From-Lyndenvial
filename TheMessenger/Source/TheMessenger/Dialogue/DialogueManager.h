@@ -16,6 +16,7 @@ class UDialogueWidgetHUD;
 
 // Delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FDialogueUpdatedSignature, FName, Name );
+DECLARE_DELEGATE( FDialogueFinished );
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // Class Name			: ADialogueManager
@@ -110,7 +111,9 @@ public:
 
 	// The delegate signature to be called when the dialogue finishes with a choice required.
 	UPROPERTY( BlueprintAssignable, BlueprintCallable )
-	FDialogueUpdatedSignature DialogueUpdate;
+		FDialogueUpdatedSignature DialogueUpdate;
+
+		FDialogueFinished DialogueFinished;
 
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;

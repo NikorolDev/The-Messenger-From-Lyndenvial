@@ -10,6 +10,8 @@ void UChoiceWidget::OnButtonClicked()
 {
 	// 
 	ChoiceSelected.Broadcast( m_iBranchID );
+	GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Green,
+		TEXT( "Clicked" ) );
 }
 
 void UChoiceWidget::NativeConstruct()

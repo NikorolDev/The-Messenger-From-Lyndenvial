@@ -6,6 +6,8 @@
 #include <Kismet/GameplayStatics.h>
 
 #include "TheMessenger/Dialogue/DialogueManager.h"
+#include "TheMessenger/Dialogue/DialogueManager.h"
+
 
 // Sets default values
 AInteractable_Character::AInteractable_Character()
@@ -21,6 +23,8 @@ void AInteractable_Character::BeginPlay()
 	Super::BeginPlay();
 	
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
+	
+	m_pcDialogueManager->DialogueFinished.BindUObject( this, &AInteractable_Character::FollowPlayer );
 }
 
 // Called every frame

@@ -35,7 +35,7 @@ void AChoiceManager::BeginPlay()
 
 	m_pcChoiceSelectionWidget = CreateWidget<UChoiceSelectionWidget>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ), m_tcChoiceSelectionWidget );
 	m_pcChoiceSelectionWidget->SetDialogueManager( m_pcDialogueManager );
-	m_pcChoiceSelectionWidget->AddToViewport();
+	m_pcChoiceSelectionWidget->AddToViewport(1);
 }
 
 // Called every frame

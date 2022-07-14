@@ -161,6 +161,7 @@ void ADialogueManager::SetDialogueTerm()
 		{
 			// Hide the dialogue widget and now the manager is ready to reintialised next dialogue.
 			m_pcDialogueWidgetHUD->HideDialogue();
+			DialogueFinished.ExecuteIfBound();
 			UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::PlayDialogueTerm L.181] DIALOGUE SEQUENCE FINISHED AND IT'S READY TO BE INITIALISED AGAIN" ) );
 		}
 	}
