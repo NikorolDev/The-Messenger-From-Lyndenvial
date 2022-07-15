@@ -7,7 +7,11 @@
 #include "InteractableInterface.h"
 #include "Interactable_Character.generated.h"
 
+class UAudioComponent;
+class UWidgetComponent;
+
 class ADialogueManager;
+class UDialogueWidgetHUD;
 
 UCLASS()
 class THEMESSENGER_API AInteractable_Character : public ACharacter, public IInteractableInterface
@@ -15,16 +19,33 @@ class THEMESSENGER_API AInteractable_Character : public ACharacter, public IInte
 	GENERATED_BODY()
 
 private:
+	// Whether the player has already interacted with the character.
+	bool m_bInteracted;
+
 	// The dialogue manager needed to play the dialogue once the player interacts with the character.
 	ADialogueManager* m_pcDialogueManager;
 
+	UDialogueWidgetHUD* m_pcDialogueWidget;
+
+	// An audio component that will play the dialogue volume instead of using gameplay statics
+	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Audio Component" ) )
+		UAudioComponent* m_pcAudioComponent;
+
+	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Widget Component" ) )
+		UWidgetComponent* m_pcWidgetComponent;
+
 	// The dialogue ID that is used to initialise dialogue. The editor set dialogue ID is the intial dialogue ID to play.
-	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ) )
+	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ))
 		FName m_nDialogueID;
+
+	// Should the character follow the player after interaction.
+	UPROPERTY( Category = "Properties|Movement", EditInstanceOnly, meta = ( DisplayName = "Will Follow Player" ) )
+		bool m_bWillFollowPlayer;
 
 protected:
 	// Called when the game starts or when spawned.
 	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void FollowPlayer();
 

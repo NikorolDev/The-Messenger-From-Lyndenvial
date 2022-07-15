@@ -40,7 +40,7 @@ void ABranchManager::SetNewDialogueID( FChoiceImpactProperties* krfsChoiceImpact
 {
 	if( krfsChoiceImpactProperties != nullptr )
 	{
-		krfsChoiceImpactProperties->CharacterAffectedTag->SetDialogueID( krfsChoiceImpactProperties->NewDialogueID );
+		//krfsChoiceImpactProperties->CharacterAffectedTag->SetDialogueID( krfsChoiceImpactProperties->NewDialogueID );
 	}
 	else
 	{

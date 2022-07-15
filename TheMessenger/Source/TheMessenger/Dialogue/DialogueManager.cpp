@@ -135,11 +135,7 @@ void ADialogueManager::SetDialogueTerm()
 			m_pcAudioComponent->SetSound( dialogueTerm->DialogueAudio );
 			m_pcAudioComponent->Play();
 		}
-		else // If the dialogue audio does not exist.
-		{
-			m_fDialogueInitialDuration = dialogueTerm->DialogueTextDuration;
-		}
-		
+
 		// Set dialogue term duration, using the duration offset and the duration of the audio file or set duration of text display.
 		m_fDialogueTermTime = dialogueTerm->DialogueDurationOffset + m_fDialogueInitialDuration;
 
@@ -165,4 +161,10 @@ void ADialogueManager::SetDialogueTerm()
 			UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::PlayDialogueTerm L.181] DIALOGUE SEQUENCE FINISHED AND IT'S READY TO BE INITIALISED AGAIN" ) );
 		}
 	}
+}
+
+FStructDialogueSequence& ADialogueManager::GetDialogueSequence( const FName& rnDialogueID )
+{
+	FStructDialogueSequence* DialogueSequence = m_tmDialogueTable.Find( rnDialogueID );
+	return *DialogueSequence;
 }

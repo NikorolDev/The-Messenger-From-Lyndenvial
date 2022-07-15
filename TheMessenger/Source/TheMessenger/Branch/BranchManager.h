@@ -18,8 +18,8 @@ private:
 
 	UTheMessengerGameInstance* m_pcGameInstance;
 
-	UPROPERTY( Category = Setup, EditInstanceOnly, meta = ( DisplayName = "Choice Manager Icon" ) )
-		TArray<AInteractable_Base*> m_apcCharacters;
+	//UPROPERTY( Category = Setup, EditInstanceOnly, meta = ( DisplayName = "Choice Manager Icon" ) )
+	//	TArray<AInteractable_Base*> m_apcCharacters;
 
 	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Choice Manager Icon" ) )
 		UBillboardComponent* m_pcIconBillboard;

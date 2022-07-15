@@ -126,4 +126,6 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------------- 
 	UFUNCTION( Category = Dialogue, BlueprintCallable )
 		void InitialiseDialogueSequence( const FName& rnDialogueID );
+
+	FStructDialogueSequence& GetDialogueSequence( const FName& rnDialogueID );
 };
