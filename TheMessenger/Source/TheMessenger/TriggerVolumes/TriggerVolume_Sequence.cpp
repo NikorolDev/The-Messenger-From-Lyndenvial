@@ -9,6 +9,8 @@
 #include <LevelSequence/Public/LevelSequenceActor.h>
 #include <LevelSequence/Public/LevelSequencePlayer.h>
 
+#include "TheMessenger/Interactable/Interactable_Character.h"
+
 
 void ATriggerVolume_Sequence::BeginPlay()
 {
@@ -21,7 +23,7 @@ void ATriggerVolume_Sequence::BeginPlay()
 	//m_pcLevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer( GetWorld(), m_pcLevelSequenceToPlay->GetSequence(), m_pfsLevelSequencePlaybackSettings, m_pcLevelSequenceToPlay );
 
 	// Setup an OnComponentBeginOverlap callback function to be called when an overlap is triggered.
-	//m_BoxTriggerVolume->OnComponentBeginOverlap.AddDynamic( this, &ATriggerVolume_Sequence::OnBeginOverlapTrigger );
+	m_BoxTriggerVolume->OnComponentBeginOverlap.AddDynamic( this, &ATriggerVolume_Sequence::OnBeginOverlapTrigger );
 }
 
 void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -34,11 +36,8 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 		// Turn off collision. To not be called again.
 		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 
-		//Set character to position itself infront of the character and call the interaction function.
-
-
-		//OtherActor->SetActorLocation()
-
+		//Call the interaction function from the charatcer.
+		m_pcInteractedCharacter->OnInteract_Implementation( this );
 
 
 		// Then play the sequence MAYBE.

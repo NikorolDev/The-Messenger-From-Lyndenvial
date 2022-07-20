@@ -8,6 +8,7 @@
 #include <Components/WidgetComponent.h>
 #include <Kismet/GameplayStatics.h>
 
+#include "TheMessenger/TheMessengerCharacter.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
 #include "TheMessenger/Dialogue/DialogueWidgetHUD.h"
 
@@ -40,7 +41,8 @@ void AInteractable_Character::BeginPlay()
 	Super::BeginPlay();
 	
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
-	m_pcDialogueWidget = Cast<UDialogueWidgetHUD>( m_pcWidgetComponent->GetWidget() );
+	//m_pcDialogueWidget = Cast<UDialogueWidgetHUD>( m_pcWidgetComponent->GetWidget() );
+	m_pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
 
 	// Check if the character is allowed to follow the player.
 	if( m_bWillFollowPlayer )
@@ -64,7 +66,17 @@ void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 	FStructDialogueProperties* DialogueSequence = &CurrentDialogueSequence->DialogueSequence[ 0 ];
 
 	// Check if the dialogue sequence will not be played in a level sequencer
-	if( !CurrentDialogueSequence->bIsSequenceRequired )
+	if( CurrentDialogueSequence->bIsSequenceRequired )
+	{
+		FVector PlayerPosition = GetActorLocation() + (GetActorForwardVector() * 300 );
+		float PlayerRotationYaw = GetActorRotation().Yaw + 180;
+
+		m_pcPlayer->SetPlayerForSequence( PlayerPosition, PlayerRotationYaw );
+		//GetActorTransform()
+
+		//m_pcPlayer.SetInputMode
+	}
+	else
 	{
 		m_pcDialogueWidget->DisplayText( DialogueSequence->CharacterName, DialogueSequence->DialogueText );
 		m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );

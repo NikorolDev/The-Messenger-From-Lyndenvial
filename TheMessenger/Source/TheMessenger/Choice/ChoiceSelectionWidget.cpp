@@ -7,7 +7,7 @@
 
 #include "ChoiceWidget.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
-#include "TheMessenger/Branch/BranchManager.h"
+//#include "TheMessenger/Branch/BranchManager.h"
 
 void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 {
@@ -15,7 +15,7 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	FStructChoiceProperties* ChoiceSelected = &m_pfsChoices->ChoiceBranches[ iBranchID ];
 
 	// Set the input mode to be game only
-	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+	//m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
 	m_pcPlayerController->bShowMouseCursor = false;
 
 	// When a choice is selected hide the window and initialise next dialogue.
@@ -26,7 +26,7 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	if( ChoiceSelected->ChoiceImpactProperties.CharacterAffectedTag != nullptr )
 	{
 		// Set the new dialogue ID for the affected character.
-		m_pcBranchManager->SetNewDialogueID( &ChoiceSelected->ChoiceImpactProperties );
+		//m_pcBranchManager->SetNewDialogueID( &ChoiceSelected->ChoiceImpactProperties );
 	}
 }
 
@@ -49,7 +49,7 @@ void UChoiceSelectionWidget::NativeConstruct()
 		ChoiceBox->AddChildToVerticalBox( m_aChoiceWidgets[ i ] );
 	}
 
-	m_pcBranchManager = Cast<ABranchManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ABranchManager::StaticClass() ) );
+	//m_pcBranchManager = Cast<ABranchManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ABranchManager::StaticClass() ) );
 	m_pcPlayerController = UGameplayStatics::GetPlayerController( GetWorld(), 0 );
 
 	// Hide the widget as no choice scenario is active.
@@ -80,7 +80,7 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 	}
 
 	// When all buttons are set. Toggle mouse cursor visibility and set game input to UI only.
-	m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
+	//m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
 	m_pcPlayerController->bShowMouseCursor = true;
 }
 

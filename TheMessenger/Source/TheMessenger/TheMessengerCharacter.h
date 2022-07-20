@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 #include "TheMessengerCharacter.generated.h"
 
+class APlayerController;
+
+class ADialogueManager;
+
 UCLASS(config=Game)
 class ATheMessengerCharacter : public ACharacter
 {
@@ -22,12 +26,18 @@ class ATheMessengerCharacter : public ACharacter
 private:
 	AActor* FocusedActor;
 
+	ADialogueManager* m_pcDialogueManager;
+
+	APlayerController* m_pcPlayerController;
+
 	UPROPERTY( Category = "Line Trace", EditInstanceOnly, meta = ( DisplayName = "Line Trace Distance" ) )
 		float m_fLineTraceDistance;
 
 	void TraceForward();
 
 	void OnInteractPressed();
+
+	void SetPlayerBackFromSequence();
 
 public:
 	ATheMessengerCharacter();
@@ -42,6 +52,8 @@ public:
 
 	// Called every frame
 	virtual void Tick( float DeltaTime ) override;
+
+	void SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw );
 
 protected:
 
@@ -76,6 +88,8 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
+
+	virtual void BeginPlay() override;
 
 public:
 	/** Returns CameraBoom subobject **/

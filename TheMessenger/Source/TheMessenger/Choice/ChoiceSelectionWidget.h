@@ -13,7 +13,7 @@ class UChoiceWidget;
 class UVerticalBox;
 
 // Forward class declarations (Game)
-class ABranchManager;
+//class ABranchManager;
 class ADialogueManager;
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ class THEMESSENGER_API UChoiceSelectionWidget : public UUserWidget
 	
 private:
 
-	ABranchManager*			m_pcBranchManager;
+	//ABranchManager*			m_pcBranchManager;
 
 	// The dialogue manager needed to continue the dialogue after the choice was made.
 	ADialogueManager*		m_pcDialogueManager;

@@ -9,6 +9,9 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include <DrawDebugHelpers.h>
+
+#include <Kismet/GameplayStatics.h>
+#include "TheMessenger/Dialogue/DialogueManager.h"
 #include "TheMessenger/Interactable/InteractableInterface.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -80,6 +83,12 @@ void ATheMessengerCharacter::OnInteractPressed()
 	}
 }
 
+void ATheMessengerCharacter::SetPlayerBackFromSequence()
+{
+	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+	EnableInput( m_pcPlayerController );
+}
+
 ATheMessengerCharacter::ATheMessengerCharacter()
 	:m_fLineTraceDistance (2000.0f)
 {
@@ -95,7 +104,7 @@ ATheMessengerCharacter::ATheMessengerCharacter()
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
@@ -150,10 +159,28 @@ void ATheMessengerCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ATheMessengerCharacter::OnResetVR);
 }
 
+void ATheMessengerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
+	m_pcPlayerController = Cast<APlayerController>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ) );
+
+	m_pcDialogueManager->DialogueFinished.BindUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
+}
+
 
 void ATheMessengerCharacter::Tick( float DeltaTime )
 {
 	TraceForward();
+}
+
+void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw )
+{
+	DisableInput( m_pcPlayerController );
+	m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
+	SetActorLocation( v3PlayerPosition );
+	m_pcPlayerController->SetControlRotation( FRotator( 0, PlayerRotationYaw, 0 ) );
 }
 
 void ATheMessengerCharacter::OnResetVR()

@@ -9,6 +9,8 @@
 class ALevelSequenceActor;
 class ULevelSequencePlayer;
 
+class AInteractable_Character;
+
 /**
  * 
  */
@@ -23,8 +25,11 @@ private:
 	ULevelSequencePlayer* m_pcLevelSequencePlayer;
 
 	// The sequence actor that is in the level which holds the sequence to play.
-	UPROPERTY( Category = Cutscene, EditInstanceOnly, meta = ( DisplayName = "Cutscene" ) )
+	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Sequence" ))
 		ALevelSequenceActor* m_pcLevelSequenceToPlay;
+
+	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Character To Interact" ) )
+		AInteractable_Character* m_pcInteractedCharacter;
 
 protected:
 	//----------------------------------------------------------------------------------------------------------------------------

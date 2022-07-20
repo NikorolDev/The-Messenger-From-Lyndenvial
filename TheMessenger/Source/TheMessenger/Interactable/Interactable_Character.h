@@ -12,6 +12,7 @@ class UWidgetComponent;
 
 class ADialogueManager;
 class UDialogueWidgetHUD;
+class ATheMessengerCharacter;
 
 UCLASS()
 class THEMESSENGER_API AInteractable_Character : public ACharacter, public IInteractableInterface
@@ -25,6 +26,9 @@ private:
 	// The dialogue manager needed to play the dialogue once the player interacts with the character.
 	ADialogueManager* m_pcDialogueManager;
 
+	// The player character
+	ATheMessengerCharacter* m_pcPlayer;
+
 	UDialogueWidgetHUD* m_pcDialogueWidget;
 
 	// An audio component that will play the dialogue volume instead of using gameplay statics
@@ -37,6 +41,9 @@ private:
 	// The dialogue ID that is used to initialise dialogue. The editor set dialogue ID is the intial dialogue ID to play.
 	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ))
 		FName m_nDialogueID;
+
+	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Player's Position In Sequence", MakeEditWidget = true ) )
+		FVector m_v3PlayerPositionInSequence;
 
 	// Should the character follow the player after interaction.
 	UPROPERTY( Category = "Properties|Movement", EditInstanceOnly, meta = ( DisplayName = "Will Follow Player" ) )
