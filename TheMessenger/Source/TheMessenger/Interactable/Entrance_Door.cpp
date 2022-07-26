@@ -3,6 +3,8 @@
 
 #include "Entrance_Door.h"
 
+#include "Interactable_Character.h"
+
 // Sets default values
 AEntrance_Door::AEntrance_Door()
 {
@@ -25,3 +27,7 @@ void AEntrance_Door::Tick(float DeltaTime)
 
 }
 
+void AEntrance_Door::OnInteract_Implementation( AActor* Caller )
+{
+	m_pcCharacterTointeract->OnInteract_Implementation( this );
+}

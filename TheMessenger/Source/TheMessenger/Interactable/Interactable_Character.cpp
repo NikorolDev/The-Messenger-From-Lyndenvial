@@ -78,8 +78,8 @@ void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 	}
 	else
 	{
-		m_pcDialogueWidget->DisplayText( DialogueSequence->CharacterName, DialogueSequence->DialogueText );
-		m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );
+		//m_pcDialogueWidget->DisplayText( DialogueSequence->CharacterName, DialogueSequence->DialogueText );
+		//m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );
 		//m_pcAudioComponent.Location
 	}
 

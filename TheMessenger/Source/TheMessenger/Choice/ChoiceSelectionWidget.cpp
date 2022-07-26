@@ -11,6 +11,8 @@
 
 void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 {
+	SetVisibility( ESlateVisibility::Hidden );
+
 	// Create a temporary struct of the impact from the choice chosen. This is to minimise the search in the array.
 	FStructChoiceProperties* ChoiceSelected = &m_pfsChoices->ChoiceBranches[ iBranchID ];
 
@@ -19,7 +21,7 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	m_pcPlayerController->bShowMouseCursor = false;
 
 	// When a choice is selected hide the window and initialise next dialogue.
-	SetVisibility( ESlateVisibility::Hidden );
+	//SetVisibility( ESlateVisibility::Hidden );
 	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
 
 	// Check if the character affected is not nullptr to properly set the impact 

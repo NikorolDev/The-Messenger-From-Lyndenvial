@@ -7,6 +7,8 @@
 #include "InteractableInterface.h"
 #include "Entrance_Door.generated.h"
 
+class AInteractable_Character;
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // Class Name			: AEntrance_Door
 // Author				: Nikodem Hamrol
@@ -19,7 +21,10 @@ class THEMESSENGER_API AEntrance_Door : public AActor, public IInteractableInter
 	GENERATED_BODY()
 	
 private:	
-
+	// The character that will interacted once the player interacts with the door, so it will teleport the player to that
+	// character.
+	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Character To Interact" ) )
+		AInteractable_Character* m_pcCharacterTointeract;
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,4 +37,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void OnInteract_Implementation( AActor* Caller ) override;
 };
