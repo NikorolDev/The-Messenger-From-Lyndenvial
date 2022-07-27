@@ -29,5 +29,6 @@ void AEntrance_Door::Tick(float DeltaTime)
 
 void AEntrance_Door::OnInteract_Implementation( AActor* Caller )
 {
+	// Interact with the character when interacting with the door.
 	m_pcCharacterTointeract->OnInteract_Implementation( this );
 }
