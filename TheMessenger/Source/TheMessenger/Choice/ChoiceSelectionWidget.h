@@ -9,12 +9,12 @@
 
 // Forward class declarations (Engine)
 class APlayerController;
-class UChoiceWidget;
 class UVerticalBox;
 
 // Forward class declarations (Game)
 //class ABranchManager;
 class ADialogueManager;
+class UChoiceWidget;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // Class Name			: UChoiceSelectionWidget

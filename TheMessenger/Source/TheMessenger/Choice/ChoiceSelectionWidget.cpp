@@ -7,18 +7,18 @@
 
 #include "ChoiceWidget.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
-//#include "TheMessenger/Branch/BranchManager.h"
+#include "TheMessenger/Interactable/Interactable_Character.h"
 
 void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 {
 	SetVisibility( ESlateVisibility::Hidden );
+	m_pcPlayerController->bShowMouseCursor = false;
 
 	// Create a temporary struct of the impact from the choice chosen. This is to minimise the search in the array.
 	FStructChoiceProperties* ChoiceSelected = &m_pfsChoices->ChoiceBranches[ iBranchID ];
 
 	// Set the input mode to be game only
 	//m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
-	m_pcPlayerController->bShowMouseCursor = false;
 
 	// When a choice is selected hide the window and initialise next dialogue.
 	//SetVisibility( ESlateVisibility::Hidden );
@@ -29,6 +29,7 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	{
 		// Set the new dialogue ID for the affected character.
 		//m_pcBranchManager->SetNewDialogueID( &ChoiceSelected->ChoiceImpactProperties );
+		ChoiceSelected->ChoiceImpactProperties.CharacterAffectedTag->SetDialogueID( ChoiceSelected->ChoiceImpactProperties.NewDialogueID );
 	}
 }
 
