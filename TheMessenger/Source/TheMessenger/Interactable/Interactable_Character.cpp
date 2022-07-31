@@ -7,6 +7,7 @@
 #include <Components/CapsuleComponent.h>
 #include <Components/WidgetComponent.h>
 #include <Kismet/GameplayStatics.h>
+#include <Kismet/KismetMathLibrary.h>
 
 #include "TheMessenger/TheMessengerCharacter.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
@@ -35,14 +36,17 @@ AInteractable_Character::AInteractable_Character()
 	//m_pcDialogueTextComponent = CreateDefaultSubobject<UTextRenderComponent>( TEXT( "Dialogue Text Render Component" ) );
 }
 
+
 // Called when the game starts or when spawned
 void AInteractable_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
-	//m_pcDialogueWidget = Cast<UDialogueWidgetHUD>( m_pcWidgetComponent->GetWidget() );
+	m_pcDialogueWidget = Cast<UDialogueWidgetHUD>(m_pcWidgetComponent->GetWidget());
+
 	m_pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
+
 
 	// Check if the character is allowed to follow the player.
 	if( m_bWillFollowPlayer )
@@ -78,13 +82,19 @@ void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 	}
 	else
 	{
+		FTimerHandle TimerForDialogue;
+
 		m_pcDialogueWidget->DisplayText( DialogueSequence->CharacterName, DialogueSequence->DialogueText );
-		m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );
+		//m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );
 		//m_pcAudioComponent.Location
+
+		GetWorldTimerManager().SetTimer( m_fsTimerForWidgetRotation, this, &AInteractable_Character::FaceWidgetToCamera, 0.1f, true );
+		GetWorldTimerManager().SetTimer( TimerForDialogue, this , &AInteractable_Character::HideOverHeadDialogueWidget, 
+											DialogueSequence->DialogueDurationOffset, false );
 	}
 
 	// Initialise the dialogue to play.
-	m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
+	//m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
 }
 
 void AInteractable_Character::OnFocus_Implementation()
@@ -98,3 +108,26 @@ void AInteractable_Character::LostFocus_Implementation()
 	GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red,
 		TEXT( "Lost Focus" ) );
 }
+
+void AInteractable_Character::FaceWidgetToCamera()
+{
+
+	FVector v3PlayerPosition = m_pcPlayer->GetActorLocation();
+	FRotator v3NewWidgetRotation = UKismetMathLibrary::FindLookAtRotation( GetActorLocation(), v3PlayerPosition );
+	
+	m_pcWidgetComponent->SetWorldRotation( v3NewWidgetRotation );
+}
+
+void AInteractable_Character::HideOverHeadDialogueWidget()
+{
+	// Hide the dialogue widget.
+	m_pcDialogueWidget->HideDialogue();
+
+	// Clear the timer of setting the widget's rotation.
+	GetWorldTimerManager().ClearTimer( m_fsTimerForWidgetRotation );
+
+	// Reset the rotation of the overhead widget to 0.
+	m_pcWidgetComponent->SetWorldRotation( FRotator( 0.0f ) );
+}
+
+void AInteractable_Character::SetDialogueID( const FName& krnDialogueID ) { m_nDialogueID = krnDialogueID; }
