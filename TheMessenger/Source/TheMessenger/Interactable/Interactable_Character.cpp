@@ -76,9 +76,6 @@ void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 		float PlayerRotationYaw = GetActorRotation().Yaw + 180;
 
 		m_pcPlayer->SetPlayerForSequence( PlayerPosition, PlayerRotationYaw );
-		//GetActorTransform()
-
-		//m_pcPlayer.SetInputMode
 	}
 	else
 	{
@@ -92,9 +89,6 @@ void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 		GetWorldTimerManager().SetTimer( TimerForDialogue, this , &AInteractable_Character::HideOverHeadDialogueWidget, 
 											DialogueSequence->DialogueDurationOffset, false );
 	}
-
-	// Initialise the dialogue to play.
-	//m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
 }
 
 void AInteractable_Character::OnFocus_Implementation()
@@ -111,7 +105,7 @@ void AInteractable_Character::LostFocus_Implementation()
 
 void AInteractable_Character::FaceWidgetToCamera()
 {
-
+	// Get the player's location
 	FVector v3PlayerPosition = m_pcPlayer->GetActorLocation();
 	FRotator v3NewWidgetRotation = UKismetMathLibrary::FindLookAtRotation( GetActorLocation(), v3PlayerPosition );
 	

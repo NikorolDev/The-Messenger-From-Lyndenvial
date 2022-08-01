@@ -9,6 +9,7 @@
 class APlayerController;
 
 class ADialogueManager;
+class UPlayerHUD;
 
 UCLASS(config=Game)
 class ATheMessengerCharacter : public ACharacter
@@ -30,7 +31,9 @@ private:
 
 	APlayerController* m_pcPlayerController;
 
-	UPROPERTY( Category = "Line Trace", EditInstanceOnly, meta = ( DisplayName = "Line Trace Distance" ) )
+	UPlayerHUD* m_pcPlayerHUD;
+
+	UPROPERTY( Category = "Properties|Line Trace", EditInstanceOnly, meta = ( DisplayName = "Line Trace Distance" ) )
 		float m_fLineTraceDistance;
 
 	void TraceForward();
@@ -55,7 +58,13 @@ public:
 
 	void SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw );
 
+	UPlayerHUD& GetPlayerHUD() const;
+
 protected:
+
+	UPROPERTY( Category = "Properties|HUD", EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Player HUD" ) )
+		TSubclassOf<UPlayerHUD> m_tcPlayerHUD;
+
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();

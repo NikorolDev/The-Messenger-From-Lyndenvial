@@ -13,6 +13,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "TheMessenger/Dialogue/DialogueManager.h"
 #include "TheMessenger/Interactable/InteractableInterface.h"
+#include "TheMessenger/Player/PlayerHUD.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ATheMessengerCharacter
@@ -166,7 +167,11 @@ void ATheMessengerCharacter::BeginPlay()
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 	m_pcPlayerController = Cast<APlayerController>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ) );
 
-	m_pcDialogueManager->DialogueFinished.BindUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
+	//m_pcDialogueManager->DialogueFinished.BindUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
+
+	// Create the player widget and add it to the viewport.
+	//m_pcPlayerHUD = CreateWidget<UPlayerHUD>( m_pcPlayerController, m_tcPlayerHUD );
+	//m_pcPlayerHUD->AddToViewport();
 }
 
 
@@ -181,6 +186,11 @@ void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPositi
 	m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
 	SetActorLocation( v3PlayerPosition );
 	m_pcPlayerController->SetControlRotation( FRotator( 0, PlayerRotationYaw, 0 ) );
+}
+
+UPlayerHUD& ATheMessengerCharacter::GetPlayerHUD() const
+{
+	return *m_pcPlayerHUD;
 }
 
 void ATheMessengerCharacter::OnResetVR()
