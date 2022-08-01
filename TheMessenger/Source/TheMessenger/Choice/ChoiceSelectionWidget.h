@@ -14,6 +14,7 @@ class UVerticalBox;
 // Forward class declarations (Game)
 //class ABranchManager;
 class ADialogueManager;
+class AHintsManager;
 class UChoiceWidget;
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -34,6 +35,8 @@ private:
 
 	// The dialogue manager needed to continue the dialogue after the choice was made.
 	ADialogueManager*		m_pcDialogueManager;
+
+	AHintsManager*			m_pcHintsManager;
 
 	// The player controller needed to toggle cursor visibility and to toggle input mode from UI to Game.
 	APlayerController*		m_pcPlayerController;

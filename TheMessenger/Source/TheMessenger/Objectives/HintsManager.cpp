@@ -29,8 +29,8 @@ void AHintsManager::BeginPlay()
 	Super::BeginPlay();
 
 	// Get the player character to get the HUD, to display the objectives.
-	ATheMessengerCharacter* pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
-	m_pcPlayerHUD = &pcPlayer->GetPlayerHUD();
+	//ATheMessengerCharacter* pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
+	//m_pcPlayerHUD = &pcPlayer->GetPlayerHUD();
 
 		
 }
@@ -42,10 +42,18 @@ void AHintsManager::Tick(float DeltaTime)
 
 }
 
-void AHintsManager::SetObjective( FName& rcnObjectiveID )
+void AHintsManager::SetHint( FName& rcnObjectiveID )
 {
 	// Set new objective by finding the objective struct 
 	m_pfsCurrentHint = m_tmHints.Find( rcnObjectiveID );
 
-	//m_pcPlayerHUD.Set
+	if( m_pcPlayerHUD == nullptr )
+	{
+		// Get the player character to get the HUD, to display the objectives.
+		ATheMessengerCharacter* pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
+		m_pcPlayerHUD = &pcPlayer->GetPlayerHUD();
+	}
+
+	// Set Hint UI Elements
+	m_pcPlayerHUD->SetHintUIElements( *m_pfsCurrentHint );
 }

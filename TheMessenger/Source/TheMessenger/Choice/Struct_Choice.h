@@ -6,10 +6,21 @@
 
 class AInteractable_Base;
 
+UENUM(BlueprintType)
+enum class EChoiceType : uint8
+{
+	Main,
+	Optional,
+	Exit
+};
+
 USTRUCT(BlueprintType)
 struct FStructChoiceProperties
 {
 	GENERATED_BODY()
+
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice Type" ) )
+		EChoiceType eChoiceType;
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice Display Text" ) )
 		FString ChoiceDisplayText;

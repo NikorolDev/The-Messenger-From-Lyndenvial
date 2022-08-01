@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "TheMessenger/Objectives/Struct_HintProperties.h"
 #include "PlayerHUD.generated.h"
 
 // Forward class declarations (Engine)
 class UImage;
+class URichTextBlock;
 class UWidgetAnimation;
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -24,10 +26,13 @@ class THEMESSENGER_API UPlayerHUD : public UUserWidget
 private:
 	// The icon that is used to display along side the tooltip.
 	UPROPERTY( meta = ( BindWidget ) )
-		UImage* ObjectiveIcon;
+		UImage* HintIcon;
+
+	UPROPERTY( meta = ( BindWidget ) )
+		URichTextBlock* HintText;
 
 	UPROPERTY( Transient, meta = ( BindWidgetAnim ) )
-		UWidgetAnimation* DisplayObjective;
+		UWidgetAnimation* DisplayHint;
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name		: AnimationFinished()
@@ -46,5 +51,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
+
+	void SetHintUIElements( const FHintProperties& krfsHintProperties );
 
 };

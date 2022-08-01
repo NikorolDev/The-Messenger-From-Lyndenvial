@@ -3,6 +3,9 @@
 
 #include "PlayerHUD.h"
 
+#include <Components/Image.h>
+#include <Components/RichTextBlock.h>
+
 void UPlayerHUD::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -14,7 +17,22 @@ void UPlayerHUD::NativeConstruct()
 	dObjectiveWidgetAnimation.BindDynamic( this, &UPlayerHUD::AnimationFinished );
 
 	// Bind the animation to when its finished using the the delegate.
-	BindToAnimationFinished( DisplayObjective, dObjectiveWidgetAnimation );
+	BindToAnimationFinished( DisplayHint, dObjectiveWidgetAnimation );
+}
+
+void UPlayerHUD::SetHintUIElements( const FHintProperties& krfsHintProperties )
+{
+	if( krfsHintProperties.HintImage != nullptr )
+	{
+		HintIcon->SetVisibility( ESlateVisibility::Visible );
+		HintIcon->SetBrushFromTexture( krfsHintProperties.HintImage, true );
+	}
+	else
+	{
+		HintIcon->SetVisibility( ESlateVisibility::Collapsed );
+	}
+
+	HintText->SetText( FText::FromString( krfsHintProperties.HintText ) );
 }
 
 void UPlayerHUD::AnimationFinished()

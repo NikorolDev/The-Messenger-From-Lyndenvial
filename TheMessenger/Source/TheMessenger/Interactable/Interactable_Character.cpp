@@ -72,10 +72,11 @@ void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 	// Check if the dialogue sequence will not be played in a level sequencer
 	if( CurrentDialogueSequence->bIsSequenceRequired )
 	{
-		FVector PlayerPosition = GetActorLocation() + (GetActorForwardVector() * 300 );
+		FVector PlayerPosition = GetActorLocation() + (GetActorForwardVector() * m_fPlayerDistancePositionInSequence );
 		float PlayerRotationYaw = GetActorRotation().Yaw + 180;
 
 		m_pcPlayer->SetPlayerForSequence( PlayerPosition, PlayerRotationYaw );
+		m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
 	}
 	else
 	{

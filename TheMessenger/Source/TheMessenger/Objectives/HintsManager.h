@@ -47,6 +47,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetObjective( FName& rcnObjectiveID );
+	void SetHint( FName& rcnObjectiveID );
 
 };

@@ -16,4 +16,7 @@ struct FChoiceImpactProperties
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "New Dialogue ID", EditCondition = "CharacterAffected != nullptr" ) )
 		FName NewDialogueID;
+
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Hint ID" ) )
+		FName HintID;
 };

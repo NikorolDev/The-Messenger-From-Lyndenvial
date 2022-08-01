@@ -8,6 +8,7 @@
 #include "ChoiceWidget.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
 #include "TheMessenger/Interactable/Interactable_Character.h"
+#include "TheMessenger/Objectives/HintsManager.h"
 
 void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 {
@@ -23,6 +24,7 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	// When a choice is selected hide the window and initialise next dialogue.
 	//SetVisibility( ESlateVisibility::Hidden );
 	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
+	m_pcHintsManager->SetHint( ChoiceSelected->ChoiceImpactProperties.HintID );
 
 	// Check if the character affected is not nullptr to properly set the impact 
 	if( ChoiceSelected->ChoiceImpactProperties.CharacterAffectedTag != nullptr )
@@ -53,7 +55,9 @@ void UChoiceSelectionWidget::NativeConstruct()
 	}
 
 	//m_pcBranchManager = Cast<ABranchManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ABranchManager::StaticClass() ) );
-	m_pcPlayerController = UGameplayStatics::GetPlayerController( GetWorld(), 0 );
+
+	m_pcHintsManager		= Cast<AHintsManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AHintsManager::StaticClass() ) );
+	m_pcPlayerController	= UGameplayStatics::GetPlayerController( GetWorld(), 0 );
 
 	// Hide the widget as no choice scenario is active.
 	SetVisibility( ESlateVisibility::Hidden );
