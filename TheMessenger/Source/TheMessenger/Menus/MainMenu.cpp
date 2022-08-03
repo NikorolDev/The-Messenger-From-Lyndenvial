@@ -6,10 +6,14 @@
 #include <Components/Button.h>
 #include <Kismet/GameplayStatics.h>
 
+#include "Cinematic.h"
+
 void UMainMenu::NativeConstruct()
 {
-	//m_pcIntroCinematic = CreateWidget<UUserWidget>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ), 
-	//												m_tcIntroCinematic );
+	Super::NativeConstruct();
+
+	m_pcCinematicWidget = CreateWidget<UCinematic>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ),
+													m_tcCinematicWidget );
 
 	NewGameButton->OnClicked.AddDynamic( this, &UMainMenu::NewGameButtonClicked );
 }
@@ -17,8 +21,8 @@ void UMainMenu::NativeConstruct()
 void UMainMenu::NewGameButtonClicked()
 {
 	SetVisibility( ESlateVisibility::Hidden );
-	//m_pcIntroCinematic->AddToViewport();
-	InitiateCinematic();
+	m_pcCinematicWidget->AddToViewport();
+	m_pcCinematicWidget->PlayCinematic( m_pcIntroCinematicMaterial, m_pcIntroCinematicPlayer );
 }
 
 void UMainMenu::ContinueButtonClicked()

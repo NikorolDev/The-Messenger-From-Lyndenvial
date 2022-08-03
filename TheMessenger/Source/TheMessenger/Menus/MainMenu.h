@@ -8,6 +8,11 @@
 
 // Forward class declarations (Engine)
 class UButton;
+class UMaterialInstance;
+class UMediaPlayer;
+
+// Forward class declarations (Game)
+class UCinematic;
 
 /**
  * 
@@ -19,7 +24,7 @@ class THEMESSENGER_API UMainMenu : public UUserWidget
 
 private:
 
-	UUserWidget* m_pcIntroCinematic;
+	UCinematic* m_pcCinematicWidget;
 
 	UPROPERTY( meta = ( BindWidget ) )
 		UButton* NewGameButton;
@@ -40,10 +45,16 @@ private:
 		void QuitButtonClicked();
 
 protected:
-	void NativeConstruct();
+	virtual void NativeConstruct() override;
 
-	UPROPERTY( Category = "Properties|Cutscene", EditDefaultsOnly, BlueprintReadWrite, meta = ( DisplayName = "Intro Cinematic Widget" ) )
-		TSubclassOf<UUserWidget> m_tcIntroCinematic;
+	UPROPERTY( Category = "Properties|Intro Cinematic", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Intro Cinematic Player" ) )
+		UMaterialInstance* m_pcIntroCinematicMaterial;
+
+	UPROPERTY( Category = "Properties|Intro Cinematic", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Intro Cinematic Player" ) )
+		UMediaPlayer* m_pcIntroCinematicPlayer;
+
+	UPROPERTY( Category = "Properties|Widget", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Cinematic Widget" ) )
+		TSubclassOf<UCinematic> m_tcCinematicWidget;
 
 	UFUNCTION( BlueprintImplementableEvent, BlueprintCallable )
 		void InitiateCinematic();
