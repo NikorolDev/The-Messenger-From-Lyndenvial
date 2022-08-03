@@ -9,6 +9,7 @@ class AInteractable_Base;
 UENUM(BlueprintType)
 enum class EChoiceType : uint8
 {
+	Hidden,
 	Main,
 	Optional,
 	Exit

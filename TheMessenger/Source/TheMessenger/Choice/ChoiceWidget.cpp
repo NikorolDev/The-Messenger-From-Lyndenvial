@@ -5,6 +5,7 @@
 
 #include <Components/Button.h>
 #include <Components/RichTextBlock.h>
+#include <Styling/SlateColor.h>
 
 void UChoiceWidget::OnButtonClicked()
 {
@@ -27,4 +28,9 @@ void UChoiceWidget::SetButtonText( int iChoiceCount, const FString& ChoiceDispla
 	ChoiceText->SetText( FText::FromString( ChoiceDisplayText ) );
 
 	SetVisibility( ESlateVisibility::Visible );
+}
+
+void UChoiceWidget::SetTextColour( const FLinearColor& krfsTextColour )
+{
+	ChoiceText->SetDefaultColorAndOpacity( FSlateColor( krfsTextColour ) );
 }

@@ -12,7 +12,6 @@ class APlayerController;
 class UVerticalBox;
 
 // Forward class declarations (Game)
-//class ABranchManager;
 class ADialogueManager;
 class AHintsManager;
 class UChoiceWidget;
@@ -63,8 +62,11 @@ private:
 
 protected:
 
+	UPROPERTY( Category = "Properties|Text Colour", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice Text Colours" ) )
+		TArray<FLinearColor> m_afsChoiceTextColours;
+
 	// The widget that will be used to display the choices.
-	UPROPERTY( Category = Widgets, EditDefaultsOnly, BlueprintReadOnly )
+	UPROPERTY( Category = "Properties|Widgets", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice Widget" ) )
 		TSubclassOf<UChoiceWidget> m_tcChoiceWidget;
 
 	//-----------------------------------------------------------------------------------------------------------------------------

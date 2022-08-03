@@ -65,37 +65,43 @@ void AInteractable_Character::Tick(float DeltaTime)
 
 void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 {
-	// Retrieve the dialogue sequence that will be played.
-	FStructDialogueSequence* CurrentDialogueSequence = &m_pcDialogueManager->GetDialogueSequence( m_nDialogueID );
-	FStructDialogueProperties* DialogueSequence = &CurrentDialogueSequence->DialogueSequence[ 0 ];
-
-	// Check if the dialogue sequence will not be played in a level sequencer
-	if( CurrentDialogueSequence->bIsSequenceRequired )
+	if( m_bCanBeInteracted )
 	{
-		FVector PlayerPosition = GetActorLocation() + (GetActorForwardVector() * m_fPlayerDistancePositionInSequence );
-		float PlayerRotationYaw = GetActorRotation().Yaw + 180;
+		// Retrieve the dialogue sequence that will be played.
+		FStructDialogueSequence* CurrentDialogueSequence = &m_pcDialogueManager->GetDialogueSequence( m_nDialogueID );
+		FStructDialogueProperties* DialogueSequence = &CurrentDialogueSequence->DialogueSequence[ 0 ];
 
-		m_pcPlayer->SetPlayerForSequence( PlayerPosition, PlayerRotationYaw );
-		m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
-	}
-	else
-	{
-		FTimerHandle TimerForDialogue;
+		// Check if the dialogue sequence will not be played in a level sequencer
+		if( CurrentDialogueSequence->bIsSequenceRequired )
+		{
+			FVector PlayerPosition = GetActorLocation() + ( GetActorForwardVector() * m_fPlayerDistancePositionInSequence );
+			float PlayerRotationYaw = GetActorRotation().Yaw + 180;
 
-		m_pcDialogueWidget->DisplayText( DialogueSequence->CharacterName, DialogueSequence->DialogueText );
-		//m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );
-		//m_pcAudioComponent.Location
+			m_pcPlayer->SetPlayerForSequence( PlayerPosition, PlayerRotationYaw );
+			m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
+		}
+		else
+		{
+			FTimerHandle TimerForDialogue;
 
-		GetWorldTimerManager().SetTimer( m_fsTimerForWidgetRotation, this, &AInteractable_Character::FaceWidgetToCamera, 0.1f, true );
-		GetWorldTimerManager().SetTimer( TimerForDialogue, this , &AInteractable_Character::HideOverHeadDialogueWidget, 
-											DialogueSequence->DialogueDurationOffset, false );
+			m_pcDialogueWidget->DisplayText( DialogueSequence->CharacterName, DialogueSequence->DialogueText );
+			//m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );
+			//m_pcAudioComponent.Location
+
+			GetWorldTimerManager().SetTimer( m_fsTimerForWidgetRotation, this, &AInteractable_Character::FaceWidgetToCamera, 0.1f, true );
+			GetWorldTimerManager().SetTimer( TimerForDialogue, this, &AInteractable_Character::HideOverHeadDialogueWidget,
+				DialogueSequence->DialogueDurationOffset, false );
+		}
 	}
 }
 
 void AInteractable_Character::OnFocus_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Green,
-		TEXT( "On Focus" ) );
+	if( m_bCanBeInteracted )
+	{
+		GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Green,
+			TEXT( "On Focus" ) );
+	}
 }
 
 void AInteractable_Character::LostFocus_Implementation()

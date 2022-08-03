@@ -9,6 +9,6 @@ public class TheMessenger : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay",
-															"UMG", "LevelSequence", "MovieScene", "MediaAssets" });
+															"UMG", "LevelSequence", "MovieScene", "MediaAssets", "SlateCore" });
 	}
 }

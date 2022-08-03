@@ -11,11 +11,15 @@ struct FChoiceImpactProperties
 	GENERATED_BODY()
 
 
-	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Character Affected Tag" ) )
-		AInteractable_Character* CharacterAffectedTag;
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Character Affected" ) )
+		AInteractable_Character* CharacterAffected;
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "New Dialogue ID", EditCondition = "CharacterAffected != nullptr" ) )
 		FName NewDialogueID;
+
+	// The choice ID of hidden choices
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice ID With Hidden Choices" ) )
+		FName ChoiceIDWithHiddenChoices;
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Hint ID" ) )
 		FName HintID;

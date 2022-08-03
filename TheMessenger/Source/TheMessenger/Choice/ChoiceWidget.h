@@ -58,5 +58,5 @@ public:
 
 	void SetButtonText( int iChoiceCount, const FString& ChoiceDisplayText, FName& rnDialogueID );
 
-
+	void SetTextColour( const FLinearColor& krfsTextColour );
 };

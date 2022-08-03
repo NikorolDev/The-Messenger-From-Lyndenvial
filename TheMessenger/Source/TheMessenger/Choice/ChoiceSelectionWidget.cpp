@@ -27,11 +27,11 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	m_pcHintsManager->SetHint( ChoiceSelected->ChoiceImpactProperties.HintID );
 
 	// Check if the character affected is not nullptr to properly set the impact 
-	if( ChoiceSelected->ChoiceImpactProperties.CharacterAffectedTag != nullptr )
+	if( ChoiceSelected->ChoiceImpactProperties.CharacterAffected != nullptr )
 	{
 		// Set the new dialogue ID for the affected character.
 		//m_pcBranchManager->SetNewDialogueID( &ChoiceSelected->ChoiceImpactProperties );
-		ChoiceSelected->ChoiceImpactProperties.CharacterAffectedTag->SetDialogueID( ChoiceSelected->ChoiceImpactProperties.NewDialogueID );
+		ChoiceSelected->ChoiceImpactProperties.CharacterAffected->SetDialogueID( ChoiceSelected->ChoiceImpactProperties.NewDialogueID );
 	}
 }
 
@@ -73,13 +73,36 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 	{
 		// Create a temporary choice properties struct to be set for each selection
 		FStructChoiceProperties& ChoiceProperties = m_pfsChoices->ChoiceBranches[ iChoiceBranch ];
+
+		m_aChoiceWidgets[iChoiceBranch]->SetButtonText(iChoiceBranch, ChoiceProperties.ChoiceDisplayText, ChoiceProperties.DialogueID);
+
+		switch( ChoiceProperties.eChoiceType )
+		{
+			case EChoiceType::Hidden:
+			{
+				m_aChoiceWidgets[ iChoiceBranch ]->SetVisibility( ESlateVisibility::Collapsed );
+				break;
+			}
+
+			case EChoiceType::Main:
+			{
+				m_aChoiceWidgets[ iChoiceBranch ]->SetTextColour( m_afsChoiceTextColours[ 0 ] );
+				break;
+			}
+
+			case EChoiceType::Optional:
+			case EChoiceType::Exit:
+			{
+				m_aChoiceWidgets[ iChoiceBranch ]->SetTextColour( m_afsChoiceTextColours[ 1 ] );
+				break;
+			}
+		}
 	
 		//DEPRECATED
 		//UChoiceWidget* ChoiceWidget = CreateWidget<UChoiceWidget>( this, m_tcChoiceWidget );
 		//ChoiceWidget->ChoiceSelected.AddDynamic( this, &UChoiceSelectionWidget::OnChoiceSelected );
 	
 		// Set the selection.
-		m_aChoiceWidgets[iChoiceBranch]->SetButtonText(iChoiceBranch, ChoiceProperties.ChoiceDisplayText, ChoiceProperties.DialogueID);
 		
 		//DEPRECATED
 		//m_aChoiceWidgets[iChoiceBranch]

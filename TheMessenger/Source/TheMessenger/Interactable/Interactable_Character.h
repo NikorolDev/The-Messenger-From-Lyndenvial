@@ -37,6 +37,10 @@ private:
 	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Audio Component" ) )
 		UAudioComponent* m_pcAudioComponent;
 
+	// Can the character be interacted by the player.
+	UPROPERTY( Category = "Properties|Interaction", EditInstanceOnly, meta = ( DisplayName = "Can Be Interacted" ) )
+		bool m_bCanBeInteracted;
+
 	// The dialogue ID that is used to initialise dialogue. The editor set dialogue ID is the intial dialogue ID to play.
 	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ))
 		FName m_nDialogueID;
