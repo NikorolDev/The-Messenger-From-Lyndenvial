@@ -24,6 +24,7 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	// When a choice is selected hide the window and initialise next dialogue.
 	//SetVisibility( ESlateVisibility::Hidden );
 	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
+
 	m_pcHintsManager->SetHint( ChoiceSelected->ChoiceImpactProperties.HintID );
 
 	// Check if the character affected is not nullptr to properly set the impact 

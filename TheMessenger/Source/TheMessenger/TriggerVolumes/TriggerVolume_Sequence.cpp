@@ -20,7 +20,10 @@ void ATriggerVolume_Sequence::BeginPlay()
 	// Create default sequence playback settings.
 	FMovieSceneSequencePlaybackSettings m_pfsLevelSequencePlaybackSettings;
 
-	//m_pcLevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer( GetWorld(), m_pcLevelSequenceToPlay->GetSequence(), m_pfsLevelSequencePlaybackSettings, m_pcLevelSequenceToPlay );
+	if( m_pcLevelSequenceToPlay != nullptr )
+	{
+		m_pcLevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer( GetWorld(), m_pcLevelSequenceToPlay->GetSequence(), m_pfsLevelSequencePlaybackSettings, m_pcLevelSequenceToPlay );
+	}
 
 	// Setup an OnComponentBeginOverlap callback function to be called when an overlap is triggered.
 	m_BoxTriggerVolume->OnComponentBeginOverlap.AddDynamic( this, &ATriggerVolume_Sequence::OnBeginOverlapTrigger );
@@ -36,9 +39,16 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 		// Turn off collision. To not be called again.
 		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 
-		//Call the interaction function from the charatcer.
-		m_pcInteractedCharacter->OnInteract_Implementation( this );
+		if( m_pcInteractedCharacter != nullptr )
+		{
+			//Call the interaction function from the charatcer.
+			m_pcInteractedCharacter->OnInteract_Implementation( this );
+		}
 
+		if( m_pcLevelSequenceToPlay != nullptr )
+		{
+			m_pcLevelSequencePlayer->Play();
+		}
 
 		// Then play the sequence MAYBE.
 		//m_pcLevelSequencePlayer->Play();
