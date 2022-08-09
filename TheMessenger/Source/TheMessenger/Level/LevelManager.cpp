@@ -40,7 +40,7 @@ void ALevelManager::BeginPlay()
 		// Cast it as influentiable and add it to a different array that will be used to check if actors have set their new day properties.
 		m_aChangers.Add( Cast<IInfluentiableThroughTimeType>( Influentiable ) );
 
-		//m_aChangers.Last()->OnFinishedSetting.BindUObject( this, &ALevelManager::SetNewDay );
+		m_aChangers.Last()->OnFinishedSetting.BindUObject( this, &ALevelManager::SetNewDay );
 	}
 
 }

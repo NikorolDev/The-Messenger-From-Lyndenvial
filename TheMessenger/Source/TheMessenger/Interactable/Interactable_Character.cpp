@@ -56,13 +56,6 @@ void AInteractable_Character::BeginPlay()
 	}
 }
 
-// Called every frame
-void AInteractable_Character::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 {
 	if( m_bCanBeInteracted )
@@ -88,7 +81,6 @@ void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 			//m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );
 			//m_pcAudioComponent.Location
 
-			GetWorldTimerManager().SetTimer( m_fsTimerForWidgetRotation, this, &AInteractable_Character::FaceWidgetToCamera, 0.1f, true );
 			GetWorldTimerManager().SetTimer( TimerForDialogue, this, &AInteractable_Character::HideOverHeadDialogueWidget,
 				DialogueSequence->DialogueDurationOffset, false );
 		}
@@ -123,12 +115,6 @@ void AInteractable_Character::HideOverHeadDialogueWidget()
 {
 	// Hide the dialogue widget.
 	m_pcDialogueWidget->HideDialogue();
-
-	// Clear the timer of setting the widget's rotation.
-	GetWorldTimerManager().ClearTimer( m_fsTimerForWidgetRotation );
-
-	// Reset the rotation of the overhead widget to 0.
-	m_pcWidgetComponent->SetWorldRotation( FRotator( 0.0f ) );
 }
 
 void AInteractable_Character::SetDialogueID( const FName& krnDialogueID ) { m_nDialogueID = krnDialogueID; }

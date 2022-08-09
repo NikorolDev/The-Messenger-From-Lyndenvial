@@ -69,9 +69,6 @@ public:
 	// Sets default values for this character's properties
 	AInteractable_Character();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	virtual void OnInteract_Implementation( AActor* Caller ) override;
 
 	virtual void OnFocus_Implementation() override;
