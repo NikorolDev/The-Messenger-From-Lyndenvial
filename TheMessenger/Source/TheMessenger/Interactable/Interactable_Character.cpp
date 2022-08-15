@@ -31,9 +31,6 @@ AInteractable_Character::AInteractable_Character()
 	// Widget Component (m_pcWidgetComponent).
 	m_pcWidgetComponent = CreateDefaultSubobject<UWidgetComponent>( TEXT( "Widget Component" ) );
 	m_pcWidgetComponent->SetupAttachment( GetCapsuleComponent() );
-
-	// Text Render Component (m_pcDialogueTextComponent).
-	//m_pcDialogueTextComponent = CreateDefaultSubobject<UTextRenderComponent>( TEXT( "Dialogue Text Render Component" ) );
 }
 
 
@@ -42,7 +39,7 @@ void AInteractable_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
+	//m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 	m_pcDialogueWidget = Cast<UDialogueWidgetHUD>(m_pcWidgetComponent->GetWidget());
 
 	m_pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
@@ -118,3 +115,8 @@ void AInteractable_Character::HideOverHeadDialogueWidget()
 }
 
 void AInteractable_Character::SetDialogueID( const FName& krnDialogueID ) { m_nDialogueID = krnDialogueID; }
+
+void AInteractable_Character::SetDialogueManager( ADialogueManager* pcDialogueManager )
+{
+	m_pcDialogueManager = pcDialogueManager;
+}

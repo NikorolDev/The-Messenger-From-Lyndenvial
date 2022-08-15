@@ -7,6 +7,7 @@
 #include <Kismet/GameplayStatics.h>
 
 #include "InfluentiableThroughTimeType.h"
+#include "TheMessenger/Interactable/Interactable_Character.h"
 
 // Sets default values
 ALevelManager::ALevelManager()
@@ -25,6 +26,16 @@ void ALevelManager::SetNewDay()
 	UE_LOG( LogTemp, Display, TEXT( "Building Set" ) );
 }
 
+void ALevelManager::SetManagersToCharacters()
+{
+	// Loop through all main characters in the level and set their new dialogue manager to grab their dialogue from.
+	for( int iCharacterID = 0; iCharacterID < m_apcMainCharacters.Num(); ++iCharacterID )
+	{
+		// Set the new dialogue manager for the main character.
+		m_apcMainCharacters[ iCharacterID ]->SetDialogueManager( m_apcDialogueManagers[ DayID ] );
+	}
+}
+
 // Called when the game starts or when spawned
 void ALevelManager::BeginPlay()
 {
@@ -32,24 +43,20 @@ void ALevelManager::BeginPlay()
 	
 	// Make a temporary array of actors that will get all actors with the influentiable interface.
 	TArray<AActor*> Influentiables;
-	//UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UInfluentiableThroughTimeType::StaticClass(), Influentiables );
+	UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UInfluentiableThroughTimeType::StaticClass(), Influentiables );
 
 	// Loop through all influetiable actors
-	///for( AActor* Influentiable : Influentiables )
-	///{
-	///	// Cast it as influentiable and add it to a different array that will be used to check if actors have set their new day properties.
-	///	m_aChangers.Add( Cast<IInfluentiableThroughTimeType>( Influentiable ) );
-	///
-	///	m_aChangers.Last()->OnFinishedSetting.BindUObject( this, &ALevelManager::SetNewDay );
-	///}
+	for( AActor* Influentiable : Influentiables )
+	{
+		// Cast it as influentiable and add it to a different array that will be used to check if actors have set their new day properties.
+		m_aChangers.Add( Cast<IInfluentiableThroughTimeType>( Influentiable ) );
+		
+		// Bind the recently added influentiable.
+		m_aChangers.Last()->OnFinishedSetting.BindUObject( this, &ALevelManager::SetNewDay );
+	}
 
-}
-
-// Called every frame
-void ALevelManager::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	// Set necessary managers to characters.
+	SetManagersToCharacters();
 }
 
 const ETimeType& ALevelManager::GetCurrentTimeType() const

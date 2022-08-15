@@ -76,4 +76,6 @@ public:
 	virtual void LostFocus_Implementation() override;
 
 	void SetDialogueID( const FName& krnDialogueID );
+
+	void SetDialogueManager( ADialogueManager* pcDialogueManager );
 };
