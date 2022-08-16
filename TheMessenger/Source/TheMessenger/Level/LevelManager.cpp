@@ -40,7 +40,7 @@ void ALevelManager::SetManagersToCharacters()
 void ALevelManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	// Make a temporary array of actors that will get all actors with the influentiable interface.
 	TArray<AActor*> Influentiables;
 	UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UInfluentiableThroughTimeType::StaticClass(), Influentiables );
@@ -55,12 +55,11 @@ void ALevelManager::BeginPlay()
 		m_aChangers.Last()->OnFinishedSetting.BindUObject( this, &ALevelManager::SetNewDay );
 	}
 
+
 	// Set necessary managers to characters.
 	SetManagersToCharacters();
 }
 
-const ETimeType& ALevelManager::GetCurrentTimeType() const
-{
-	return m_aDayTypes[ DayID ];
-}
+const ETimeType& ALevelManager::GetCurrentTimeType() const { return m_aDayTypes[ DayID ]; }
 
+ADialogueManager& ALevelManager::GetCurrentDialogueManager() const { return *m_apcDialogueManagers[ DayID ]; }

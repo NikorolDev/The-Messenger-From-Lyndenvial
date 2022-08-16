@@ -31,6 +31,8 @@ private:
 
 	TArray<IInfluentiableThroughTimeType*> m_aChangers;
 
+	ADialogueManager* m_pcCurrentDialogueManager;
+
 	UPROPERTY( Category = "Properties", EditInstanceOnly, meta = ( DisplayName = "DayTypes" ) )
 		TArray<ETimeType> m_aDayTypes;
 
@@ -63,4 +65,6 @@ public:
 
 	UFUNCTION( BlueprintPure )
 		const ETimeType& GetCurrentTimeType() const;
+	
+	ADialogueManager& GetCurrentDialogueManager() const;
 };

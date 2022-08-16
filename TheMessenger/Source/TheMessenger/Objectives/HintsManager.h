@@ -11,6 +11,8 @@
 class UBillboardComponent;
 
 // Forward class declarations (Game)
+class ADialogueManager;
+class ALevelManager;
 class UPlayerHUD;
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -25,7 +27,14 @@ class THEMESSENGER_API AHintsManager : public AActor
 	GENERATED_BODY()
 	
 private:
+
+	bool m_bHintDisplay;
+
 	FHintProperties* m_pfsCurrentHint;
+
+	ALevelManager* m_pcLevelManager;
+
+	ADialogueManager* m_pcDialogueManager;
 
 	UPlayerHUD* m_pcPlayerHUD;
 
@@ -36,6 +45,9 @@ private:
 	UPROPERTY( EditInstanceOnly, meta = ( DisplayName = "Hints" ) )
 		TMap<FName, FHintProperties> m_tmHints;
 
+	UFUNCTION()
+		void DisplayHintPopUp();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -44,9 +56,10 @@ public:
 	// Sets default values for this actor's properties
 	AHintsManager();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void IntialiseForNewDay();
 
 	void SetHint( FName& rcnObjectiveID );
+
+	void SetHintDisplay( bool bHintDisplay );
 
 };

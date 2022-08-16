@@ -6,6 +6,8 @@
 #include <Components/Image.h>
 #include <Components/RichTextBlock.h>
 
+#include "TheMessenger/Objectives/HintsManager.h"
+
 void UPlayerHUD::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -20,6 +22,12 @@ void UPlayerHUD::NativeConstruct()
 	BindToAnimationFinished( DisplayHint, dObjectiveWidgetAnimation );
 }
 
+void UPlayerHUD::DisplayHintPopUp()
+{
+	m_bIsAnimationInReverse = false;
+	PlayAnimation( DisplayHint );
+}
+
 void UPlayerHUD::SetHintUIElements( const FHintProperties& krfsHintProperties )
 {
 	if( krfsHintProperties.HintImage != nullptr )
@@ -32,9 +40,27 @@ void UPlayerHUD::SetHintUIElements( const FHintProperties& krfsHintProperties )
 		HintIcon->SetVisibility( ESlateVisibility::Collapsed );
 	}
 
+	m_fHintPopUpDuration = krfsHintProperties.HintDuration;
 	HintText->SetText( FText::FromString( krfsHintProperties.HintText ) );
+}
+
+void UPlayerHUD::HideHintPopUp()
+{
+	m_bIsAnimationInReverse = true;
+	PlayAnimationReverse( DisplayHint );
 }
 
 void UPlayerHUD::AnimationFinished()
 {
+	if( m_bIsAnimationInReverse )
+	{
+		m_pcHintsManager->SetHintDisplay( false );
+	}
+	else
+	{
+		// Setup a timer handle that will delay the hiding of the tooltip off screen, based on the duration of tooltip display.
+		FTimerHandle fsTimerHandle;
+
+		GetWorld()->GetTimerManager().SetTimer( fsTimerHandle, this, &UPlayerHUD::HideHintPopUp, m_fHintPopUpDuration, false );
+	}
 }

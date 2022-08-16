@@ -16,7 +16,7 @@ class UDialogueWidgetHUD;
 
 // Delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FDialogueUpdatedSignature, FName, Name );
-DECLARE_DELEGATE( FDialogueFinished );
+DECLARE_MULTICAST_DELEGATE( FDialogueFinished );
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // Class Name			: ADialogueManager

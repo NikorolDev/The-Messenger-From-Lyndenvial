@@ -25,7 +25,10 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	//SetVisibility( ESlateVisibility::Hidden );
 	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
 
-	m_pcHintsManager->SetHint( ChoiceSelected->ChoiceImpactProperties.HintID );
+	if( !ChoiceSelected->ChoiceImpactProperties.HintID.IsNone() )
+	{
+		m_pcHintsManager->SetHint( ChoiceSelected->ChoiceImpactProperties.HintID );
+	}
 
 	// Check if the character affected is not nullptr to properly set the impact 
 	if( ChoiceSelected->ChoiceImpactProperties.CharacterAffected != nullptr )

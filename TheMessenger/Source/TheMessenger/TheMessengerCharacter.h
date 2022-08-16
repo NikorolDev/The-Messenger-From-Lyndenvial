@@ -40,7 +40,8 @@ private:
 
 	void OnInteractPressed();
 
-	void SetPlayerBackFromSequence();
+	UFUNCTION()
+		void SetPlayerBackFromSequence();
 
 public:
 	ATheMessengerCharacter();

@@ -168,10 +168,12 @@ void ATheMessengerCharacter::BeginPlay()
 	m_pcPlayerController = Cast<APlayerController>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ) );
 
 	// Create the player widget and add it to the viewport.
-	//m_pcPlayerHUD = CreateWidget<UPlayerHUD>( m_pcPlayerController, m_tcPlayerHUD );
-	//m_pcPlayerHUD->AddToViewport();
+	m_pcPlayerHUD = CreateWidget<UPlayerHUD>( m_pcPlayerController, m_tcPlayerHUD );
+	m_pcPlayerHUD->AddToViewport();
 
-	m_pcDialogueManager->DialogueFinished.BindUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
+	//m_pcDialogueManager->DialogueFinished.BindUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
+	//m_pcDialogueManager->DialogueFinished.AddDynamic( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
+	m_pcDialogueManager->DialogueFinished.AddUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
 }
 
 

@@ -12,6 +12,9 @@ class UImage;
 class URichTextBlock;
 class UWidgetAnimation;
 
+// Forward class declarations (Game)
+class AHintsManager;
+
 //-----------------------------------------------------------------------------------------------------------------------------
 // Class Name			: UPlayerHUD
 // Author				: Nikodem Hamrol
@@ -24,6 +27,15 @@ class THEMESSENGER_API UPlayerHUD : public UUserWidget
 	GENERATED_BODY()
 	
 private:
+	// 
+	bool m_bIsAnimationInReverse;
+
+	// The duration of the hint displayed.
+	float m_fHintPopUpDuration;
+
+	// The hint manager to disable hint display to allow for the hint to be redisplayed.
+	AHintsManager* m_pcHintsManager;
+
 	// The icon that is used to display along side the tooltip.
 	UPROPERTY( meta = ( BindWidget ) )
 		UImage* HintIcon;
@@ -33,6 +45,8 @@ private:
 
 	UPROPERTY( Transient, meta = ( BindWidgetAnim ) )
 		UWidgetAnimation* DisplayHint;
+
+	void HideHintPopUp();
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name		: AnimationFinished()
@@ -51,6 +65,8 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
+
+	void DisplayHintPopUp();
 
 	void SetHintUIElements( const FHintProperties& krfsHintProperties );
 

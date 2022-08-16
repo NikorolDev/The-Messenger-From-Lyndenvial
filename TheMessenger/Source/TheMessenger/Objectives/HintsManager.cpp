@@ -7,6 +7,8 @@
 #include <Kismet/GameplayStatics.h>
 
 #include "TheMessenger/TheMessengerCharacter.h"
+#include "TheMessenger/Dialogue/DialogueManager.h"
+#include "TheMessenger/Level/LevelManager.h"
 #include "TheMessenger/Player/PlayerHUD.h"
 
 // Sets default values
@@ -22,6 +24,15 @@ AHintsManager::AHintsManager()
 
 }
 
+void AHintsManager::DisplayHintPopUp()
+{
+	if( m_bHintDisplay )
+	{
+		UE_LOG( LogTemp, Display, TEXT( "DISPLAYING HINTS" ) );
+		m_pcPlayerHUD->DisplayHintPopUp();
+	}
+}
+
 // Called when the game starts or when spawned
 void AHintsManager::BeginPlay()
 {
@@ -32,14 +43,15 @@ void AHintsManager::BeginPlay()
 	//ATheMessengerCharacter* pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
 	//m_pcPlayerHUD = &pcPlayer->GetPlayerHUD();
 
-		
+	m_pcLevelManager = Cast<ALevelManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ALevelManager::StaticClass() ) );
+
+	IntialiseForNewDay();
 }
 
-// Called every frame
-void AHintsManager::Tick(float DeltaTime)
+void AHintsManager::IntialiseForNewDay()
 {
-	Super::Tick(DeltaTime);
-
+	m_pcDialogueManager = &m_pcLevelManager->GetCurrentDialogueManager();
+	m_pcDialogueManager->DialogueFinished.AddUObject( this, &AHintsManager::DisplayHintPopUp );
 }
 
 void AHintsManager::SetHint( FName& rcnObjectiveID )
@@ -56,4 +68,8 @@ void AHintsManager::SetHint( FName& rcnObjectiveID )
 
 	// Set Hint UI Elements
 	m_pcPlayerHUD->SetHintUIElements( *m_pfsCurrentHint );
+
+	m_bHintDisplay = true;
 }
+
+void AHintsManager::SetHintDisplay( bool bHintDisplay ) { m_bHintDisplay = bHintDisplay; }
