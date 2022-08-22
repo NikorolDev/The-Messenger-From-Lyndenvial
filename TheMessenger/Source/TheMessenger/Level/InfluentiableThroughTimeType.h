@@ -28,6 +28,4 @@ public:
 	FOnFinishedSettingSignature OnFinishedSetting;
 
 	// 
-	UFUNCTION( BlueprintCallable, BlueprintNativeEvent )
-		void SetForNextDay();
 };

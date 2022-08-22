@@ -7,13 +7,29 @@
 ABuilding_Base::ABuilding_Base()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+}
 
+void ABuilding_Base::SetForNextDay( EDayTimeType eDayTimeType )
+{
+	for(int i =0; i < m_aWindows.Num(); ++i )
+	{
+		switch( eDayTimeType )
+		{
+			case EDayTimeType::Day:
+				m_aWindows[ i ]->SetVectorParameterValueOnMaterials( "color", m_v3DefaultWindowColour );
+				break;
+			case EDayTimeType::Night:
+				m_aWindows[ i ]->SetVectorParameterValueOnMaterials( "color", m_v3NightWindowColour );
+				break;
+		}
+	}
 }
 
 // Called when the game starts or when spawned
 void ABuilding_Base::BeginPlay()
 {
 	Super::BeginPlay();
+
 	
 }
