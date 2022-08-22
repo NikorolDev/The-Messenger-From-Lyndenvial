@@ -4,9 +4,12 @@
 #include "LevelManager.h"
 
 #include <Components/BillboardComponent.h>
+#include <Engine/DirectionalLight.h>
+#include <EngineUtils.h>
 #include <Kismet/GameplayStatics.h>
+#include <Misc/OutputDeviceNull.h>
 
-#include "InfluentiableThroughTimeType.h"
+#include "Building_Base.h"
 #include "TheMessenger/Interactable/Interactable_Character.h"
 
 // Sets default values
@@ -23,7 +26,21 @@ ALevelManager::ALevelManager()
 
 void ALevelManager::SetNewDay()
 {
-	UE_LOG( LogTemp, Display, TEXT( "Building Set" ) );
+	for( int i = 0; i < m_aChangers.Num(); ++i )
+	{
+		m_aChangers[ i ]->SetForNextDay(m_aDayTypes[DayID]);
+	}
+
+	if( m_pcSkyLightSource )
+	{
+		m_pcSkyLightSource->SetActorRotation(FRotator());
+	}
+
+	if( m_pcSkySphere )
+	{
+		FOutputDeviceNull outputDevice;
+		m_pcSkySphere->CallFunctionByNameWithArguments( TEXT( "UpdateSunDirection" ), outputDevice, nullptr, true );
+	}
 }
 
 void ALevelManager::SetManagersToCharacters()
@@ -41,25 +58,34 @@ void ALevelManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Make a temporary array of actors that will get all actors with the influentiable interface.
-	TArray<AActor*> Influentiables;
-	UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UInfluentiableThroughTimeType::StaticClass(), Influentiables );
+	TActorIterator<ABuilding_Base> BuildingsIterator = TActorIterator<ABuilding_Base>( GetWorld(), ABuilding_Base::StaticClass() );
 
-	// Loop through all influetiable actors
-	for( AActor* Influentiable : Influentiables )
+	while( BuildingsIterator )
 	{
-		// Cast it as influentiable and add it to a different array that will be used to check if actors have set their new day properties.
-		m_aChangers.Add( Cast<IInfluentiableThroughTimeType>( Influentiable ) );
-		
-		// Bind the recently added influentiable.
-		m_aChangers.Last()->OnFinishedSetting.BindUObject( this, &ALevelManager::SetNewDay );
+		m_aChangers.Add( *BuildingsIterator );
+
+		BuildingsIterator.operator++();
 	}
 
 
+	// Make a temporary array of actors that will get all actors with the influentiable interface.
+	//TArray<AActor*> Influentiables;
+	//UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UInfluentiableThroughTimeType::StaticClass(), Influentiables );
+
+	// Loop through all influetiable actors
+	//for( AActor* Influentiable : Influentiables )
+	//{
+	//	// Cast it as influentiable and add it to a different array that will be used to check if actors have set their new day properties.
+	//	m_aChangers.Add( Cast<IInfluentiableThroughTimeType>( Influentiable ) );
+	//	
+	//	// Bind the recently added influentiable.
+	//	m_aChangers.Last()->OnFinishedSetting.BindUObject( this, &ALevelManager::SetNewDay );
+	//}
+
 	// Set necessary managers to characters.
 	SetManagersToCharacters();
-}
 
-const ETimeType& ALevelManager::GetCurrentTimeType() const { return m_aDayTypes[ DayID ]; }
+	SetNewDay();
+}
 
 ADialogueManager& ALevelManager::GetCurrentDialogueManager() const { return *m_apcDialogueManagers[ DayID ]; }

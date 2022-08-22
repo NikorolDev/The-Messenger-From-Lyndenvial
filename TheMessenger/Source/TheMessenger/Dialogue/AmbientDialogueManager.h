@@ -12,6 +12,7 @@ class UBillboardComponent;
 
 // Forward class Declarations (Game)
 class AInteractable_Character;
+class AVillager_Base;
 
 UCLASS()
 class THEMESSENGER_API AAmbientDialogueManager : public AActor
@@ -37,13 +38,22 @@ private:
 	// An instance of the dialogue.
 	FAmbientDialogueSequence* m_pfsDialogueSequence;
 
+	AVillager_Base* m_pcCurrentVillagerSpeaking;
+
 	// This billboard component will visualise the manager in the map editor.
-	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Ambient Dialgoue Manager Icon" ) )
+	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Dialgoue Manager Icon" ) )
 		UBillboardComponent* m_pcIconBillboard;
 
 	// This dialogue table will hold the dialogue in the level
 	UPROPERTY( Category = Dialogue, EditInstanceOnly, meta = ( DisplayName = "Ambient Dialogue Table" ) )
-		TMap<FName, FAmbientDialogueSequence> m_tmDialogueTable;
+		TMap<FName, FAmbientDialogueSequence> m_tmAmbientDialogueTable;
+
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: PlayDialogueTerm()
+	// Author			: Nikodem Hamrol
+	// Purpose			: To play the dialogue sequence when initialised.
+	//----------------------------------------------------------------------------------------------------------------------------
+	void PlayDialogueTerm();
 
 	//----------------------------------------------------------------------------------------------------------------------------
 	// Function Name	: SetDialogueTerm()

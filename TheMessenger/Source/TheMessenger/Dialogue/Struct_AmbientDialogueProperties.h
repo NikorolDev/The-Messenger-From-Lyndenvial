@@ -4,7 +4,7 @@
 #include "Struct_AmbientDialogueProperties.generated.h"
 
 // Forward class declaration
-class AInteractable_Character;
+class AVillager_Base;
 
 //----------------------------------------------------------------------------------------------------------------------------
 // Struct Name			: FStructAmbientDialogueProperties
@@ -18,7 +18,7 @@ struct FAmbientDialogueProperties : public FStructDialogueProperties
 	GENERATED_BODY()
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
-		AInteractable_Character* CharacterToSpeak = nullptr;
+		AVillager_Base* CharacterToSpeak = nullptr;
 };
 
 USTRUCT(BlueprintType)

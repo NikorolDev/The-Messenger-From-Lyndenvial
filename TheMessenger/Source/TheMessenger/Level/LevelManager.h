@@ -4,21 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Enum_DayTimeType.h"
 #include "LevelManager.generated.h"
 
+class ADirectionalLight;
 
+class ABuilding_Base;
 class AChoiceManager;
 class ADialogueManager;
 class AInteractable_Character;
-class IInfluentiableThroughTimeType;
-
-UENUM( BlueprintType )
-enum class ETimeType : uint8
-{
-	Day,
-	Night
-};
-
 
 UCLASS()
 class THEMESSENGER_API ALevelManager : public AActor
@@ -29,16 +23,14 @@ private:
 
 	int DayID;
 
-	TArray<IInfluentiableThroughTimeType*> m_aChangers;
+	int m_iActorsFinishedDaySetting;
+
+	TArray<ABuilding_Base*> m_aChangers;
 
 	ADialogueManager* m_pcCurrentDialogueManager;
 
 	UPROPERTY( Category = "Properties", EditInstanceOnly, meta = ( DisplayName = "DayTypes" ) )
-		TArray<ETimeType> m_aDayTypes;
-
-	// An array of all choice managers
-	UPROPERTY( Category = "Properties|Choice", EditInstanceOnly, meta = ( DisplayName = "Choice Managers" ) )
-		TArray<AChoiceManager*> m_apcChoiceManagers;
+		TArray<EDayTimeType> m_aDayTypes;
 
 	UPROPERTY( Category = "Properties|Characters", EditInstanceOnly, meta = ( DisplayName = "Main Characters" ) )
 		TArray<AInteractable_Character*> m_apcMainCharacters;
@@ -46,6 +38,12 @@ private:
 	// An array of all dialogue managers
 	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue Managers" ) )
 		TArray<ADialogueManager*> m_apcDialogueManagers;
+
+	UPROPERTY( Category = "Properties|Sky", EditInstanceOnly, meta = ( DisplayName = "Sky Sphere" ) )
+		AActor* m_pcSkySphere;
+
+	UPROPERTY( Category = "Properties|Sky", EditInstanceOnly, meta = ( DisplayName = "Sky Light Source" ) )
+		ADirectionalLight* m_pcSkyLightSource;
 
 	// This billboard component will visualise the manager in the map editor.
 	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Dialgoue Manager Icon" ) )
@@ -62,9 +60,6 @@ protected:
 public:	
 	// Sets default values for this actor's properties
 	ALevelManager();
-
-	UFUNCTION( BlueprintPure )
-		const ETimeType& GetCurrentTimeType() const;
 	
 	ADialogueManager& GetCurrentDialogueManager() const;
 };
