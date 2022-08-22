@@ -29,10 +29,6 @@ struct FStructDialogueProperties
 		FString		DialogueText = FString( "" );
 
 	// The extra time to delay the next dialogue term playing.
-	//UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( EditCondition = "DialogueAudio == nullptr" ) )
-	//	float		DialogueTextDuration = 0.0f;
-
-	// The extra time to delay the next dialogue term playing.
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
 		float		DialogueDurationOffset = 0.0f;
 };

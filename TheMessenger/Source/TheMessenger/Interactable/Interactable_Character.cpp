@@ -114,9 +114,6 @@ void AInteractable_Character::HideOverHeadDialogueWidget()
 	m_pcDialogueWidget->HideDialogue();
 }
 
-void AInteractable_Character::SetDialogueID( const FName& krnDialogueID ) { m_nDialogueID = krnDialogueID; }
+void AInteractable_Character::SetDialogueID( const FName& krnDialogueID )				{ m_nDialogueID = krnDialogueID; }
 
-void AInteractable_Character::SetDialogueManager( ADialogueManager* pcDialogueManager )
-{
-	m_pcDialogueManager = pcDialogueManager;
-}
+void AInteractable_Character::SetDialogueManager( ADialogueManager* pcDialogueManager ) { m_pcDialogueManager = pcDialogueManager; }
