@@ -29,11 +29,11 @@ void ATheMessengerCharacter::TraceForward()
 	//CollisionParams.AddIgnoredActor( this->GetOwner() );
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel( OutHit, v3StartPosition, v3EndPosition, ECC_Visibility, CollisionParams );
-	//DrawDebugLine( GetWorld(), v3StartPosition, v3EndPosition, FColor::Green, false, 1.0f );
+	DrawDebugLine( GetWorld(), v3StartPosition, v3EndPosition, FColor::Green, false, 1.0f );
 
 	if( bHit )
 	{
-		//DrawDebugBox( GetWorld(), OutHit.ImpactPoint, FVector( 5, 5, 5 ), FColor::Red, false, 1.0f );
+		DrawDebugBox( GetWorld(), OutHit.ImpactPoint, FVector( 5, 5, 5 ), FColor::Red, false, 1.0f );
 
 		AActor* Interactable = OutHit.GetActor();
 
@@ -69,6 +69,18 @@ void ATheMessengerCharacter::TraceForward()
 			}
 			FocusedActor = nullptr;
 		}
+	}
+	else
+	{
+		if( FocusedActor )
+		{
+			IInteractableInterface* Interface = Cast<IInteractableInterface>( FocusedActor );
+			if( Interface )
+			{
+				Interface->LostFocus_Implementation();
+			}
+		}
+		FocusedActor = nullptr;
 	}
 }
 

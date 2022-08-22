@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "TheMessenger/Interactable/InteractableInterface.h"
 #include "Villager_Base.generated.h"
 
 // Forward class Declarations (Engine)
@@ -12,21 +13,30 @@ class UWidgetComponent;
 
 // Forward class Declarations (Game)
 class AAmbientDialogueManager;
+class UCharacterOverHead;
 
 UCLASS()
-class THEMESSENGER_API AVillager_Base : public ACharacter
+class THEMESSENGER_API AVillager_Base : public ACharacter, public IInteractableInterface
 {
 	GENERATED_BODY()
 
 private:
 
-	AAmbientDialogueManager* m_pcAmbientDialoguemanager;
+	AAmbientDialogueManager* m_pcAmbientDialogueManager;
 
+	UCharacterOverHead* m_pcCharacterOverHead;
 
 protected:
+	
+	UPROPERTY( Category = "Properties|Character", EditInstanceOnly, meta = ( DisplayName = "Character Name" ) )
+		FName m_nCharacterName;
+
 	// The dialogue ID that is used to initialise dialogue. The editor set dialogue ID is the intial dialogue ID to play.
 	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ) )
 		FName m_nDialogueID;
+
+	UPROPERTY( Category = "Properties|Interaction", EditInstanceOnly, meta = ( DisplayName = "Character Name" ) )
+		bool m_bIsInteractable;
 
 	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Audio Component" ) )
 		UAudioComponent* m_pcAudioComponent;
@@ -41,6 +51,11 @@ public:
 	// Sets default values for this character's properties
 	AVillager_Base();
 
-	void PlayAmbientDialogueSequence();
+	virtual void OnFocus_Implementation() override;
 
+	virtual void LostFocus_Implementation() override;
+
+	void PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio );
+
+	UCharacterOverHead& GetCharatcerOverHead() const;
 };
