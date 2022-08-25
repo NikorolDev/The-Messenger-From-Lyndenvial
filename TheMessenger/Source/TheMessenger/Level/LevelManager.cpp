@@ -14,6 +14,7 @@
 
 // Sets default values
 ALevelManager::ALevelManager()
+	: DayID(0)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -31,9 +32,11 @@ void ALevelManager::SetNewDay()
 		m_aChangers[ i ]->SetForNextDay(m_aDayTypes[DayID]);
 	}
 
+
 	if( m_pcSkyLightSource )
 	{
-		m_pcSkyLightSource->SetActorRotation(FRotator());
+		FRotator CurrentLightRotation = m_pcSkyLightSource->GetActorRotation();
+		m_pcSkyLightSource->SetActorRotation( FRotator( m_fLightNightRotationY, CurrentLightRotation.Yaw, CurrentLightRotation.Roll ) );
 	}
 
 	if( m_pcSkySphere )

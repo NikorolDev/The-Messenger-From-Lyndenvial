@@ -59,7 +59,8 @@ public:
 
 	void SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw );
 
-	UPlayerHUD& GetPlayerHUD() const;
+	UFUNCTION( BlueprintCallable)
+		UPlayerHUD* GetPlayerHUD();
 
 protected:
 

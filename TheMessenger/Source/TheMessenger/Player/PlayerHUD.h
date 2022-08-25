@@ -36,6 +36,9 @@ private:
 	// The hint manager to disable hint display to allow for the hint to be redisplayed.
 	AHintsManager* m_pcHintsManager;
 
+	UPROPERTY( meta = ( BindWidget ) )
+		UImage* BlackBackground;
+
 	// The icon that is used to display along side the tooltip.
 	UPROPERTY( meta = ( BindWidget ) )
 		UImage* HintIcon;
@@ -70,4 +73,6 @@ public:
 
 	void SetHintUIElements( const FHintProperties& krfsHintProperties );
 
+	UFUNCTION( BlueprintCallable )
+		void ToggleBlackBackground( bool bIsVisible );
 };

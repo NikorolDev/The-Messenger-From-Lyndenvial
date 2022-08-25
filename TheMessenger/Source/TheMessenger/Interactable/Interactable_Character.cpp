@@ -75,8 +75,6 @@ void AInteractable_Character::OnInteract_Implementation( AActor* Caller )
 			FTimerHandle TimerForDialogue;
 
 			m_pcDialogueWidget->DisplayText( DialogueSequence->CharacterName, DialogueSequence->DialogueText );
-			//m_pcAudioComponent->SetSound( DialogueSequence->DialogueAudio );
-			//m_pcAudioComponent.Location
 
 			GetWorldTimerManager().SetTimer( TimerForDialogue, this, &AInteractable_Character::HideOverHeadDialogueWidget,
 				DialogueSequence->DialogueDurationOffset, false );

@@ -114,7 +114,7 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 	}
 
 	// When all buttons are set. Toggle mouse cursor visibility and set game input to UI only.
-	//m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
+	m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
 	m_pcPlayerController->bShowMouseCursor = true;
 }
 

@@ -39,6 +39,10 @@ private:
 	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue Managers" ) )
 		TArray<ADialogueManager*> m_apcDialogueManagers;
 
+	
+	UPROPERTY( Category = "Properties|Sky", EditInstanceOnly, meta = ( DisplayName = "Light Night Rotation Y" ) )
+		float m_fLightNightRotationY;
+
 	UPROPERTY( Category = "Properties|Sky", EditInstanceOnly, meta = ( DisplayName = "Sky Sphere" ) )
 		AActor* m_pcSkySphere;
 

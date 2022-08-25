@@ -5,12 +5,15 @@
 
 #include <Components/Image.h>
 #include <Components/RichTextBlock.h>
+#include <Kismet/GameplayStatics.h>
 
 #include "TheMessenger/Objectives/HintsManager.h"
 
 void UPlayerHUD::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	m_pcHintsManager = Cast<AHintsManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AHintsManager::StaticClass() ) );
 
 	// Setup a delegate to be able to bind the function to it and to when the animation has finished.
 	FWidgetAnimationDynamicEvent dObjectiveWidgetAnimation;
@@ -42,6 +45,18 @@ void UPlayerHUD::SetHintUIElements( const FHintProperties& krfsHintProperties )
 
 	m_fHintPopUpDuration = krfsHintProperties.HintDuration;
 	HintText->SetText( FText::FromString( krfsHintProperties.HintText ) );
+}
+
+void UPlayerHUD::ToggleBlackBackground( bool bIsVisible )
+{
+	if( bIsVisible )
+	{
+		BlackBackground->SetVisibility( ESlateVisibility::Visible );
+	}
+	else
+	{
+		BlackBackground->SetVisibility( ESlateVisibility::Hidden );
+	}
 }
 
 void UPlayerHUD::HideHintPopUp()

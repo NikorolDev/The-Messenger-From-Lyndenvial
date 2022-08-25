@@ -29,11 +29,11 @@ void ATheMessengerCharacter::TraceForward()
 	//CollisionParams.AddIgnoredActor( this->GetOwner() );
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel( OutHit, v3StartPosition, v3EndPosition, ECC_Visibility, CollisionParams );
-	DrawDebugLine( GetWorld(), v3StartPosition, v3EndPosition, FColor::Green, false, 1.0f );
+	//DrawDebugLine( GetWorld(), v3StartPosition, v3EndPosition, FColor::Green, false, 1.0f );
 
 	if( bHit )
 	{
-		DrawDebugBox( GetWorld(), OutHit.ImpactPoint, FVector( 5, 5, 5 ), FColor::Red, false, 1.0f );
+		//DrawDebugBox( GetWorld(), OutHit.ImpactPoint, FVector( 5, 5, 5 ), FColor::Red, false, 1.0f );
 
 		AActor* Interactable = OutHit.GetActor();
 
@@ -181,7 +181,7 @@ void ATheMessengerCharacter::BeginPlay()
 
 	// Create the player widget and add it to the viewport.
 	m_pcPlayerHUD = CreateWidget<UPlayerHUD>( m_pcPlayerController, m_tcPlayerHUD );
-	m_pcPlayerHUD->AddToViewport();
+	m_pcPlayerHUD->AddToViewport(-1);
 
 	//m_pcDialogueManager->DialogueFinished.BindUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
 	//m_pcDialogueManager->DialogueFinished.AddDynamic( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
@@ -202,9 +202,9 @@ void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPositi
 	m_pcPlayerController->SetControlRotation( FRotator( 0, PlayerRotationYaw, 0 ) );
 }
 
-UPlayerHUD& ATheMessengerCharacter::GetPlayerHUD() const
+UPlayerHUD* ATheMessengerCharacter::GetPlayerHUD()
 {
-	return *m_pcPlayerHUD;
+	return m_pcPlayerHUD;
 }
 
 void ATheMessengerCharacter::OnResetVR()

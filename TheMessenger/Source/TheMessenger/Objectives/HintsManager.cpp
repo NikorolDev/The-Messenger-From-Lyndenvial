@@ -63,7 +63,7 @@ void AHintsManager::SetHint( FName& rcnObjectiveID )
 	{
 		// Get the player character to get the HUD, to display the objectives.
 		ATheMessengerCharacter* pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
-		m_pcPlayerHUD = &pcPlayer->GetPlayerHUD();
+		m_pcPlayerHUD = pcPlayer->GetPlayerHUD();
 	}
 
 	// Set Hint UI Elements
