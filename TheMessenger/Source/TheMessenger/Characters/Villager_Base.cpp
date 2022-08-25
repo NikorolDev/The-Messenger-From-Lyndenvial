@@ -35,8 +35,18 @@ void AVillager_Base::BeginPlay()
 	// Get the ambient dialogue manager from the level.
 	m_pcAmbientDialogueManager = Cast <AAmbientDialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AAmbientDialogueManager::StaticClass() ) );
 
+	Initialise();
+
 	// Get the character over head widget.
-	m_pcCharacterOverHead = Cast<UCharacterOverHead>( m_pcWidgetComponent->GetWidget() );	
+	//m_pcCharacterOverHead = Cast<UCharacterOverHead>( m_pcWidgetComponent->GetWidget() );	
+}
+
+void AVillager_Base::Initialise()
+{
+	// Get the character over head widget.
+	m_pcCharacterOverHead = Cast<UCharacterOverHead>( m_pcWidgetComponent->GetWidget() );
+
+	m_pcCharacterOverHead->SetCharacterName( m_nCharacterName );
 }
 
 void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio )
@@ -53,6 +63,7 @@ void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USou
 	m_pcCharacterOverHead->DisplayText( krsDialogueText );
 }
 
+
 void AVillager_Base::OnFocus_Implementation()
 {
 	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( true, m_bIsInteractable );
@@ -63,4 +74,10 @@ void AVillager_Base::LostFocus_Implementation()
 	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( false );
 }
 
-UCharacterOverHead& AVillager_Base::GetCharatcerOverHead() const { return *m_pcCharacterOverHead; }
+const bool AVillager_Base::GetIsInteractable() const						{ return m_bIsInteractable; }
+
+FName& AVillager_Base::GetDialogueID()										{ return m_nDialogueID; }
+
+AAmbientDialogueManager& AVillager_Base::GetAmbientDialogueManager() const	{ return *m_pcAmbientDialogueManager; }
+
+UCharacterOverHead& AVillager_Base::GetCharatcerOverHead() const			{ return *m_pcCharacterOverHead; }

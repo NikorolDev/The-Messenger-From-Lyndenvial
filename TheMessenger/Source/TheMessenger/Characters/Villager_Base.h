@@ -26,8 +26,6 @@ private:
 
 	UCharacterOverHead* m_pcCharacterOverHead;
 
-protected:
-	
 	UPROPERTY( Category = "Properties|Character", EditInstanceOnly, meta = ( DisplayName = "Character Name" ) )
 		FName m_nCharacterName;
 
@@ -35,17 +33,23 @@ protected:
 	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ) )
 		FName m_nDialogueID;
 
-	UPROPERTY( Category = "Properties|Interaction", EditInstanceOnly, meta = ( DisplayName = "Character Name" ) )
+	UPROPERTY( Category = "Properties|Interaction", EditInstanceOnly, meta = ( DisplayName = "Is Interactable" ) )
 		bool m_bIsInteractable;
 
-	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Audio Component" ) )
+	UPROPERTY( Category = Components, EditDefaultsOnly, BlueprintReadWrite, meta = ( AllowPrivateAccess = true, DisplayName = "Audio Component" ) )
 		UAudioComponent* m_pcAudioComponent;
 
-	UPROPERTY( Category = Components, EditDefaultsOnly, BlueprintReadWrite, meta = ( DisplayName = "Widget Component" ) )
+	//UPROPERTY( Category = Components, EditDefaultsOnly, BlueprintReadWrite, meta = ( DisplayName = "Widget Component" ) )
+	UPROPERTY( Category = Components, EditDefaultsOnly, BlueprintReadWrite, meta = ( AllowPrivateAccess = true, DisplayName = "Widget Component" ) )
 		UWidgetComponent* m_pcWidgetComponent;
+
+
+protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void Initialise();
 
 public:
 	// Sets default values for this character's properties
@@ -56,6 +60,12 @@ public:
 	virtual void LostFocus_Implementation() override;
 
 	void PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio );
+
+	const bool GetIsInteractable() const;
+
+	FName& GetDialogueID();
+
+	AAmbientDialogueManager& GetAmbientDialogueManager() const;
 
 	UCharacterOverHead& GetCharatcerOverHead() const;
 };

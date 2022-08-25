@@ -63,4 +63,6 @@ public:
 	void HideDialogue();
 
 	void ToggleOnFocusOverlayVisibility( bool bIsVisible, bool bIsInteractable = false );
+
+	void SetCharacterName( const FName& pnCharacterName );
 };

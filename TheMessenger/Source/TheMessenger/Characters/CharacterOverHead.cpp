@@ -48,3 +48,8 @@ void UCharacterOverHead::ToggleOnFocusOverlayVisibility( bool bIsVisible, bool b
 		OnFocusOverlay->SetVisibility( ESlateVisibility::Hidden );
 	}
 }
+
+void UCharacterOverHead::SetCharacterName( const FName& pnCharacterName )
+{
+	CharacterName->SetText( FText::FromString( pnCharacterName.ToString() ) );
+}
