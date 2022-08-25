@@ -32,37 +32,35 @@ void AVillager_Base::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Get the ambient dialogue manager from the level.
 	m_pcAmbientDialogueManager = Cast <AAmbientDialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AAmbientDialogueManager::StaticClass() ) );
 
+	// Get the character over head widget.
 	m_pcCharacterOverHead = Cast<UCharacterOverHead>( m_pcWidgetComponent->GetWidget() );	
 }
 
 void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio )
 {
+	// Check if the audio has been set from the ambient dialogue manager.
 	if( pcDialogueAudio )
 	{
-		UGameplayStatics::PlaySoundAtLocation( GetWorld(), pcDialogueAudio, GetActorLocation() );
+		// Set the sound and play it. With attenuation on, it play the sound at location.
+		m_pcAudioComponent->SetSound( pcDialogueAudio );
+		m_pcAudioComponent->Play();
 	}
 
+	// Display the dialogue over head of the character.
 	m_pcCharacterOverHead->DisplayText( krsDialogueText );
-}
-
-UCharacterOverHead& AVillager_Base::GetCharatcerOverHead() const
-{
-	return *m_pcCharacterOverHead;
 }
 
 void AVillager_Base::OnFocus_Implementation()
 {
 	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( true, m_bIsInteractable );
-	UE_LOG( LogTemp, Warning,
-		TEXT( "On Focus" ) );
 }
 
 void AVillager_Base::LostFocus_Implementation()
 {
 	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( false );
-	UE_LOG( LogTemp, Warning,
-		TEXT( "Off Focus" ) );
 }
 
+UCharacterOverHead& AVillager_Base::GetCharatcerOverHead() const { return *m_pcCharacterOverHead; }
