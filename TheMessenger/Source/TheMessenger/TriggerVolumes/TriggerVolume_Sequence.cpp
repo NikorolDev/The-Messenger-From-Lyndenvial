@@ -4,8 +4,6 @@
 #include "TriggerVolume_Sequence.h"
 
 #include <Components/BoxComponent.h>
-//#include <LevelSequence.h>
-//#include <LevelSequencePlayer.h>
 #include <LevelSequence/Public/LevelSequenceActor.h>
 #include <LevelSequence/Public/LevelSequencePlayer.h>
 
@@ -53,8 +51,5 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 		{
 			m_pcLevelSequencePlayer->Play();
 		}
-
-		// Then play the sequence MAYBE.
-		//m_pcLevelSequencePlayer->Play();
 	}
 }
