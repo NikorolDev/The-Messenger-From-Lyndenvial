@@ -24,4 +24,7 @@ class THEMESSENGER_API IInfluentiableThroughChoice
 public:
 	UFUNCTION( Category = "Choice Selected", BlueprintNativeEvent, BlueprintCallable )
 		void OnImpactDialogue( const FName& krnDialogueID );
+
+	UFUNCTION( Category = "Choice Selected", BlueprintNativeEvent, BlueprintCallable )
+		void OnImpactActor();
 };

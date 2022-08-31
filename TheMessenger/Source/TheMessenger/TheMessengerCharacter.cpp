@@ -98,8 +98,11 @@ void ATheMessengerCharacter::OnInteractPressed()
 
 void ATheMessengerCharacter::SetPlayerBackFromSequence()
 {
-	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
-	EnableInput( m_pcPlayerController );
+	if( !m_bInEndDaySequence )
+	{
+		m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+		EnableInput( m_pcPlayerController );
+	}
 }
 
 ATheMessengerCharacter::ATheMessengerCharacter()
@@ -200,6 +203,11 @@ void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPositi
 	m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
 	SetActorLocation( v3PlayerPosition );
 	m_pcPlayerController->SetControlRotation( FRotator( 0, PlayerRotationYaw, 0 ) );
+}
+
+void ATheMessengerCharacter::SetInEndDaySequence( bool bInEndDaySequence )
+{
+	m_bInEndDaySequence = bInEndDaySequence;
 }
 
 UPlayerHUD* ATheMessengerCharacter::GetPlayerHUD()

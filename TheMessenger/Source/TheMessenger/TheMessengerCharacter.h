@@ -25,6 +25,8 @@ class ATheMessengerCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 
 private:
+	bool m_bInEndDaySequence;
+
 	AActor* FocusedActor;
 
 	ADialogueManager* m_pcDialogueManager;
@@ -58,6 +60,8 @@ public:
 	virtual void Tick( float DeltaTime ) override;
 
 	void SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw );
+
+	void SetInEndDaySequence( bool bInEndDaySequence );
 
 	UFUNCTION( BlueprintCallable)
 		UPlayerHUD* GetPlayerHUD();

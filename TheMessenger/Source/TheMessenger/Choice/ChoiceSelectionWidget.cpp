@@ -6,8 +6,8 @@
 #include <Kismet/GameplayStatics.h>
 
 #include "ChoiceWidget.h"
+#include "TheMessenger/Characters/Villager_Base.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
-#include "TheMessenger/Characters/Villager_Main.h"
 #include "TheMessenger/Objectives/HintsManager.h"
 
 void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )

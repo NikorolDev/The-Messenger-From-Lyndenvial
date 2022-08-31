@@ -55,6 +55,8 @@ void AVillager_Base::OnInteract_Implementation( AActor* Caller )
 		if( CurrentDialogueSequence->bIsASequence )
 		{
 			m_bIsInSequence = true;
+			//LostFocus_Implementation();
+			m_bInteracted = true;
 
 			FVector PlayerPosition = GetActorLocation() + ( GetActorForwardVector() * m_fPlayerDistanceInSequence );
 			float PlayerRotationYaw = GetActorRotation().Yaw + 180;
@@ -72,11 +74,20 @@ void AVillager_Base::OnFocus_Implementation()
 	{
 		m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( true, m_bIsInteractable );
 	}
+	//else
+	//{
+	//	LostFocus_Implementation();
+	//}
 }
 
 void AVillager_Base::LostFocus_Implementation()
 {
 	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( false );
+}
+
+void AVillager_Base::OnImpactDialogue_Implementation( const FName& krnDialogueID )
+{
+	m_nDialogueID = krnDialogueID;
 }
 
 void AVillager_Base::Initialise()
@@ -91,6 +102,7 @@ void AVillager_Base::OnDialogueFinished()
 {
 	m_pcCharacterOverHead->HideDialogue();
 	m_bIsInSequence = false;
+	m_bInteracted = false;
 }
 
 void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio )
@@ -107,6 +119,16 @@ void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USou
 	m_pcCharacterOverHead->DisplayText( krsDialogueText );
 }
 
+void AVillager_Base::SetInteracted( bool bInteracted )
+{
+	m_bInteracted = bInteracted;
+}
+
+const bool AVillager_Base::GetInteracted() const
+{
+	return m_bInteracted;
+}
+
 void AVillager_Base::SetIsInSequence( bool bIsInSequence )			{ m_bIsInSequence = bIsInSequence; }
 
 const bool AVillager_Base::GetIsInteractable() const				{ return m_bIsInteractable; }
@@ -116,5 +138,10 @@ void AVillager_Base::SetDialogueID( const FName& krnDialogueID )	{ m_nDialogueID
 FName& AVillager_Base::GetDialogueID()								{ return m_nDialogueID; }
 
 ADialogueManager& AVillager_Base::GetDialogueManager() const		{ return *m_pcDialogueManager; }
+
+ATheMessengerCharacter& AVillager_Base::GetPlayer() const
+{
+	return *m_pcPlayer;
+}
 
 UCharacterOverHead& AVillager_Base::GetCharatcerOverHead() const	{ return *m_pcCharacterOverHead; }

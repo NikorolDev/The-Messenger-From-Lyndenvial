@@ -27,6 +27,8 @@ private:
 
 	bool m_bIsInSequence;
 
+	bool m_bInteracted;
+
 	ADialogueManager* m_pcDialogueManager;
 
 	// The player character
@@ -76,8 +78,14 @@ public:
 
 	virtual void LostFocus_Implementation() override;
 
+	virtual void OnImpactDialogue_Implementation( const FName& krnDialogueID ) override;
+
 	void PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio );
 
+	void SetInteracted( bool bInteracted );
+
+	const bool GetInteracted() const;
+	
 	void SetIsInSequence( bool bIsInSequence );
 
 	const bool GetIsInteractable() const;
@@ -87,6 +95,8 @@ public:
 	FName& GetDialogueID();
 
 	ADialogueManager& GetDialogueManager() const;
+
+	ATheMessengerCharacter& GetPlayer() const;
 
 	UCharacterOverHead& GetCharatcerOverHead() const;
 };
