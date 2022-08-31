@@ -2,8 +2,11 @@
 
 #include "Struct_DialogueProperties.generated.h"
 
-// Forward class declaration
+// Forward class declaration (Engine)
 class USoundWave;
+
+// Forward class declaration (Game)
+class AVillager_Base;
 
 //----------------------------------------------------------------------------------------------------------------------------
 // Struct Name			: FStructDialogueProperties
@@ -16,19 +19,23 @@ struct FStructDialogueProperties
 {
 	GENERATED_BODY()
 
-	// The audio that will play for the dialogue.
-	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
-		USoundWave* DialogueAudio = nullptr;
-
 	// The character name to display on screen.
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
-		FString		CharacterName = FString( "" );
+		FString			CharacterName = FString( "" );
 
 	// The text to display on screen.
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
-		FString		DialogueText = FString( "" );
+		FString			DialogueText = FString( "" );
 
 	// The extra time to delay the next dialogue term playing.
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
-		float		DialogueDurationOffset = 0.0f;
+		float			DialogueDurationOffset = 0.0f;
+
+	// The villager that will speak the dialogue for ambience.
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
+		AVillager_Base* CharacterToSpeak = nullptr;
+	
+	// The audio that will play for the dialogue.
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly )
+		USoundWave*		DialogueAudio = nullptr;
 };

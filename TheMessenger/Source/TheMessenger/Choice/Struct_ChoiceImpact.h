@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Struct_ChoiceImpact.generated.h"
 
-class AInteractable_Character;
+class AVillager_Main;
 
 USTRUCT( BlueprintType )
 struct FChoiceImpactProperties
@@ -12,7 +12,7 @@ struct FChoiceImpactProperties
 
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Character Affected" ) )
-		AInteractable_Character* CharacterAffected;
+		AVillager_Main* ChoiceInfluencedCharacters = nullptr;
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "New Dialogue ID", EditCondition = "CharacterAffected != nullptr" ) )
 		FName NewDialogueID;
@@ -20,7 +20,4 @@ struct FChoiceImpactProperties
 	// The choice ID of hidden choices
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice ID With Hidden Choices" ) )
 		FName ChoiceIDWithHiddenChoices;
-
-	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Hint ID" ) )
-		FName HintID;
 };

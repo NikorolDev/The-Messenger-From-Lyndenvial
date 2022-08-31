@@ -50,6 +50,9 @@ private:
 	// An instance of the dialogue.
 	FStructDialogueSequence* m_pfsDialogueSequence;
 
+	// The current villager that is speaking through ambient dialogue.
+	AVillager_Base* m_pcCurrentVillagerSpeaking;
+
 	// The dialogue widget that will display dialogue for the manager.
 	UDialogueWidgetHUD* m_pcDialogueWidgetHUD;
 

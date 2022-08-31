@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Enum_VillagerIdleAnimations.h"
+#include "InfluentiableThroughChoice.h"
 #include "TheMessenger/Interactable/InteractableInterface.h"
 #include "Villager_Base.generated.h"
 
@@ -12,19 +14,28 @@ class UAudioComponent;
 class UWidgetComponent;
 
 // Forward class Declarations (Game)
-class AAmbientDialogueManager;
+class ADialogueManager;
+class ATheMessengerCharacter;
 class UCharacterOverHead;
 
 UCLASS()
-class THEMESSENGER_API AVillager_Base : public ACharacter, public IInteractableInterface
+class THEMESSENGER_API AVillager_Base : public ACharacter, public IInteractableInterface, public IInfluentiableThroughChoice
 {
 	GENERATED_BODY()
 
 private:
 
-	AAmbientDialogueManager* m_pcAmbientDialogueManager;
+	bool m_bIsInSequence;
+
+	ADialogueManager* m_pcDialogueManager;
+
+	// The player character
+	ATheMessengerCharacter* m_pcPlayer;
 
 	UCharacterOverHead* m_pcCharacterOverHead;
+
+	UPROPERTY( Category = "Properties|Animations", EditAnywhere, BlueprintReadOnly, meta = ( DisplayName = "Idle Animation", AllowPrivateAccess = true ) )
+		EVillagerIdleAnimations m_eIdleAnimation;
 
 	UPROPERTY( Category = "Properties|Character", EditInstanceOnly, meta = ( DisplayName = "Character Name" ) )
 		FName m_nCharacterName;
@@ -36,6 +47,9 @@ private:
 	UPROPERTY( Category = "Properties|Interaction", EditInstanceOnly, meta = ( DisplayName = "Is Interactable" ) )
 		bool m_bIsInteractable;
 
+	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Player Distance In Sequence" ) )
+		float m_fPlayerDistanceInSequence;
+
 	UPROPERTY( Category = Components, EditDefaultsOnly, BlueprintReadWrite, meta = ( AllowPrivateAccess = true, DisplayName = "Audio Component" ) )
 		UAudioComponent* m_pcAudioComponent;
 
@@ -43,17 +57,20 @@ private:
 	UPROPERTY( Category = Components, EditDefaultsOnly, BlueprintReadWrite, meta = ( AllowPrivateAccess = true, DisplayName = "Widget Component" ) )
 		UWidgetComponent* m_pcWidgetComponent;
 
-
 protected:
-
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	virtual void Initialise();
 
+	UFUNCTION()
+		virtual void OnDialogueFinished();
+
 public:
 	// Sets default values for this character's properties
 	AVillager_Base();
+
+	virtual void OnInteract_Implementation( AActor* Caller ) override;
 
 	virtual void OnFocus_Implementation() override;
 
@@ -61,11 +78,15 @@ public:
 
 	void PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio );
 
+	void SetIsInSequence( bool bIsInSequence );
+
 	const bool GetIsInteractable() const;
+
+	void SetDialogueID( const FName& krnDialogueID );
 
 	FName& GetDialogueID();
 
-	AAmbientDialogueManager& GetAmbientDialogueManager() const;
+	ADialogueManager& GetDialogueManager() const;
 
 	UCharacterOverHead& GetCharatcerOverHead() const;
 };

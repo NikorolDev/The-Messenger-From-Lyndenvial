@@ -34,6 +34,7 @@ void AChoiceManager::BeginPlay()
 	m_pcDialogueManager->DialogueUpdate.AddDynamic( this, &AChoiceManager::DisplayChoices );
 
 	m_pcChoiceSelectionWidget = CreateWidget<UChoiceSelectionWidget>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ), m_tcChoiceSelectionWidget );
+	m_pcChoiceSelectionWidget->SetChoiceManager( this );
 	m_pcChoiceSelectionWidget->SetDialogueManager( m_pcDialogueManager );
 	m_pcChoiceSelectionWidget->AddToViewport(1);
 }
@@ -64,6 +65,9 @@ void AChoiceManager::AddChoices( AInteractable_Base* pcCharacterInteracted )
 	UE_LOG( LogTemp, Display, TEXT( "[ADialogueManager::BeginPlay L.40] %s" ), *m_pcCharacterInteracted->GetName() );
 }
 
-void AChoiceManager::UnloadChoices()
+void AChoiceManager::UnHideChoices( FName& rnChoiceID )
 {
+	//FStructChoiceBranches* choiceBranch = m_pfsChoices.Find( rnChoiceID );
+	//
+	//choiceBranch->ChoiceBranches[0].
 }

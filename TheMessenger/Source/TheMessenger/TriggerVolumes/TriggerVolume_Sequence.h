@@ -9,7 +9,7 @@
 class ALevelSequenceActor;
 class ULevelSequencePlayer;
 
-class AInteractable_Character;
+class AVillager_Base;
 
 /**
  * 
@@ -29,7 +29,7 @@ private:
 		ALevelSequenceActor* m_pcLevelSequenceToPlay;
 
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Character To Interact" ) )
-		AInteractable_Character* m_pcInteractedCharacter;
+		AVillager_Base* m_pcInteractedCharacter;
 
 protected:
 	//----------------------------------------------------------------------------------------------------------------------------

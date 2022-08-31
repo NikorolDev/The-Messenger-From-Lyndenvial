@@ -7,7 +7,7 @@
 
 #include "ChoiceWidget.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
-#include "TheMessenger/Interactable/Interactable_Character.h"
+#include "TheMessenger/Characters/Villager_Main.h"
 #include "TheMessenger/Objectives/HintsManager.h"
 
 void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
@@ -25,18 +25,31 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	//SetVisibility( ESlateVisibility::Hidden );
 	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
 
-	if( !ChoiceSelected->ChoiceImpactProperties.HintID.IsNone() )
+	int iImpactedActors = ChoiceSelected->ChoiceImpactProperties.Num();
+
+	if( iImpactedActors > 0 )
 	{
-		m_pcHintsManager->SetHint( ChoiceSelected->ChoiceImpactProperties.HintID );
+		for( int iImpactedCharacterID = 0; iImpactedCharacterID < iImpactedActors; ++iImpactedCharacterID )
+		{
+			FChoiceImpactProperties* impactProperties = &ChoiceSelected->ChoiceImpactProperties[ iImpactedCharacterID ];
+			impactProperties->ChoiceInfluencedCharacters->OnImpactDialogue_Implementation( impactProperties->NewDialogueID );
+
+			//mimpactProperties->ChoiceIDWithHiddenChoices
+		}
 	}
 
-	// Check if the character affected is not nullptr to properly set the impact 
-	if( ChoiceSelected->ChoiceImpactProperties.CharacterAffected != nullptr )
-	{
-		// Set the new dialogue ID for the affected character.
-		//m_pcBranchManager->SetNewDialogueID( &ChoiceSelected->ChoiceImpactProperties );
-		ChoiceSelected->ChoiceImpactProperties.CharacterAffected->SetDialogueID( ChoiceSelected->ChoiceImpactProperties.NewDialogueID );
-	}
+	//if( !ChoiceSelected->ChoiceImpactProperties.HintID.IsNone() )
+	//{
+	//	m_pcHintsManager->SetHint( ChoiceSelected->ChoiceImpactProperties.HintID );
+	//}
+	//
+	//// Check if the character affected is not nullptr to properly set the impact 
+	//if( ChoiceSelected->ChoiceImpactProperties.CharacterAffected != nullptr )
+	//{
+	//	// Set the new dialogue ID for the affected character.
+	//	//m_pcBranchManager->SetNewDialogueID( &ChoiceSelected->ChoiceImpactProperties );
+	//	ChoiceSelected->ChoiceImpactProperties.CharacterAffected->SetDialogueID( ChoiceSelected->ChoiceImpactProperties.NewDialogueID );
+	//}
 }
 
 void UChoiceSelectionWidget::NativeConstruct()
@@ -118,4 +131,6 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 	m_pcPlayerController->bShowMouseCursor = true;
 }
 
-void UChoiceSelectionWidget::SetDialogueManager( ADialogueManager* pcDialogueManager ) { m_pcDialogueManager = pcDialogueManager; }
+void UChoiceSelectionWidget::SetChoiceManager( AChoiceManager* krcChoiceManager )		{ m_pcChoiceManager = krcChoiceManager; }
+
+void UChoiceSelectionWidget::SetDialogueManager( ADialogueManager* pcDialogueManager )	{ m_pcDialogueManager = pcDialogueManager; }

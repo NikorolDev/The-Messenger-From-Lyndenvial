@@ -53,6 +53,6 @@ public:
 
 	void AddChoices( AInteractable_Base* pcCharacterInteracted );
 
-	void UnloadChoices();
+	void UnHideChoices( FName& rnChoiceID );
 
 };

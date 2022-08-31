@@ -8,6 +8,8 @@
 #include <Kismet/GameplayStatics.h>
 
 #include "DialogueWidgetHUD.h"
+#include "TheMessenger/Characters/Villager_Base.h"
+#include "TheMessenger/Characters/CharacterOverHead.h"
 
 // Sets default values
 ADialogueManager::ADialogueManager()
@@ -111,27 +113,45 @@ void ADialogueManager::SetDialogueTerm()
 		// Create an instance of dialogue properties struct.
 		FStructDialogueProperties* dialogueTerm = &m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID ];
 
-		// Check if the dialogue text is not empty.
-		if( !dialogueTerm->DialogueText.IsEmpty() )
+		if( dialogueTerm->CharacterToSpeak )
 		{
-			m_pcDialogueWidgetHUD->DisplayText( dialogueTerm->CharacterName, dialogueTerm->DialogueText );
-		}
+			if( m_pcCurrentVillagerSpeaking )
+			{
+				m_pcCurrentVillagerSpeaking->GetCharatcerOverHead().HideDialogue();
+			}
 
-		// Check if the dialogue audio exists.
-		if( dialogueTerm->DialogueAudio )
+			m_pcCurrentVillagerSpeaking = dialogueTerm->CharacterToSpeak;
+
+			if( dialogueTerm->DialogueAudio )
+			{
+				m_fDialogueTermTime = dialogueTerm->DialogueAudio->GetDuration();
+				dialogueTerm->CharacterToSpeak->PlayAmbientDialogueSequence( dialogueTerm->DialogueText, dialogueTerm->DialogueAudio );
+			}
+		}
+		else
 		{
-			// Set the dialogue audio duration for closing the dialogue widget before the term duration finishes.
-			// Set dialogue term duration, using the duration offset and the duration of the audio file.
-			m_fDialogueInitialDuration = dialogueTerm->DialogueAudio->GetDuration();
+			// Check if the dialogue text is not empty.
+			if( !dialogueTerm->DialogueText.IsEmpty() )
+			{
+				m_pcDialogueWidgetHUD->DisplayText( dialogueTerm->CharacterName, dialogueTerm->DialogueText );
+			}
 
-			// Use the audio component to set the dialogue audio to play and play it.
-			// Replaced the use of gameplay statics as the audio component gives more control of the audio being played.
-			m_pcAudioComponent->SetSound( dialogueTerm->DialogueAudio );
-			m_pcAudioComponent->Play();
+			// Check if the dialogue audio exists.
+			if( dialogueTerm->DialogueAudio )
+			{
+				// Set the dialogue audio duration for closing the dialogue widget before the term duration finishes.
+				// Set dialogue term duration, using the duration offset and the duration of the audio file.
+				m_fDialogueInitialDuration = dialogueTerm->DialogueAudio->GetDuration();
+
+				// Use the audio component to set the dialogue audio to play and play it.
+				// Replaced the use of gameplay statics as the audio component gives more control of the audio being played.
+				m_pcAudioComponent->SetSound( dialogueTerm->DialogueAudio );
+				m_pcAudioComponent->Play();
+			}
+
+			// Set dialogue term duration, using the duration offset and the duration of the audio file or set duration of text display.
+			m_fDialogueTermTime = dialogueTerm->DialogueDurationOffset + m_fDialogueInitialDuration;
 		}
-
-		// Set dialogue term duration, using the duration offset and the duration of the audio file or set duration of text display.
-		m_fDialogueTermTime = dialogueTerm->DialogueDurationOffset + m_fDialogueInitialDuration;
 
 		// Play the dialogue term.
 		PlayDialogueTerm();

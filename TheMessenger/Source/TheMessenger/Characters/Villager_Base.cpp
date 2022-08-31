@@ -8,8 +8,9 @@
 #include <Components/WidgetComponent.h>
 #include <Kismet/GameplayStatics.h>
 
-#include "TheMessenger/Dialogue/AmbientDialogueManager.h"
 #include "CharacterOverHead.h"
+#include "TheMessenger/Dialogue/DialogueManager.h"
+#include "TheMessenger/TheMessengerCharacter.h"
 
 // Sets default values
 AVillager_Base::AVillager_Base()
@@ -27,18 +28,55 @@ AVillager_Base::AVillager_Base()
 	m_pcWidgetComponent->SetupAttachment( GetCapsuleComponent() );
 }
 
+
 // Called when the game starts or when spawned
 void AVillager_Base::BeginPlay()
 {
 	Super::BeginPlay();
 
 	// Get the ambient dialogue manager from the level.
-	m_pcAmbientDialogueManager = Cast <AAmbientDialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AAmbientDialogueManager::StaticClass() ) );
-
 	Initialise();
+
+	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
+	m_pcDialogueManager->DialogueFinished.AddUObject( this, &AVillager_Base::OnDialogueFinished );
+
+	m_pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
 
 	// Get the character over head widget.
 	//m_pcCharacterOverHead = Cast<UCharacterOverHead>( m_pcWidgetComponent->GetWidget() );	
+}
+
+void AVillager_Base::OnInteract_Implementation( AActor* Caller )
+{
+	if( m_bIsInteractable )
+	{
+		FStructDialogueSequence* CurrentDialogueSequence = &m_pcDialogueManager->GetDialogueSequence( m_nDialogueID );
+		
+		if( CurrentDialogueSequence->bIsASequence )
+		{
+			m_bIsInSequence = true;
+
+			FVector PlayerPosition = GetActorLocation() + ( GetActorForwardVector() * m_fPlayerDistanceInSequence );
+			float PlayerRotationYaw = GetActorRotation().Yaw + 180;
+		
+			m_pcPlayer->SetPlayerForSequence( PlayerPosition, PlayerRotationYaw );
+		}
+
+		m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
+	}
+}
+
+void AVillager_Base::OnFocus_Implementation()
+{
+	if( !m_bIsInSequence )
+	{
+		m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( true, m_bIsInteractable );
+	}
+}
+
+void AVillager_Base::LostFocus_Implementation()
+{
+	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( false );
 }
 
 void AVillager_Base::Initialise()
@@ -47,6 +85,12 @@ void AVillager_Base::Initialise()
 	m_pcCharacterOverHead = Cast<UCharacterOverHead>( m_pcWidgetComponent->GetWidget() );
 
 	m_pcCharacterOverHead->SetCharacterName( m_nCharacterName );
+}
+
+void AVillager_Base::OnDialogueFinished()
+{
+	m_pcCharacterOverHead->HideDialogue();
+	m_bIsInSequence = false;
 }
 
 void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio )
@@ -63,21 +107,14 @@ void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USou
 	m_pcCharacterOverHead->DisplayText( krsDialogueText );
 }
 
+void AVillager_Base::SetIsInSequence( bool bIsInSequence )			{ m_bIsInSequence = bIsInSequence; }
 
-void AVillager_Base::OnFocus_Implementation()
-{
-	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( true, m_bIsInteractable );
-}
+const bool AVillager_Base::GetIsInteractable() const				{ return m_bIsInteractable; }
 
-void AVillager_Base::LostFocus_Implementation()
-{
-	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( false );
-}
+void AVillager_Base::SetDialogueID( const FName& krnDialogueID )	{ m_nDialogueID = krnDialogueID; }
 
-const bool AVillager_Base::GetIsInteractable() const						{ return m_bIsInteractable; }
+FName& AVillager_Base::GetDialogueID()								{ return m_nDialogueID; }
 
-FName& AVillager_Base::GetDialogueID()										{ return m_nDialogueID; }
+ADialogueManager& AVillager_Base::GetDialogueManager() const		{ return *m_pcDialogueManager; }
 
-AAmbientDialogueManager& AVillager_Base::GetAmbientDialogueManager() const	{ return *m_pcAmbientDialogueManager; }
-
-UCharacterOverHead& AVillager_Base::GetCharatcerOverHead() const			{ return *m_pcCharacterOverHead; }
+UCharacterOverHead& AVillager_Base::GetCharatcerOverHead() const	{ return *m_pcCharacterOverHead; }

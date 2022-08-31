@@ -29,8 +29,11 @@ struct FStructChoiceProperties
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Dialogue ID" ) )
 		FName DialogueID;
 
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Hint ID" ) )
+		FName HintID;
+
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice Impact Properties" ) )
-		FChoiceImpactProperties ChoiceImpactProperties;
+		TArray<FChoiceImpactProperties> ChoiceImpactProperties;
 };
 
 USTRUCT( BlueprintType )

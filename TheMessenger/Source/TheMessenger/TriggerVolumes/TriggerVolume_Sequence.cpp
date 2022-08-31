@@ -9,7 +9,8 @@
 #include <LevelSequence/Public/LevelSequenceActor.h>
 #include <LevelSequence/Public/LevelSequencePlayer.h>
 
-#include "TheMessenger/Interactable/Interactable_Character.h"
+#include "TheMessenger/Characters/Villager_Base.h"
+#include "TheMessenger/TheMessengerCharacter.h"
 
 
 void ATriggerVolume_Sequence::BeginPlay()
@@ -36,6 +37,9 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 	// This will detect the player if it has that tag.
 	if( ( OtherActor != this ) && OtherActor->Tags.Contains( "Player" ) )
 	{
+		ATheMessengerCharacter* Player = Cast<ATheMessengerCharacter>( OtherActor );
+		Player->DisableInput( &Player->GetPlayerController() );
+
 		// Turn off collision. To not be called again.
 		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 

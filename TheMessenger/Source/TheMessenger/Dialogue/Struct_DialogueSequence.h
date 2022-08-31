@@ -18,9 +18,8 @@ struct FStructDialogueSequence
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Is Choice Required" ) )
 		bool bIsChoiceRequired;
 
-	// Whether the dialogue will play in a level sequencer or on top of the character.
-	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Is Sequence Required" ) )
-		bool bIsSequenceRequired;
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Is A Sequence" ) )
+		bool bIsASequence;
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( EditCondition = "bIsChoiceRequired" ) )
 		FName ChoiceID;

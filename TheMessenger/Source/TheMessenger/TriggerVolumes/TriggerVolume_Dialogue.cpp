@@ -6,11 +6,11 @@
 #include <Components/BoxComponent.h>
 #include <Kismet/GameplayStatics.h>
 
-#include "TheMessenger/Dialogue/AmbientDialogueManager.h"
+#include "TheMessenger/Dialogue/DialogueManager.h"
 
 void ATriggerVolume_Dialogue::BeginPlay()
 {
-	m_pcAmbientDialogueManager = Cast<AAmbientDialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AAmbientDialogueManager::StaticClass() ) );
+	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 
 	m_BoxTriggerVolume->OnComponentBeginOverlap.AddDynamic( this, &ATriggerVolume_Dialogue::OnBeginOverlapTrigger );
 }
@@ -23,6 +23,6 @@ void ATriggerVolume_Dialogue::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 	{
 		int iDialogueID = FMath::RandRange( 0, m_aDialogueIDs.Num()-1 );
 
-		m_pcAmbientDialogueManager->InitialiseDialogueSequence( m_aDialogueIDs[ iDialogueID ] );
+		m_pcDialogueManager->InitialiseDialogueSequence( m_aDialogueIDs[ iDialogueID ] );
 	}
 }

@@ -6,7 +6,7 @@
 #include "TriggerVolume_Base.h"
 #include "TriggerVolume_Dialogue.generated.h"
 
-class AAmbientDialogueManager;
+class ADialogueManager;
 
 /**
  * 
@@ -18,7 +18,7 @@ class THEMESSENGER_API ATriggerVolume_Dialogue : public ATriggerVolume_Base
 	
 private:
 
-	AAmbientDialogueManager* m_pcAmbientDialogueManager;
+	ADialogueManager* m_pcDialogueManager;
 
 	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue IDs" ) )
 		TArray<FName> m_aDialogueIDs;

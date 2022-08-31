@@ -11,11 +11,10 @@
 
 void AVillager_Interactable::BeginPlay()
 {
+	// Call the villager base class' begin play function to initialise ambient dialogue manager and the overhead UI
 	AVillager_Base::BeginPlay();
 
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
-
-	//Initialise();
 }
 
 void AVillager_Interactable::OnInteract_Implementation( AActor* Caller )
@@ -26,29 +25,15 @@ void AVillager_Interactable::OnInteract_Implementation( AActor* Caller )
 
 		if( m_bIsAmbientDialogue )
 		{
-			GetAmbientDialogueManager().InitialiseDialogueSequence( *nDialogueID );
+			//CallAmbientDialogueInitialiser();
 		}
 		else
 		{
 			FStructDialogueSequence* CurrentDialogueSequence = &m_pcDialogueManager->GetDialogueSequence( *nDialogueID );
 
 			m_pcDialogueManager->InitialiseDialogueSequence( *nDialogueID );
-			
-			//if( CurrentDialogueSequence->bIsChoiceRequired )
-			//{
-			//
-			//}
-			//else
-			//{
-			//}
-
-
-			//m_pcDialogueManager.Initi
-
 		}
 	}
-
-	//m_bIsInteractable
 	
 	
 	

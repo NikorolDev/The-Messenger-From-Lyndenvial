@@ -13,7 +13,7 @@ class AVillager_Base;
 //						,	and audio files.
 //----------------------------------------------------------------------------------------------------------------------------
 USTRUCT( BlueprintType )
-struct FAmbientDialogueProperties : public FStructDialogueProperties
+struct FAmbientDialogueProperties
 {
 	GENERATED_BODY()
 

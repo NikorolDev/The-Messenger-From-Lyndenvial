@@ -62,6 +62,8 @@ public:
 	UFUNCTION( BlueprintCallable)
 		UPlayerHUD* GetPlayerHUD();
 
+	APlayerController& GetPlayerController() const;
+
 protected:
 
 	UPROPERTY( Category = "Properties|HUD", EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Player HUD" ) )

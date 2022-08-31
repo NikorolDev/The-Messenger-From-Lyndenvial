@@ -12,6 +12,7 @@ class APlayerController;
 class UVerticalBox;
 
 // Forward class declarations (Game)
+class AChoiceManager;
 class ADialogueManager;
 class AHintsManager;
 class UChoiceWidget;
@@ -30,7 +31,7 @@ class THEMESSENGER_API UChoiceSelectionWidget : public UUserWidget
 	
 private:
 
-	//ABranchManager*			m_pcBranchManager;
+	AChoiceManager*		m_pcChoiceManager;
 
 	// The dialogue manager needed to continue the dialogue after the choice was made.
 	ADialogueManager*		m_pcDialogueManager;
@@ -85,6 +86,9 @@ public:
 	// Purpose			: This function will create choices based on the choice ID that was set in the choice manager.
 	//-----------------------------------------------------------------------------------------------------------------------------
 	void CreateChoices( FStructChoiceBranches* pfsChoiceBranches );
+
+
+	void SetChoiceManager( AChoiceManager* krcChoiceManager );
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name	: SetDialogueManager(ADialogueManager* pcDialogueManager)

@@ -56,12 +56,12 @@ void AAmbientDialogueManager::SetDialogueTerm()
 			m_pcCurrentVillagerSpeaking = fsAmbientDialogueTerm->CharacterToSpeak;
 
 
-			if( fsAmbientDialogueTerm->DialogueAudio )
-			{
-				m_fDialogueTermTime = fsAmbientDialogueTerm->DialogueAudio->GetDuration();
-				fsAmbientDialogueTerm->CharacterToSpeak->PlayAmbientDialogueSequence( fsAmbientDialogueTerm->DialogueText, 
-																						fsAmbientDialogueTerm->DialogueAudio );
-			}
+			//if( fsAmbientDialogueTerm->DialogueAudio )
+			//{
+			//	m_fDialogueTermTime = fsAmbientDialogueTerm->DialogueAudio->GetDuration();
+			//	fsAmbientDialogueTerm->CharacterToSpeak->PlayAmbientDialogueSequence( fsAmbientDialogueTerm->DialogueText, 
+			//																			fsAmbientDialogueTerm->DialogueAudio );
+			//}
 
 			PlayDialogueTerm();
 		}

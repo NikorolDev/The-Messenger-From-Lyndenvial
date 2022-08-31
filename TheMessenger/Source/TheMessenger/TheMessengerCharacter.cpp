@@ -207,6 +207,11 @@ UPlayerHUD* ATheMessengerCharacter::GetPlayerHUD()
 	return m_pcPlayerHUD;
 }
 
+APlayerController& ATheMessengerCharacter::GetPlayerController() const
+{
+	return *m_pcPlayerController;
+}
+
 void ATheMessengerCharacter::OnResetVR()
 {
 	// If TheMessenger is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in TheMessenger.Build.cs is not automatically propagated
