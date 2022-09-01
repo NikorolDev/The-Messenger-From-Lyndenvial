@@ -6,6 +6,8 @@
 #include <LevelSequence/Public/LevelSequenceActor.h>
 #include <LevelSequence/Public/LevelSequencePlayer.h>
 
+#include "CharacterOverHead.h"
+
 void AVillager_StoryGuard::BeginPlay()
 {
 	AVillager_Base::BeginPlay();
@@ -29,5 +31,6 @@ void AVillager_StoryGuard::OnDialogueFinished()
 			SetDialogueID( m_nDialogueIDAfterSeqeunce );
 			m_pcLevelSequencePlayer->Play();
 		}
+		GetCharatcerOverHead().HideDialogue();
 	}
 }

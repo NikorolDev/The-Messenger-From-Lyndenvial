@@ -57,6 +57,8 @@ void AVillager_Base::OnInteract_Implementation( AActor* Caller )
 			m_bIsInSequence = true;
 			m_bInteracted = true;
 
+			LostFocus_Implementation();
+
 			FVector PlayerPosition = GetActorLocation() + ( GetActorForwardVector() * m_fPlayerDistanceInSequence );
 			float PlayerRotationYaw = GetActorRotation().Yaw + 180;
 		
@@ -73,10 +75,10 @@ void AVillager_Base::OnFocus_Implementation()
 	{
 		m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( true, m_bIsInteractable );
 	}
-	//else
-	//{
-	//	LostFocus_Implementation();
-	//}
+	else
+	{
+		LostFocus_Implementation();
+	}
 }
 
 void AVillager_Base::LostFocus_Implementation()

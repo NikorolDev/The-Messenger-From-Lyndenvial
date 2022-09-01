@@ -15,9 +15,20 @@ class THEMESSENGER_API AVillager_Beggar : public AVillager_Base
 	GENERATED_BODY()
 
 private:
-	UPROPERTY( Category = "Properties|Choices", EditAnywhere, meta = ( DisplayName = "Impacted Choices" ) )
-		TArray<FName> m_anImpactChoiceIDs;
+
+	FVector m_v3InitialLocation;
+
+	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Off Map Location" ) )
+		FVector m_v3OffMapLocation;
+
+	//UPROPERTY( Category = "Properties|Choices", EditAnywhere, meta = ( DisplayName = "Impacted Choices" ) )
+	//	TArray<FName> m_anImpactChoiceIDs;
+
+protected:
+	virtual void BeginPlay() override;
 
 public:
+	virtual void OnImpactActor_Implementation() override;
+
 	//virtual void OnImpactDialogue_Implementation( const FName& krnDialogueID ) override;
 };
