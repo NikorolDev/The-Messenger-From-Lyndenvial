@@ -8,6 +8,7 @@
 #include "LevelManager.generated.h"
 
 class ADirectionalLight;
+class UBillboardComponent;
 
 class ABuilding_Base;
 class AChoiceManager;

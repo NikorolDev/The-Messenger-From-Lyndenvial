@@ -18,7 +18,7 @@ struct FChoiceImpactProperties
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Character Affected" ) )
 		AVillager_Base* ChoiceInfluencedCharacter = nullptr;
 
-	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "New Dialogue ID", EditCondition = "CharacterAffected != nullptr" ) )
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "New Dialogue ID", EditCondition = "ChoiceInfluencedCharacter != nullptr" ) )
 		FName NewDialogueID;
 
 	// The choice ID of hidden choices

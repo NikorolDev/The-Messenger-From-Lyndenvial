@@ -75,3 +75,5 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+TheMessenger/Build/WindowsNoEditor/FileOpenOrder/EditorOpenOrder.log
+TheMessenger/Build/WindowsNoEditor/FileOpenOrder/CookerOpenOrder.log

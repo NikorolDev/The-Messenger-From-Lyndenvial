@@ -16,6 +16,7 @@ void UMainMenu::NativeConstruct()
 													m_tcCinematicWidget );
 
 	NewGameButton->OnClicked.AddDynamic( this, &UMainMenu::NewGameButtonClicked );
+	QuitButton->OnClicked.AddDynamic( this, &UMainMenu::QuitButtonClicked );
 }
 
 void UMainMenu::NewGameButtonClicked()
@@ -25,10 +26,7 @@ void UMainMenu::NewGameButtonClicked()
 	m_pcCinematicWidget->PlayCinematic( m_pcIntroCinematicMaterial, m_pcIntroCinematicPlayer );
 }
 
-void UMainMenu::ContinueButtonClicked()
-{
-}
-
 void UMainMenu::QuitButtonClicked()
 {
+	UKismetSystemLibrary::QuitGame( GetWorld(), UGameplayStatics::GetPlayerController( GetWorld(), 0 ), EQuitPreference::Quit, false );
 }

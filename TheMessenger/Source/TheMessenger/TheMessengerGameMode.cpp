@@ -1,6 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TheMessengerGameMode.h"
+
+#include <Kismet/GameplayStatics.h>
+
 #include "TheMessengerCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -12,4 +15,11 @@ ATheMessengerGameMode::ATheMessengerGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+}
+
+void ATheMessengerGameMode::BeginPlay()
+{
+	APlayerController* pcPlayerController = UGameplayStatics::GetPlayerController( GetWorld(), 0 );
+	pcPlayerController->bShowMouseCursor = false;
+	pcPlayerController->SetInputMode( FInputModeGameOnly() );
 }

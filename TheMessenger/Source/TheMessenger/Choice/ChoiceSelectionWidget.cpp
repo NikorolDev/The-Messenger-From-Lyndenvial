@@ -52,10 +52,10 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 		}
 	}
 
-	//if( !ChoiceSelected->ChoiceImpactProperties.HintID.IsNone() )
-	//{
-	//	m_pcHintsManager->SetHint( ChoiceSelected->ChoiceImpactProperties.HintID );
-	//}
+	if( !ChoiceSelected->HintID.IsNone() )
+	{
+		m_pcHintsManager->SetHint( ChoiceSelected->HintID );
+	}
 	//
 	//// Check if the character affected is not nullptr to properly set the impact 
 	//if( ChoiceSelected->ChoiceImpactProperties.CharacterAffected != nullptr )

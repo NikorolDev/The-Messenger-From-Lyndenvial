@@ -12,6 +12,7 @@ class UAudioComponent;
 class UBillboardComponent;
 
 // Forward class Declarations (Game)
+class AVillager_Base;
 class UDialogueWidgetHUD;
 
 // Delegates

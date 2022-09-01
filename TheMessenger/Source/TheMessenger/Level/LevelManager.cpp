@@ -61,14 +61,14 @@ void ALevelManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TActorIterator<ABuilding_Base> BuildingsIterator = TActorIterator<ABuilding_Base>( GetWorld(), ABuilding_Base::StaticClass() );
-
-	while( BuildingsIterator )
-	{
-		m_aChangers.Add( *BuildingsIterator );
-
-		BuildingsIterator.operator++();
-	}
+	//TActorIterator<ABuilding_Base> BuildingsIterator = TActorIterator<ABuilding_Base>( GetWorld(), ABuilding_Base::StaticClass() );
+	//
+	//while( BuildingsIterator )
+	//{
+	//	m_aChangers.Add( *BuildingsIterator );
+	//
+	//	BuildingsIterator.operator++();
+	//}
 
 
 	// Make a temporary array of actors that will get all actors with the influentiable interface.
@@ -86,9 +86,9 @@ void ALevelManager::BeginPlay()
 	//}
 
 	// Set necessary managers to characters.
-	SetManagersToCharacters();
+	//SetManagersToCharacters();
 
-	SetNewDay();
+	//SetNewDay();
 }
 
 ADialogueManager& ALevelManager::GetCurrentDialogueManager() const { return *m_apcDialogueManagers[ DayID ]; }

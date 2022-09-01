@@ -30,16 +30,10 @@ private:
 		UButton* NewGameButton;
 
 	UPROPERTY( meta = ( BindWidget ) )
-		UButton* ContinueButton;
-
-	UPROPERTY( meta = ( BindWidget ) )
 		UButton* QuitButton;
 
 	UFUNCTION()
 		void NewGameButtonClicked();
-
-	UFUNCTION()
-		void ContinueButtonClicked();
 
 	UFUNCTION()
 		void QuitButtonClicked();

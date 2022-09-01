@@ -43,9 +43,9 @@ void AHintsManager::BeginPlay()
 	//ATheMessengerCharacter* pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
 	//m_pcPlayerHUD = &pcPlayer->GetPlayerHUD();
 
-	m_pcLevelManager = Cast<ALevelManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ALevelManager::StaticClass() ) );
+	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 
-	IntialiseForNewDay();
+	//IntialiseForNewDay();
 }
 
 void AHintsManager::IntialiseForNewDay()
