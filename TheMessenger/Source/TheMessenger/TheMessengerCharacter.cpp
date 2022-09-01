@@ -11,6 +11,7 @@
 #include <DrawDebugHelpers.h>
 
 #include <Kismet/GameplayStatics.h>
+
 #include "TheMessenger/Dialogue/DialogueManager.h"
 #include "TheMessenger/Interactable/InteractableInterface.h"
 #include "TheMessenger/Player/PlayerHUD.h"
@@ -101,7 +102,8 @@ void ATheMessengerCharacter::SetPlayerBackFromSequence()
 	if( !m_bInEndDaySequence )
 	{
 		m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
-		EnableInput( m_pcPlayerController );
+		m_bIsMovementLocked = false;
+		//EnableInput( m_pcPlayerController );
 	}
 }
 
@@ -199,7 +201,8 @@ void ATheMessengerCharacter::Tick( float DeltaTime )
 
 void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw )
 {
-	DisableInput( m_pcPlayerController );
+	m_bIsMovementLocked = true;
+	//DisableInput( m_pcPlayerController );
 	m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
 	SetActorLocation( v3PlayerPosition );
 	m_pcPlayerController->SetControlRotation( FRotator( 0, PlayerRotationYaw, 0 ) );
@@ -255,7 +258,7 @@ void ATheMessengerCharacter::LookUpAtRate(float Rate)
 
 void ATheMessengerCharacter::MoveForward(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if (!m_bIsMovementLocked && (Controller != nullptr) && (Value != 0.0f))
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -269,7 +272,7 @@ void ATheMessengerCharacter::MoveForward(float Value)
 
 void ATheMessengerCharacter::MoveRight(float Value)
 {
-	if ( (Controller != nullptr) && (Value != 0.0f) )
+	if ( !m_bIsMovementLocked && (Controller != nullptr) && (Value != 0.0f) )
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();

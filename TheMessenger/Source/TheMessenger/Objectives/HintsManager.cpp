@@ -44,6 +44,7 @@ void AHintsManager::BeginPlay()
 	//m_pcPlayerHUD = &pcPlayer->GetPlayerHUD();
 
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
+	m_pcDialogueManager->DialogueFinished.AddUObject( this, &AHintsManager::DisplayHintPopUp );
 
 	//IntialiseForNewDay();
 }
@@ -51,7 +52,6 @@ void AHintsManager::BeginPlay()
 void AHintsManager::IntialiseForNewDay()
 {
 	m_pcDialogueManager = &m_pcLevelManager->GetCurrentDialogueManager();
-	m_pcDialogueManager->DialogueFinished.AddUObject( this, &AHintsManager::DisplayHintPopUp );
 }
 
 void AHintsManager::SetHint( FName& rcnObjectiveID )

@@ -25,6 +25,8 @@ class ATheMessengerCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 
 private:
+	bool m_bIsMovementLocked;
+
 	bool m_bInEndDaySequence;
 
 	AActor* FocusedActor;
