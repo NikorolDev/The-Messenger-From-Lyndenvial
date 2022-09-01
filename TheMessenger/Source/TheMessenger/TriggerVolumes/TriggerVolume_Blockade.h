@@ -19,7 +19,8 @@ class THEMESSENGER_API ATriggerVolume_Blockade : public ATriggerVolume_Base, pub
 
 private:
 
-	bool m_bIsPassable;
+	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "bool" ) )
+		bool m_bIsPassable;
 
 	ADialogueManager* m_pcDialogueManager;
 

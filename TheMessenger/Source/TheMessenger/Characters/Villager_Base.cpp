@@ -55,7 +55,6 @@ void AVillager_Base::OnInteract_Implementation( AActor* Caller )
 		if( CurrentDialogueSequence->bIsASequence )
 		{
 			m_bIsInSequence = true;
-			//LostFocus_Implementation();
 			m_bInteracted = true;
 
 			FVector PlayerPosition = GetActorLocation() + ( GetActorForwardVector() * m_fPlayerDistanceInSequence );

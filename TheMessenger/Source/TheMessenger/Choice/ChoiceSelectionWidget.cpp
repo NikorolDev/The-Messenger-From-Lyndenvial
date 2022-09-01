@@ -7,6 +7,7 @@
 
 #include "ChoiceWidget.h"
 #include "TheMessenger/Characters/Villager_Base.h"
+#include "TheMessenger/Characters/InfluentiableThroughChoice.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
 #include "TheMessenger/Objectives/HintsManager.h"
 
@@ -29,10 +30,23 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 
 	if( iImpactedActors > 0 )
 	{
-		for( int iImpactedCharacterID = 0; iImpactedCharacterID < iImpactedActors; ++iImpactedCharacterID )
+		for( int iImpactedActorID = 0; iImpactedActorID < iImpactedActors; ++iImpactedActorID )
 		{
-			FChoiceImpactProperties* impactProperties = &ChoiceSelected->ChoiceImpactProperties[ iImpactedCharacterID ];
-			impactProperties->ChoiceInfluencedCharacters->OnImpactDialogue_Implementation( impactProperties->NewDialogueID );
+			FChoiceImpactProperties* impactProperties = &ChoiceSelected->ChoiceImpactProperties[ iImpactedActorID ];
+
+			if( impactProperties->ChoiceInfluencedCharacter )
+			{
+				impactProperties->ChoiceInfluencedCharacter->OnImpactDialogue_Implementation( impactProperties->NewDialogueID );
+			}
+
+			if( impactProperties->ChoiceInfluencedActor )
+			{
+				IInfluentiableThroughChoice::Execute_OnImpactActor( impactProperties->ChoiceInfluencedActor.GetObject() );
+
+				//IInfluentiableThroughChoice test = Cast<IInfluentiableThroughChoice>(impactProperties->ChoiceInfluencedActor);
+				//IInfluentiableThroughChoice test = impactProperties->ChoiceInfluencedActor.GetInterface();
+				//impactProperties->ChoiceInfluencedActor
+			}
 
 			//mimpactProperties->ChoiceIDWithHiddenChoices
 		}

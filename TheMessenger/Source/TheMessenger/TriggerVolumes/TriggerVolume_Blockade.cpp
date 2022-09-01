@@ -4,6 +4,7 @@
 #include "TriggerVolume_Blockade.h"
 
 #include <Components/BoxComponent.h>
+#include <Components/StaticMeshComponent.h>
 #include <Kismet/GameplayStatics.h>
 
 #include "TheMessenger/Dialogue/DialogueManager.h"
@@ -34,9 +35,9 @@ void ATriggerVolume_Blockade::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 	}
 }
 
-
 void ATriggerVolume_Blockade::OnImpactActor_Implementation()
 {
 	m_bIsPassable = true;
 	m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+	m_VisualMesh->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 }
