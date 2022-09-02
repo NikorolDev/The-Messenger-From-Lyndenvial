@@ -12,5 +12,5 @@ void AVillager_Beggar::BeginPlay()
 
 void AVillager_Beggar::OnImpactActor_Implementation()
 {
-	SetActorLocation( m_v3OffMapLocation );
+	SetActorLocation( m_v3OffMapLocation, false );
 }
