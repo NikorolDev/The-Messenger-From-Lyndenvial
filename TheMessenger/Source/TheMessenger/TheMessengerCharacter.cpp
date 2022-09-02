@@ -102,9 +102,10 @@ void ATheMessengerCharacter::SetPlayerBackFromSequence()
 	if( !m_bInEndDaySequence )
 	{
 		m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
-		m_bIsMovementLocked = false;
 		//EnableInput( m_pcPlayerController );
 	}
+
+	m_bIsMovementLocked = false;
 }
 
 ATheMessengerCharacter::ATheMessengerCharacter()
@@ -181,6 +182,8 @@ void ATheMessengerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	m_v3SpawnLocation = GetActorLocation();
+
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 	m_pcPlayerController = Cast<APlayerController>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ) );
 
@@ -211,6 +214,13 @@ void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPositi
 void ATheMessengerCharacter::SetInEndDaySequence( bool bInEndDaySequence )
 {
 	m_bInEndDaySequence = bInEndDaySequence;
+}
+
+void ATheMessengerCharacter::SetLocationToSpawn()
+{
+	//SetActorLocation( m_v3SpawnLocation );
+	SetActorLocation( FVector( 362, -20482, 650 ) );
+	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
 }
 
 UPlayerHUD* ATheMessengerCharacter::GetPlayerHUD()

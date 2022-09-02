@@ -117,7 +117,7 @@ public:
 	UPROPERTY( BlueprintAssignable, BlueprintCallable )
 		FDialogueUpdatedSignature DialogueUpdate;
 
-		FDialogueFinished DialogueFinished;
+	FDialogueFinished DialogueFinished;
 
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;

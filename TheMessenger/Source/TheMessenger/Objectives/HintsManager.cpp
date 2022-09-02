@@ -51,7 +51,7 @@ void AHintsManager::BeginPlay()
 
 void AHintsManager::IntialiseForNewDay()
 {
-	m_pcDialogueManager = &m_pcLevelManager->GetCurrentDialogueManager();
+	//m_pcDialogueManager = &m_pcLevelManager->GetCurrentDialogueManager();
 }
 
 void AHintsManager::SetHint( FName& rcnObjectiveID )

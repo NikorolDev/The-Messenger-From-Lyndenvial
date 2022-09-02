@@ -10,6 +10,7 @@ class ALevelSequenceActor;
 class ULevelSequencePlayer;
 
 class AVillager_Base;
+class ALevelManager;
 
 /**
  * 
@@ -21,15 +22,27 @@ class THEMESSENGER_API ATriggerVolume_Sequence : public ATriggerVolume_Base
 	
 private:
 
+	int m_iCurrentDay;
+
+	ALevelManager* m_pcLevelManager;
+
 	// The sequence player to play the final cutscene.
 	ULevelSequencePlayer* m_pcLevelSequencePlayer;
+
+	// The desired day that this level sequencer should trigger.
+	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "DayToTrigger" ) )
+		int m_iDayToTrigger;
 
 	// The sequence actor that is in the level which holds the sequence to play.
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Sequence" ))
 		ALevelSequenceActor* m_pcLevelSequenceToPlay;
 
+	// If required, which villager should the level sequencer interact with as soon as the player hits the trigger volume.
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Character To Interact" ) )
 		AVillager_Base* m_pcInteractedCharacter;
+
+	UFUNCTION()
+		void ChangeDay();
 
 protected:
 	//----------------------------------------------------------------------------------------------------------------------------

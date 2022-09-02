@@ -4,12 +4,13 @@
 #include "TriggerVolume_Sequence.h"
 
 #include <Components/BoxComponent.h>
+#include <Kismet/GameplayStatics.h>
 #include <LevelSequence/Public/LevelSequenceActor.h>
 #include <LevelSequence/Public/LevelSequencePlayer.h>
 
 #include "TheMessenger/Characters/Villager_Base.h"
+#include "TheMessenger/Level/LevelManager.h"
 #include "TheMessenger/TheMessengerCharacter.h"
-
 
 void ATriggerVolume_Sequence::BeginPlay()
 {
@@ -23,6 +24,9 @@ void ATriggerVolume_Sequence::BeginPlay()
 	{
 		m_pcLevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer( GetWorld(), m_pcLevelSequenceToPlay->GetSequence(), m_pfsLevelSequencePlaybackSettings, m_pcLevelSequenceToPlay );
 	}
+
+	m_pcLevelManager = Cast<ALevelManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ALevelManager::StaticClass() ) );
+	m_pcLevelManager->OnChangedDay.AddUObject( this, &ATriggerVolume_Sequence::ChangeDay );
 
 	// Setup an OnComponentBeginOverlap callback function to be called when an overlap is triggered.
 	m_BoxTriggerVolume->OnComponentBeginOverlap.AddDynamic( this, &ATriggerVolume_Sequence::OnBeginOverlapTrigger );
@@ -48,5 +52,13 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 		{
 			m_pcLevelSequencePlayer->Play();
 		}
+	}
+}
+
+void ATriggerVolume_Sequence::ChangeDay()
+{
+	if( m_iDayToTrigger == m_pcLevelManager->GetDayID() )
+	{
+		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
 	}
 }

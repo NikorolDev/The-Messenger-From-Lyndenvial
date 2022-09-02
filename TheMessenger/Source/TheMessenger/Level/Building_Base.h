@@ -32,6 +32,7 @@ public:
 	// Sets default values for this actor's properties
 	ABuilding_Base();
 
-	//UFUNCTION( BlueprintImplementableEvent, BlueprintCallable )
-		void SetForNextDay(EDayTimeType eDayTimeType);
+	UFUNCTION( BlueprintImplementableEvent, BlueprintCallable )
+		void ChangeOnTimeType(EDayTimeType eDayTimeType);
+		void ChangeOnTimeType_Implementation( EDayTimeType eDayTimeType );
 };

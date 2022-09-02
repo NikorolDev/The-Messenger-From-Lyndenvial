@@ -13,7 +13,9 @@ class UBillboardComponent;
 class ABuilding_Base;
 class AChoiceManager;
 class ADialogueManager;
-class AInteractable_Character;
+class ATheMessengerCharacter;
+
+DECLARE_MULTICAST_DELEGATE( FChangeDay );
 
 UCLASS()
 class THEMESSENGER_API ALevelManager : public AActor
@@ -22,7 +24,8 @@ class THEMESSENGER_API ALevelManager : public AActor
 	
 private:
 
-	int DayID;
+
+	int m_iDayID;
 
 	int m_iActorsFinishedDaySetting;
 
@@ -30,16 +33,20 @@ private:
 
 	ADialogueManager* m_pcCurrentDialogueManager;
 
+	ATheMessengerCharacter* m_pcPlayer;
+
 	UPROPERTY( Category = "Properties", EditInstanceOnly, meta = ( DisplayName = "DayTypes" ) )
 		TArray<EDayTimeType> m_aDayTypes;
 
-	UPROPERTY( Category = "Properties|Characters", EditInstanceOnly, meta = ( DisplayName = "Main Characters" ) )
-		TArray<AInteractable_Character*> m_apcMainCharacters;
+	//UPROPERTY( Category = "Properties|Characters", EditInstanceOnly, meta = ( DisplayName = "Main Characters" ) )
+	//	TArray<AInteractable_Character*> m_apcMainCharacters;
 
 	// An array of all dialogue managers
-	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue Managers" ) )
-		TArray<ADialogueManager*> m_apcDialogueManagers;
+	//UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue Managers" ) )
+	//	TArray<ADialogueManager*> m_apcDialogueManagers;
 
+	UPROPERTY( Category = "Properties|Sky", EditInstanceOnly, meta = ( DisplayName = "Light Day Rotation Y" ) )
+		float m_fLightDayRotationY;
 	
 	UPROPERTY( Category = "Properties|Sky", EditInstanceOnly, meta = ( DisplayName = "Light Night Rotation Y" ) )
 		float m_fLightNightRotationY;
@@ -54,10 +61,6 @@ private:
 	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Dialgoue Manager Icon" ) )
 		UBillboardComponent* m_pcIconBillboard;
 
-	void SetNewDay();
-
-	void SetManagersToCharacters();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -65,6 +68,12 @@ protected:
 public:	
 	// Sets default values for this actor's properties
 	ALevelManager();
-	
-	ADialogueManager& GetCurrentDialogueManager() const;
+
+	FChangeDay OnChangedDay;
+
+	void SetNewDay();
+
+	void ChangeTime();
+
+	int GetDayID() const;
 };

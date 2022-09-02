@@ -29,6 +29,8 @@ private:
 
 	bool m_bInEndDaySequence;
 
+	FVector m_v3SpawnLocation;
+
 	AActor* FocusedActor;
 
 	ADialogueManager* m_pcDialogueManager;
@@ -64,6 +66,8 @@ public:
 	void SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw );
 
 	void SetInEndDaySequence( bool bInEndDaySequence );
+
+	void SetLocationToSpawn();
 
 	UFUNCTION( BlueprintCallable)
 		UPlayerHUD* GetPlayerHUD();
