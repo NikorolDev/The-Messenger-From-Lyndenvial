@@ -14,6 +14,7 @@
 
 // Sets default values
 AVillager_Base::AVillager_Base()
+	: m_bIsActive (true)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -48,36 +49,42 @@ void AVillager_Base::BeginPlay()
 
 void AVillager_Base::OnInteract_Implementation( AActor* Caller )
 {
-	if( m_bIsInteractable )
+	if( m_bIsActive )
 	{
-		FStructDialogueSequence* CurrentDialogueSequence = &m_pcDialogueManager->GetDialogueSequence( m_nDialogueID );
-		
-		if( CurrentDialogueSequence->bIsASequence )
+		if( m_bIsInteractable )
 		{
-			m_bIsInSequence = true;
-			m_bInteracted = true;
+			FStructDialogueSequence* CurrentDialogueSequence = &m_pcDialogueManager->GetDialogueSequence( m_nDialogueID );
 
-			LostFocus_Implementation();
+			if( CurrentDialogueSequence->bIsASequence )
+			{
+				m_bIsInSequence = true;
+				m_bInteracted = true;
 
-			FVector PlayerPosition = GetActorLocation() + ( GetActorForwardVector() * m_fPlayerDistanceInSequence );
-			float PlayerRotationYaw = GetActorRotation().Yaw + 180;
-		
-			m_pcPlayer->SetPlayerForSequence( PlayerPosition, PlayerRotationYaw );
+				LostFocus_Implementation();
+
+				FVector PlayerPosition = GetActorLocation() + ( GetActorForwardVector() * m_fPlayerDistanceInSequence );
+				float PlayerRotationYaw = GetActorRotation().Yaw + 180;
+
+				m_pcPlayer->SetPlayerForSequence( PlayerPosition, PlayerRotationYaw );
+			}
+
+			m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
 		}
-
-		m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
 	}
 }
 
 void AVillager_Base::OnFocus_Implementation()
 {
-	if( !m_bIsInSequence )
+	if( m_bIsActive )
 	{
-		m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( true, m_bIsInteractable );
-	}
-	else
-	{
-		LostFocus_Implementation();
+		if( !m_bIsInSequence )
+		{
+			m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( true, m_bIsInteractable );
+		}
+		else
+		{
+			LostFocus_Implementation();
+		}
 	}
 }
 
@@ -120,15 +127,32 @@ void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USou
 	m_pcCharacterOverHead->DisplayText( krsDialogueText );
 }
 
-void AVillager_Base::SetInteracted( bool bInteracted )
+void AVillager_Base::HideCharactersAtNight( EDayTimeType eDayTimeType )
 {
-	m_bInteracted = bInteracted;
+	switch( eDayTimeType )
+	{
+		case EDayTimeType::Day:
+		{
+			m_bIsActive = true;
+			SetActorHiddenInGame( false );
+			GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::QueryAndPhysics );
+			break;
+		}
+		case EDayTimeType::Night:
+		{
+			m_bIsActive = false;
+			SetActorHiddenInGame( true );
+			GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+			break;
+		}
+	}
 }
 
-const bool AVillager_Base::GetInteracted() const
-{
-	return m_bInteracted;
-}
+void AVillager_Base::SetInteracted( bool bInteracted )				{ m_bInteracted = bInteracted; }
+
+const bool AVillager_Base::GetInteracted() const					{ return m_bInteracted; }
+
+const bool AVillager_Base::GetActiveAtNight() const					{ return m_bActiveAtNight; }
 
 void AVillager_Base::SetIsInSequence( bool bIsInSequence )			{ m_bIsInSequence = bIsInSequence; }
 
@@ -140,9 +164,6 @@ FName& AVillager_Base::GetDialogueID()								{ return m_nDialogueID; }
 
 ADialogueManager& AVillager_Base::GetDialogueManager() const		{ return *m_pcDialogueManager; }
 
-ATheMessengerCharacter& AVillager_Base::GetPlayer() const
-{
-	return *m_pcPlayer;
-}
+ATheMessengerCharacter& AVillager_Base::GetPlayer() const			{ return *m_pcPlayer; }
 
 UCharacterOverHead& AVillager_Base::GetCharatcerOverHead() const	{ return *m_pcCharacterOverHead; }

@@ -10,6 +10,7 @@
 #include <Misc/OutputDeviceNull.h>
 
 #include "Building_Base.h"
+#include "TheMessenger/Characters/Villager_Base.h"
 #include "TheMessenger/TheMessengerCharacter.h"
 
 // Sets default values
@@ -77,6 +78,7 @@ void ALevelManager::BeginPlay()
 	m_pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
 
 	TActorIterator<ABuilding_Base> BuildingsIterator = TActorIterator<ABuilding_Base>( GetWorld(), ABuilding_Base::StaticClass() );
+	TActorIterator<AVillager_Base> CharactersIterator = TActorIterator<AVillager_Base>( GetWorld(), AVillager_Base::StaticClass() );
 	
 	while( BuildingsIterator )
 	{
@@ -85,6 +87,38 @@ void ALevelManager::BeginPlay()
 		BuildingsIterator.operator++();
 	}
 
+	//CharactersIterator.GetProgressDenominator();
+
+
+
+
+	//for( int i = 0; CharactersIterator.GetProgressNumerator(); ++i )
+	//{
+	//	m_aVillagers.Add( *CharactersIterator );
+	//}
+
+
+	//int ICharacterID;
+	while( CharactersIterator )
+	{
+		AVillager_Base* pcvillager = *CharactersIterator;
+
+		if( !pcvillager->GetActiveAtNight() )
+		{
+			m_aVillagers.Add( pcvillager );
+		}
+
+		//m_aVillagers.Add( *CharactersIterator );
+		//
+		//if( !m_aVillagers.Last()->GetActiveAtNight() )
+		//{
+		//	m_aVillagers.Remove( m_aVillagers.Last() );
+		//}
+
+		CharactersIterator.operator++();
+	}
+
+	UE_LOG( LogTemp, Warning, TEXT( "Villagers: %d" ), m_aVillagers.Num() );
 
 	// Make a temporary array of actors that will get all actors with the influentiable interface.
 	//TArray<AActor*> Influentiables;
@@ -113,6 +147,11 @@ void ALevelManager::ChangeTime()
 	for( int i = 0; i < m_aChangers.Num(); ++i )
 	{
 		m_aChangers[ i ]->ChangeOnTimeType( m_aDayTypes[ m_iDayID ] );
+	}
+
+	for( int iVillagerID = 0; iVillagerID < m_aVillagers.Num(); ++iVillagerID )
+	{
+		m_aVillagers[ iVillagerID ]->HideCharactersAtNight( m_aDayTypes[ m_iDayID ] );
 	}
 
 	FRotator CurrentLightRotation = m_pcSkyLightSource->GetActorRotation();

@@ -14,6 +14,7 @@ class ABuilding_Base;
 class AChoiceManager;
 class ADialogueManager;
 class ATheMessengerCharacter;
+class AVillager_Base;
 
 DECLARE_MULTICAST_DELEGATE( FChangeDay );
 
@@ -30,6 +31,8 @@ private:
 	int m_iActorsFinishedDaySetting;
 
 	TArray<ABuilding_Base*> m_aChangers;
+
+	TArray<AVillager_Base*> m_aVillagers;
 
 	ADialogueManager* m_pcCurrentDialogueManager;
 

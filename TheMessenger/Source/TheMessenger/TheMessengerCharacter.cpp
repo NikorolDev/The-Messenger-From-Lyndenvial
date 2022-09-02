@@ -101,8 +101,9 @@ void ATheMessengerCharacter::SetPlayerBackFromSequence()
 {
 	if( !m_bInEndDaySequence )
 	{
-		m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
-		//EnableInput( m_pcPlayerController );
+		EnableInput( m_pcPlayerController );
+		//m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+		//m_pcPlayerController->SetCinematicMode( false, false, false );
 	}
 
 	m_bIsMovementLocked = false;
@@ -205,10 +206,16 @@ void ATheMessengerCharacter::Tick( float DeltaTime )
 void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw )
 {
 	m_bIsMovementLocked = true;
-	//DisableInput( m_pcPlayerController );
-	m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
+	//m_pcPlayerController.
+
+	//m_pcPlayerController->SetCinematicMode( true, true, true );
+
+	DisableInput( m_pcPlayerController );
 	SetActorLocation( v3PlayerPosition );
 	m_pcPlayerController->SetControlRotation( FRotator( 0, PlayerRotationYaw, 0 ) );
+	//m_pcPlayerController->DisableInput();
+	//m_pcPlayerController->SetIgnoreMoveInput( true );
+	//m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
 }
 
 void ATheMessengerCharacter::SetInEndDaySequence( bool bInEndDaySequence )
@@ -254,16 +261,16 @@ void ATheMessengerCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector
 		StopJumping();
 }
 
-void ATheMessengerCharacter::TurnAtRate(float Rate)
+void ATheMessengerCharacter::TurnAtRate( float Rate )
 {
 	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+	AddControllerYawInput( Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds() );
 }
 
-void ATheMessengerCharacter::LookUpAtRate(float Rate)
+void ATheMessengerCharacter::LookUpAtRate( float Rate )
 {
 	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	AddControllerPitchInput( Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds() );
 }
 
 void ATheMessengerCharacter::MoveForward(float Value)

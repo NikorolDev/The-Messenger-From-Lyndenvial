@@ -39,6 +39,9 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 	// This will detect the player if it has that tag.
 	if( ( OtherActor != this ) && OtherActor->Tags.Contains( "Player" ) )
 	{
+		//ATheMessengerCharacter* Player = Cast<ATheMessengerCharacter>( OtherActor );
+		//Player->DisableInput( &Player->GetPlayerController() );
+
 		// Turn off collision. To not be called again.
 		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 

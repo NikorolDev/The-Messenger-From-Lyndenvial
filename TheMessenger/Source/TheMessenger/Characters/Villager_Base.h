@@ -7,6 +7,7 @@
 #include "Enum_VillagerIdleAnimations.h"
 #include "InfluentiableThroughChoice.h"
 #include "TheMessenger/Interactable/InteractableInterface.h"
+#include "TheMessenger/Level/Enum_DayTimeType.h"
 #include "Villager_Base.generated.h"
 
 // Forward class Declarations (Engine)
@@ -29,6 +30,8 @@ private:
 
 	bool m_bInteracted;
 
+	bool m_bIsActive;
+
 	ADialogueManager* m_pcDialogueManager;
 
 	// The player character
@@ -49,8 +52,14 @@ private:
 	UPROPERTY( Category = "Properties|Interaction", EditInstanceOnly, meta = ( DisplayName = "Is Interactable" ) )
 		bool m_bIsInteractable;
 
+	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Active At Night" ) )
+		bool m_bActiveAtNight;
+
 	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Player Distance In Sequence" ) )
 		float m_fPlayerDistanceInSequence;
+
+	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Out Of Map Position Z" ) )
+		float m_fOutOfMapPositionZ;
 
 	UPROPERTY( Category = Components, EditDefaultsOnly, BlueprintReadWrite, meta = ( AllowPrivateAccess = true, DisplayName = "Audio Component" ) )
 		UAudioComponent* m_pcAudioComponent;
@@ -82,9 +91,13 @@ public:
 
 	void PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio );
 
+	void HideCharactersAtNight( EDayTimeType eDayTimeType );
+
 	void SetInteracted( bool bInteracted );
 
 	const bool GetInteracted() const;
+
+	const bool GetActiveAtNight() const;
 	
 	void SetIsInSequence( bool bIsInSequence );
 
