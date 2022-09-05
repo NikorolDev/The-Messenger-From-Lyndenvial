@@ -15,8 +15,8 @@
 
 // Sets default values
 ALevelManager::ALevelManager()
-	: m_iDayID				(1)
-	, m_eCurrentDayTimeType (EDayTimeType::Night)
+	: m_iDayID				(0)
+	, m_eCurrentDayTimeType (EDayTimeType::Day)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
