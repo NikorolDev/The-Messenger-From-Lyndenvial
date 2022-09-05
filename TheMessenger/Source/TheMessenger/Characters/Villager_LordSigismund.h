@@ -31,7 +31,4 @@ public:
 	virtual void OnDialogueFinished() override;
 
 	virtual void OnInteract_Implementation( AActor* Caller ) override;
-
-	virtual void OnImpactDialogue_Implementation( const FName& krnDialogueID ) override;
-
 };

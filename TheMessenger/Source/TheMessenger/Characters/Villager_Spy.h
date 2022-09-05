@@ -27,11 +27,18 @@ private:
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Sequence" ) )
 		ALevelSequenceActor* m_pcLevelSequenceToPlay;
 
+	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Day To Appear" ) )
+		int m_iDayToAppear;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void AppearOnThisDay() override;
+
 public:
 	virtual void OnDialogueFinished() override;
+
+	virtual void OnImpactActor_Implementation() override;
 	
 };

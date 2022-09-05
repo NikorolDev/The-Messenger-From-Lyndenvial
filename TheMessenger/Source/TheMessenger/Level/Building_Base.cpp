@@ -12,35 +12,7 @@ ABuilding_Base::ABuilding_Base()
 
 void ABuilding_Base::ChangeOnTimeType_Implementation( EDayTimeType eDayTimeType )
 {
-	for( int i = 0; i < m_aWindows.Num(); ++i )
-	{
-		switch( eDayTimeType )
-		{
-			case EDayTimeType::Day:
-				m_aWindows[ i ]->SetVectorParameterValueOnMaterials( "color", m_v3DefaultWindowColour );
-				break;
-			case EDayTimeType::Night:
-				m_aWindows[ i ]->SetVectorParameterValueOnMaterials( "color", m_v3NightWindowColour );
-				break;
-		}
-	}
 }
-
-//void ABuilding_Base::ChangeOnTimeType( EDayTimeType eDayTimeType )
-//{
-//	for(int i =0; i < m_aWindows.Num(); ++i )
-//	{
-//		switch( eDayTimeType )
-//		{
-//			case EDayTimeType::Day:
-//				m_aWindows[ i ]->SetVectorParameterValueOnMaterials( "color", m_v3DefaultWindowColour );
-//				break;
-//			case EDayTimeType::Night:
-//				m_aWindows[ i ]->SetVectorParameterValueOnMaterials( "color", m_v3NightWindowColour );
-//				break;
-//		}
-//	}
-//}
 
 // Called when the game starts or when spawned
 void ABuilding_Base::BeginPlay()

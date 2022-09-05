@@ -16,19 +16,21 @@ class THEMESSENGER_API AVillager_Beggar : public AVillager_Base
 
 private:
 
-	FVector m_v3InitialLocation;
+	bool m_bhasHelped;
 
-	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Off Map Location" ) )
-		FVector m_v3OffMapLocation;
-
-	//UPROPERTY( Category = "Properties|Choices", EditAnywhere, meta = ( DisplayName = "Impacted Choices" ) )
-	//	TArray<FName> m_anImpactChoiceIDs;
+	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Day To Appear" ) )
+		int m_iDayToAppear;
 
 protected:
 	virtual void BeginPlay() override;
 
 public:
+	AVillager_Beggar();
+
 	virtual void OnImpactActor_Implementation() override;
+
+	UFUNCTION( BlueprintCallable )
+		void SetHasHelped( bool bHasHelped );
 
 	//virtual void OnImpactDialogue_Implementation( const FName& krnDialogueID ) override;
 };

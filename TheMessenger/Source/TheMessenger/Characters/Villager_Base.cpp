@@ -10,6 +10,7 @@
 
 #include "CharacterOverHead.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
+#include "TheMessenger/Level/LevelManager.h"
 #include "TheMessenger/TheMessengerCharacter.h"
 
 // Sets default values
@@ -35,11 +36,17 @@ void AVillager_Base::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Get the ambient dialogue manager from the level.
-	Initialise();
+	// Get the character over head widget.
+	if( m_pcWidgetComponent->GetWidget() != nullptr )
+	{
+		m_pcCharacterOverHead = Cast<UCharacterOverHead>( m_pcWidgetComponent->GetWidget() );
+		m_pcCharacterOverHead->SetCharacterName( m_nCharacterName );
+	}
 
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 	m_pcDialogueManager->DialogueFinished.AddUObject( this, &AVillager_Base::OnDialogueFinished );
+
+	m_pcLevelManager = Cast<ALevelManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ALevelManager::StaticClass() ) );
 
 	m_pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
 
@@ -75,7 +82,7 @@ void AVillager_Base::OnInteract_Implementation( AActor* Caller )
 
 void AVillager_Base::OnFocus_Implementation()
 {
-	if( m_bIsActive )
+	if( m_bIsActive && m_pcCharacterOverHead )
 	{
 		if( !m_bIsInSequence )
 		{
@@ -90,7 +97,10 @@ void AVillager_Base::OnFocus_Implementation()
 
 void AVillager_Base::LostFocus_Implementation()
 {
-	m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( false );
+	if( m_pcCharacterOverHead )
+	{
+		m_pcCharacterOverHead->ToggleOnFocusOverlayVisibility( false );
+	}
 }
 
 void AVillager_Base::OnImpactDialogue_Implementation( const FName& krnDialogueID )
@@ -100,10 +110,6 @@ void AVillager_Base::OnImpactDialogue_Implementation( const FName& krnDialogueID
 
 void AVillager_Base::Initialise()
 {
-	// Get the character over head widget.
-	m_pcCharacterOverHead = Cast<UCharacterOverHead>( m_pcWidgetComponent->GetWidget() );
-
-	m_pcCharacterOverHead->SetCharacterName( m_nCharacterName );
 }
 
 void AVillager_Base::OnDialogueFinished()
@@ -127,23 +133,42 @@ void AVillager_Base::PlayAmbientDialogueSequence( FString& krsDialogueText, USou
 	m_pcCharacterOverHead->DisplayText( krsDialogueText );
 }
 
-void AVillager_Base::HideCharactersAtNight( EDayTimeType eDayTimeType )
+void AVillager_Base::HideCharacter( bool bHideCharacter )
 {
-	switch( eDayTimeType )
+	if( !bHideCharacter )
 	{
-		case EDayTimeType::Day:
+		m_bIsActive = true;
+		SetActorHiddenInGame( false );
+		GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::QueryAndPhysics );
+	}
+	else
+	{
+		m_bIsActive = false;
+		SetActorHiddenInGame( true );
+		GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+	}
+}
+
+void AVillager_Base::HideCharacter( EDayTimeType eDayTimeType )
+{
+	if( !m_bHiddenInGame )
+	{
+		switch( eDayTimeType )
 		{
-			m_bIsActive = true;
-			SetActorHiddenInGame( false );
-			GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::QueryAndPhysics );
-			break;
-		}
-		case EDayTimeType::Night:
-		{
-			m_bIsActive = false;
-			SetActorHiddenInGame( true );
-			GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::NoCollision );
-			break;
+			case EDayTimeType::Day:
+			{
+				m_bIsActive = true;
+				SetActorHiddenInGame( false );
+				GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::QueryAndPhysics );
+				break;
+			}
+			case EDayTimeType::Night:
+			{
+				m_bIsActive = false;
+				SetActorHiddenInGame( true );
+				GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+				break;
+			}
 		}
 	}
 }
@@ -163,6 +188,8 @@ void AVillager_Base::SetDialogueID( const FName& krnDialogueID )	{ m_nDialogueID
 FName& AVillager_Base::GetDialogueID()								{ return m_nDialogueID; }
 
 ADialogueManager& AVillager_Base::GetDialogueManager() const		{ return *m_pcDialogueManager; }
+
+ALevelManager& AVillager_Base::GetLevelManager() const				{ return *m_pcLevelManager; }
 
 ATheMessengerCharacter& AVillager_Base::GetPlayer() const			{ return *m_pcPlayer; }
 

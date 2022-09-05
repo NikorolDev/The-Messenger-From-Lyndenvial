@@ -29,8 +29,11 @@ private:
 	// The sequence player to play the final cutscene.
 	ULevelSequencePlayer* m_pcLevelSequencePlayer;
 
+	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Trigger On Specified Day" ) )
+		bool m_bTriggerOnDay;
+
 	// The desired day that this level sequencer should trigger.
-	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "DayToTrigger" ) )
+	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Day To Trigger", EditCondition = "m_bTriggerOnDay" ) )
 		int m_iDayToTrigger;
 
 	// The sequence actor that is in the level which holds the sequence to play.

@@ -31,7 +31,3 @@ void AVillager_LordSigismund::OnInteract_Implementation( AActor* Caller )
 	AVillager_Base::OnInteract_Implementation( Caller );
 	GetPlayer().SetInEndDaySequence( true );
 }
-
-void AVillager_LordSigismund::OnImpactDialogue_Implementation( const FName& krnDialogueID )
-{
-}

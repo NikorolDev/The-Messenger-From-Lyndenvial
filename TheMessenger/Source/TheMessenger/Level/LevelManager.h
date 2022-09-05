@@ -30,6 +30,8 @@ private:
 
 	int m_iActorsFinishedDaySetting;
 
+	EDayTimeType m_eCurrentDayTimeType;
+
 	TArray<ABuilding_Base*> m_aChangers;
 
 	TArray<AVillager_Base*> m_aVillagers;
@@ -76,7 +78,12 @@ public:
 
 	void SetNewDay();
 
-	void ChangeTime();
+	UFUNCTION( BlueprintCallable )
+		void ChangeTime();
 
 	int GetDayID() const;
+
+	UFUNCTION( BlueprintCallable )
+		void SetCurrentDayTimeType( EDayTimeType eDayTimeType );
+
 };

@@ -20,8 +20,4 @@ struct FChoiceImpactProperties
 
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "New Dialogue ID", EditCondition = "ChoiceInfluencedCharacter != nullptr" ) )
 		FName NewDialogueID;
-
-	// The choice ID of hidden choices
-	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice ID With Hidden Choices" ) )
-		FName ChoiceIDWithHiddenChoices;
 };

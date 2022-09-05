@@ -16,6 +16,7 @@ class UWidgetComponent;
 
 // Forward class Declarations (Game)
 class ADialogueManager;
+class ALevelManager;
 class ATheMessengerCharacter;
 class UCharacterOverHead;
 
@@ -33,6 +34,8 @@ private:
 	bool m_bIsActive;
 
 	ADialogueManager* m_pcDialogueManager;
+
+	ALevelManager* m_pcLevelManager;
 
 	// The player character
 	ATheMessengerCharacter* m_pcPlayer;
@@ -55,11 +58,11 @@ private:
 	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Active At Night" ) )
 		bool m_bActiveAtNight;
 
+	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Hidden In Game" ) )
+		bool m_bHiddenInGame;
+
 	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Player Distance In Sequence" ) )
 		float m_fPlayerDistanceInSequence;
-
-	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Out Of Map Position Z" ) )
-		float m_fOutOfMapPositionZ;
 
 	UPROPERTY( Category = Components, EditDefaultsOnly, BlueprintReadWrite, meta = ( AllowPrivateAccess = true, DisplayName = "Audio Component" ) )
 		UAudioComponent* m_pcAudioComponent;
@@ -77,6 +80,9 @@ protected:
 	UFUNCTION()
 		virtual void OnDialogueFinished();
 
+	UFUNCTION()
+		virtual void AppearOnThisDay() {};
+
 public:
 	// Sets default values for this character's properties
 	AVillager_Base();
@@ -91,7 +97,10 @@ public:
 
 	void PlayAmbientDialogueSequence( FString& krsDialogueText, USoundWave* pcDialogueAudio );
 
-	void HideCharactersAtNight( EDayTimeType eDayTimeType );
+	UFUNCTION( BlueprintCallable )
+		void HideCharacter( bool bHideCharacter );
+
+	void HideCharacter( EDayTimeType eDayTimeType );
 
 	void SetInteracted( bool bInteracted );
 
@@ -103,11 +112,14 @@ public:
 
 	const bool GetIsInteractable() const;
 
-	void SetDialogueID( const FName& krnDialogueID );
+	UFUNCTION( BlueprintCallable )
+		void SetDialogueID( const FName& krnDialogueID );
 
 	FName& GetDialogueID();
 
 	ADialogueManager& GetDialogueManager() const;
+
+	ALevelManager& GetLevelManager() const;
 
 	ATheMessengerCharacter& GetPlayer() const;
 

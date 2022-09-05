@@ -15,7 +15,8 @@
 
 // Sets default values
 ALevelManager::ALevelManager()
-	: m_iDayID(0)
+	: m_iDayID				(1)
+	, m_eCurrentDayTimeType (EDayTimeType::Night)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -30,44 +31,13 @@ void ALevelManager::SetNewDay()
 {
 	m_iDayID++;
 
+	m_eCurrentDayTimeType = m_aDayTypes[ m_iDayID ];
+
 	ChangeTime();
 
 	OnChangedDay.Broadcast();
 
 	m_pcPlayer->SetLocationToSpawn();
-	
-	//FRotator CurrentLightRotation = m_pcSkyLightSource->GetActorRotation();
-	//
-	//switch( m_aDayTypes[ m_iDayID ] )
-	//{
-	//	case EDayTimeType::Day:
-	//	{
-	//		m_pcSkyLightSource->SetActorRotation( FRotator( m_fLightDayRotationY, CurrentLightRotation.Yaw, CurrentLightRotation.Roll ) );
-	//	}
-	//	case EDayTimeType::Night:
-	//	{
-	//		m_pcSkyLightSource->SetActorRotation( FRotator( m_fLightNightRotationY, CurrentLightRotation.Yaw, CurrentLightRotation.Roll ) );
-	//	}
-	//}
-	//
-	//
-	//
-	//
-	////for( int i = 0; i < m_aChangers.Num(); ++i )
-	////{
-	////	m_aChangers[ i ]->ChangeOnTimeType(m_aDayTypes[m_iDayID]);
-	////}
-	//
-	//
-	//
-	//
-	//if( m_pcSkySphere )
-	//{
-	//	FOutputDeviceNull outputDevice;
-	//	m_pcSkySphere->CallFunctionByNameWithArguments( TEXT( "UpdateSunDirection" ), outputDevice, nullptr, true );
-	//}
-
-
 }
 
 // Called when the game starts or when spawned
@@ -87,18 +57,6 @@ void ALevelManager::BeginPlay()
 		BuildingsIterator.operator++();
 	}
 
-	//CharactersIterator.GetProgressDenominator();
-
-
-
-
-	//for( int i = 0; CharactersIterator.GetProgressNumerator(); ++i )
-	//{
-	//	m_aVillagers.Add( *CharactersIterator );
-	//}
-
-
-	//int ICharacterID;
 	while( CharactersIterator )
 	{
 		AVillager_Base* pcvillager = *CharactersIterator;
@@ -107,13 +65,6 @@ void ALevelManager::BeginPlay()
 		{
 			m_aVillagers.Add( pcvillager );
 		}
-
-		//m_aVillagers.Add( *CharactersIterator );
-		//
-		//if( !m_aVillagers.Last()->GetActiveAtNight() )
-		//{
-		//	m_aVillagers.Remove( m_aVillagers.Last() );
-		//}
 
 		CharactersIterator.operator++();
 	}
@@ -146,17 +97,17 @@ void ALevelManager::ChangeTime()
 {
 	for( int i = 0; i < m_aChangers.Num(); ++i )
 	{
-		m_aChangers[ i ]->ChangeOnTimeType( m_aDayTypes[ m_iDayID ] );
+		m_aChangers[ i ]->ChangeOnTimeType( m_eCurrentDayTimeType );
 	}
 
 	for( int iVillagerID = 0; iVillagerID < m_aVillagers.Num(); ++iVillagerID )
 	{
-		m_aVillagers[ iVillagerID ]->HideCharactersAtNight( m_aDayTypes[ m_iDayID ] );
+		m_aVillagers[ iVillagerID ]->HideCharacter( m_eCurrentDayTimeType );
 	}
 
 	FRotator CurrentLightRotation = m_pcSkyLightSource->GetActorRotation();
 
-	switch( m_aDayTypes[ m_iDayID ] )
+	switch( m_eCurrentDayTimeType )
 	{
 		case EDayTimeType::Day:
 		{
@@ -177,4 +128,6 @@ void ALevelManager::ChangeTime()
 	}
 }
 
-int ALevelManager::GetDayID() const									{ return m_iDayID; }
+int ALevelManager::GetDayID() const										{ return m_iDayID; }
+
+void ALevelManager::SetCurrentDayTimeType( EDayTimeType eDayTimeType )	{ m_eCurrentDayTimeType = eDayTimeType; }

@@ -101,8 +101,10 @@ void ATheMessengerCharacter::SetPlayerBackFromSequence()
 {
 	if( !m_bInEndDaySequence )
 	{
+		UE_LOG( LogTemp, Warning, TEXT( "Re-enabled Input" ) );
+
 		EnableInput( m_pcPlayerController );
-		//m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+		m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
 		//m_pcPlayerController->SetCinematicMode( false, false, false );
 	}
 
@@ -192,8 +194,6 @@ void ATheMessengerCharacter::BeginPlay()
 	m_pcPlayerHUD = CreateWidget<UPlayerHUD>( m_pcPlayerController, m_tcPlayerHUD );
 	m_pcPlayerHUD->AddToViewport(-1);
 
-	//m_pcDialogueManager->DialogueFinished.BindUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
-	//m_pcDialogueManager->DialogueFinished.AddDynamic( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
 	m_pcDialogueManager->DialogueFinished.AddUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
 }
 
@@ -225,8 +225,10 @@ void ATheMessengerCharacter::SetInEndDaySequence( bool bInEndDaySequence )
 
 void ATheMessengerCharacter::SetLocationToSpawn()
 {
-	//SetActorLocation( m_v3SpawnLocation );
+	m_bInEndDaySequence = false;
 	SetActorLocation( FVector( 362, -20482, 650 ) );
+	m_pcPlayerController->SetControlRotation( FRotator( 0.0f, 90.0f, 0.0f ) );
+	EnableInput( m_pcPlayerController );
 	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
 }
 

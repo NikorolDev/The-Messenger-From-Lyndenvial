@@ -39,11 +39,14 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 	// This will detect the player if it has that tag.
 	if( ( OtherActor != this ) && OtherActor->Tags.Contains( "Player" ) )
 	{
-		//ATheMessengerCharacter* Player = Cast<ATheMessengerCharacter>( OtherActor );
-		//Player->DisableInput( &Player->GetPlayerController() );
+		ATheMessengerCharacter* Player = Cast<ATheMessengerCharacter>( OtherActor );
+		Player->DisableInput( &Player->GetPlayerController() );
 
-		// Turn off collision. To not be called again.
-		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+		if( m_bTriggerOnDay )
+		{
+			// Turn off collision. To not be called again.
+			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+		}
 
 		if( m_pcInteractedCharacter != nullptr )
 		{
@@ -60,8 +63,15 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 
 void ATriggerVolume_Sequence::ChangeDay()
 {
-	if( m_iDayToTrigger == m_pcLevelManager->GetDayID() )
+	if( m_bTriggerOnDay )
 	{
-		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
+		if( m_iDayToTrigger == m_pcLevelManager->GetDayID() )
+		{
+			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
+		}
+		else
+		{
+			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+		}
 	}
 }

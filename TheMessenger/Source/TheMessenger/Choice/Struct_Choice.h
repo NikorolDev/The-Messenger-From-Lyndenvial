@@ -32,6 +32,12 @@ struct FStructChoiceProperties
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Hint ID" ) )
 		FName HintID;
 
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Trigger Ending" ) )
+		bool TriggerEnding;
+
+	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Ending ID", EditCondition = "TriggerEnding" ) )
+		FName EndingID;
+
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice Impact Properties" ) )
 		TArray<FChoiceImpactProperties> ChoiceImpactProperties;
 };
