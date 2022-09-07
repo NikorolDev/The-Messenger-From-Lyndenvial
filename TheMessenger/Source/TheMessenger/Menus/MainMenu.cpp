@@ -14,6 +14,8 @@ void UMainMenu::NativeConstruct()
 
 	m_pcCinematicWidget = CreateWidget<UCinematic>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ),
 													m_tcCinematicWidget );
+	m_pcCinematicWidget->AddToViewport();
+	m_pcCinematicWidget->SetAccessedFromMainMenu( true );
 
 	NewGameButton->OnClicked.AddDynamic( this, &UMainMenu::NewGameButtonClicked );
 	QuitButton->OnClicked.AddDynamic( this, &UMainMenu::QuitButtonClicked );
@@ -22,8 +24,7 @@ void UMainMenu::NativeConstruct()
 void UMainMenu::NewGameButtonClicked()
 {
 	SetVisibility( ESlateVisibility::Hidden );
-	m_pcCinematicWidget->AddToViewport();
-	m_pcCinematicWidget->PlayCinematic( m_pcIntroCinematicMaterial, m_pcIntroCinematicPlayer );
+	m_pcCinematicWidget->PlayCinematic( m_pfsIntroCinematic );
 }
 
 void UMainMenu::QuitButtonClicked()

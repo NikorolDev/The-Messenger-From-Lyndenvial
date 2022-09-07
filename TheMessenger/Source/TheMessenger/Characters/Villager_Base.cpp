@@ -177,6 +177,8 @@ void AVillager_Base::HideCharacter( EDayTimeType eDayTimeType )
 	}
 }
 
+const bool AVillager_Base::GetActive() const						{ return m_bIsActive; }
+
 void AVillager_Base::SetInteracted( bool bInteracted )				{ m_bInteracted = bInteracted; }
 
 const bool AVillager_Base::GetInteracted() const					{ return m_bInteracted; }

@@ -26,10 +26,6 @@ void AVillager_StoryGuard::BeginPlay()
 
 void AVillager_StoryGuard::OnDialogueFinished()
 {
-	AVillager_Base::OnDialogueFinished();
-
-	GetCharatcerOverHead().HideDialogue();
-
 	if( GetInteracted() )
 	{
 		if( !m_bHasSequencePlayed )
@@ -39,4 +35,6 @@ void AVillager_StoryGuard::OnDialogueFinished()
 			m_pcLevelSequencePlayer->Play();
 		}
 	}
+
+	AVillager_Base::OnDialogueFinished();
 }

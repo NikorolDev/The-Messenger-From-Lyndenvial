@@ -6,6 +6,9 @@
 #include "Villager_Base.h"
 #include "Villager_Beggar.generated.h"
 
+
+class ATriggerVolume_Sequence;
+
 /**
  * 
  */
@@ -20,6 +23,9 @@ private:
 
 	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Day To Appear" ) )
 		int m_iDayToAppear;
+
+	UPROPERTY( Category = "Properties|Sequence", EditInstanceOnly, meta = ( DisplayName = "Trigger Volume Assigned" ) )
+		ATriggerVolume_Sequence* m_pcTriggerVolumeAssigned;
 
 protected:
 	virtual void BeginPlay() override;

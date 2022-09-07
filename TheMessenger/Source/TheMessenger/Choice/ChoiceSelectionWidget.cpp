@@ -9,21 +9,20 @@
 #include "TheMessenger/Characters/Villager_Base.h"
 #include "TheMessenger/Characters/InfluentiableThroughChoice.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
+#include "TheMessenger/Endings/EndingManager.h"
 #include "TheMessenger/Objectives/HintsManager.h"
 
 void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 {
 	SetVisibility( ESlateVisibility::Hidden );
+	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
 	m_pcPlayerController->bShowMouseCursor = false;
 
 	// Create a temporary struct of the impact from the choice chosen. This is to minimise the search in the array.
 	FStructChoiceProperties* ChoiceSelected = &m_pfsChoices->ChoiceBranches[ iBranchID ];
 
 	// Set the input mode to be game only
-	//m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
 
-	// When a choice is selected hide the window and initialise next dialogue.
-	//SetVisibility( ESlateVisibility::Hidden );
 	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
 
 	int iImpactedActors = ChoiceSelected->ChoiceImpactProperties.Num();
@@ -55,6 +54,11 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	if( !ChoiceSelected->HintID.IsNone() )
 	{
 		m_pcHintsManager->SetHint( ChoiceSelected->HintID );
+	}
+
+	if( ChoiceSelected->TriggerEnding )
+	{
+		m_pcEndingManager->TriggerEnding( ChoiceSelected->EndingID );
 	}
 
 	for( int iChoiceBranch = 0; iChoiceBranch < m_aChoiceWidgets.Num(); ++iChoiceBranch )
@@ -92,6 +96,7 @@ void UChoiceSelectionWidget::NativeConstruct()
 
 	//m_pcBranchManager = Cast<ABranchManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ABranchManager::StaticClass() ) );
 
+	m_pcEndingManager		= Cast<AEndingManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AEndingManager::StaticClass() ) );
 	m_pcHintsManager		= Cast<AHintsManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AHintsManager::StaticClass() ) );
 	m_pcPlayerController	= UGameplayStatics::GetPlayerController( GetWorld(), 0 );
 

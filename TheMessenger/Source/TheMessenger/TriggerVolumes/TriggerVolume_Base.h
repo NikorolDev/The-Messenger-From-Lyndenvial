@@ -82,4 +82,6 @@ public:
 	// Purpose			: To get the level manager needed for the other trigger volumes that require it.
 	//----------------------------------------------------------------------------------------------------------------------------
 	ALevelManager& GetLevelManager() const;
+
+	UBoxComponent& GetTriggerBox() const;
 };

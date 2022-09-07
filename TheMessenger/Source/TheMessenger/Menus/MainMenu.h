@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "TheMessenger/Endings/Struct_CinematicProperties.h"
 #include "MainMenu.generated.h"
 
 // Forward class declarations (Engine)
@@ -26,6 +27,12 @@ private:
 
 	UCinematic* m_pcCinematicWidget;
 
+	UPROPERTY( Category = "Properties", EditAnywhere, meta = ( DisplayName = "Intro Cinematic" ) )
+		FCinematicProperties m_pfsIntroCinematic;
+
+	UPROPERTY( Category = "Properties|Widget", EditDefaultsOnly, meta = ( DisplayName = "Cinematic Widget" ) )
+		TSubclassOf<UCinematic> m_tcCinematicWidget;
+
 	UPROPERTY( meta = ( BindWidget ) )
 		UButton* NewGameButton;
 
@@ -40,20 +47,4 @@ private:
 
 protected:
 	virtual void NativeConstruct() override;
-
-	UPROPERTY( Category = "Properties|Intro Cinematic", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Intro Cinematic Player" ) )
-		UMaterialInstance* m_pcIntroCinematicMaterial;
-
-	UPROPERTY( Category = "Properties|Intro Cinematic", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Intro Cinematic Player" ) )
-		UMediaPlayer* m_pcIntroCinematicPlayer;
-
-	UPROPERTY( Category = "Properties|Widget", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Cinematic Widget" ) )
-		TSubclassOf<UCinematic> m_tcCinematicWidget;
-
-	UFUNCTION( BlueprintImplementableEvent, BlueprintCallable )
-		void InitiateCinematic();
-
-public:
-
-	
 };

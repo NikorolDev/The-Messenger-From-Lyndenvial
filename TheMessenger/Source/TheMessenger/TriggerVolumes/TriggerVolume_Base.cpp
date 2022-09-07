@@ -50,3 +50,5 @@ void ATriggerVolume_Base::BeginPlay()
 }
 
 ALevelManager& ATriggerVolume_Base::GetLevelManager() const { return *m_pcLevelManager; }
+
+UBoxComponent& ATriggerVolume_Base::GetTriggerBox() const	{ return *m_BoxTriggerVolume; }

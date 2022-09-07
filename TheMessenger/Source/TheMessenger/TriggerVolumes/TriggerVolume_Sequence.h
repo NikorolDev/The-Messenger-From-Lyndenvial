@@ -36,10 +36,6 @@ private:
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Day To Trigger", EditCondition = "m_bTriggerOnDay" ) )
 		int m_iDayToTrigger;
 
-	// The day ID that represents day 4.
-	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Day 4 ID" ) )
-		int m_iDay4ID;
-
 	// The sequence actor that is in the level which holds the sequence to play.
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Sequence" ))
 		ALevelSequenceActor* m_pcLevelSequenceToPlay;
@@ -71,4 +67,5 @@ protected:
 		UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit ) override;
 
 	virtual void OnImpactActor_Implementation() override;
+
 };

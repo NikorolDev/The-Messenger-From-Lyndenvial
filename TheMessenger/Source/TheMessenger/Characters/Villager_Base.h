@@ -102,6 +102,8 @@ public:
 
 	void HideCharacter( EDayTimeType eDayTimeType );
 
+	const bool GetActive() const;
+
 	void SetInteracted( bool bInteracted );
 
 	const bool GetInteracted() const;

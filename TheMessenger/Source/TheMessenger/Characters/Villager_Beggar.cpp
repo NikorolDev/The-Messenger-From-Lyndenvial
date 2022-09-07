@@ -3,7 +3,10 @@
 
 #include "Villager_Beggar.h"
 
+#include <Components/BoxComponent.h>
+
 #include "TheMessenger/Level/LevelManager.h"
+#include "TheMessenger/TriggerVolumes/TriggerVolume_Sequence.h"
 
 
 AVillager_Beggar::AVillager_Beggar()
@@ -23,6 +26,12 @@ void AVillager_Beggar::OnImpactActor_Implementation()
 		if( m_bhasHelped )
 		{
 			HideCharacter( false );
+			m_pcTriggerVolumeAssigned->GetTriggerBox().SetCollisionEnabled( ECollisionEnabled::QueryOnly );
+		}
+		else
+		{
+			HideCharacter( true );
+			m_pcTriggerVolumeAssigned->GetTriggerBox().SetCollisionEnabled( ECollisionEnabled::NoCollision );
 		}
 	}
 	else

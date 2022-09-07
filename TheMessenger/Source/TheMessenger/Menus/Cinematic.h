@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "TheMessenger/Endings/Struct_CinematicProperties.h"
 #include "Cinematic.generated.h"
 
 // Forward class declarations (Engine)
@@ -21,6 +22,9 @@ class THEMESSENGER_API UCinematic : public UUserWidget
 	GENERATED_BODY()
 
 private:
+	UPROPERTY( Category = "Properties", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Accessed From Main Menu", AllowPrivateAccess = true ) )
+		bool m_bAccessedFromMainMenu;
+
 	UPROPERTY( meta = ( BindWidget ) )
 		UTextBlock* SkipText;
 
@@ -30,10 +34,9 @@ protected:
 	UPROPERTY( BlueprintReadOnly, meta = ( BindWidget ) )
 		UImage* CinematicImage;
 
-	UFUNCTION( BlueprintImplementableEvent, BlueprintCallable )
-		void SkipCinematic();
 public:
-
 	UFUNCTION( BlueprintImplementableEvent, BlueprintCallable )
-		void PlayCinematic( UMaterialInstance* CinematicMaterial, UMediaPlayer* CinematicPlayer );
+		void PlayCinematic( FCinematicProperties pfsEndingProperties );
+
+	void SetAccessedFromMainMenu( bool bAccessedFromMainMenu );
 };

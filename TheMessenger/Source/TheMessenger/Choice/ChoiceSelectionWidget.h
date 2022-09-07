@@ -14,6 +14,7 @@ class UVerticalBox;
 // Forward class declarations (Game)
 class AChoiceManager;
 class ADialogueManager;
+class AEndingManager;
 class AHintsManager;
 class UChoiceWidget;
 
@@ -35,6 +36,8 @@ private:
 
 	// The dialogue manager needed to continue the dialogue after the choice was made.
 	ADialogueManager*		m_pcDialogueManager;
+
+	AEndingManager*			m_pcEndingManager;
 
 	AHintsManager*			m_pcHintsManager;
 

@@ -41,6 +41,7 @@ void AVillager_Spy::AppearOnThisDay()
 
 void AVillager_Spy::OnDialogueFinished()
 {
+
 	GetCharatcerOverHead().HideDialogue();
 
 	if( GetInteracted() )
@@ -51,6 +52,8 @@ void AVillager_Spy::OnDialogueFinished()
 			m_pcLevelSequencePlayer->Play();
 		}
 	}
+
+	AVillager_Base::OnDialogueFinished();
 }
 
 void AVillager_Spy::OnImpactActor_Implementation()

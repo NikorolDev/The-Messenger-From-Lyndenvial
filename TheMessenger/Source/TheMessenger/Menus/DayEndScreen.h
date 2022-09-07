@@ -9,6 +9,7 @@
 class UButton;
 class UTextBlock;
 
+class AEndingManager;
 class ALevelManager;
 
 /**
@@ -21,6 +22,8 @@ class THEMESSENGER_API UDayEndScreen : public UUserWidget
 
 private:
 	int m_iDayNumber;
+
+	AEndingManager* m_pcEndingManager;
 
 	ALevelManager* m_pcLevelManager;
 

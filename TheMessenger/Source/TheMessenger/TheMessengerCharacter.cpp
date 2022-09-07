@@ -105,6 +105,7 @@ void ATheMessengerCharacter::SetPlayerBackFromSequence()
 
 		EnableInput( m_pcPlayerController );
 		m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+		m_pcPlayerController->bShowMouseCursor = false;
 		//m_pcPlayerController->SetCinematicMode( false, false, false );
 	}
 
@@ -207,16 +208,9 @@ void ATheMessengerCharacter::Tick( float DeltaTime )
 void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw )
 {
 	m_bIsMovementLocked = true;
-	//m_pcPlayerController.
-
-	//m_pcPlayerController->SetCinematicMode( true, true, true );
-
 	DisableInput( m_pcPlayerController );
 	SetActorLocation( v3PlayerPosition );
 	m_pcPlayerController->SetControlRotation( FRotator( 0, PlayerRotationYaw, 0 ) );
-	//m_pcPlayerController->DisableInput();
-	//m_pcPlayerController->SetIgnoreMoveInput( true );
-	//m_pcPlayerController->SetInputMode( FInputModeUIOnly() );
 }
 
 void ATheMessengerCharacter::SetInEndDaySequence( bool bInEndDaySequence )
@@ -229,8 +223,9 @@ void ATheMessengerCharacter::SetLocationToSpawn()
 	m_bInEndDaySequence = false;
 	SetActorLocation( m_v3SpawnLocation );
 	m_pcPlayerController->SetControlRotation( m_v3SpawnRotation );
-	EnableInput( m_pcPlayerController );
 	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+	m_pcPlayerController->bShowMouseCursor = false;
+	EnableInput( m_pcPlayerController );
 }
 
 UPlayerHUD* ATheMessengerCharacter::GetPlayerHUD()

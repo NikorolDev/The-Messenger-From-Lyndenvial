@@ -60,9 +60,12 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 		// Check if the villager has been set in the editor.
 		if( m_pcVillagerToInteract != nullptr )
 		{
-			//Call the interaction function from the charatcer.
-			m_pcVillagerToInteract->OnInteract_Implementation( this );
-			Player->DisableInput( &Player->GetPlayerController() );
+			if( m_pcVillagerToInteract->GetActive() )
+			{
+				//Call the interaction function from the charatcer.
+				m_pcVillagerToInteract->OnInteract_Implementation( this );
+				Player->DisableInput( &Player->GetPlayerController() );
+			}
 		}
 
 		// Check if the level sequencer has been set
@@ -82,7 +85,7 @@ void ATriggerVolume_Sequence::OnImpactActor_Implementation()
 
 void ATriggerVolume_Sequence::OnChangedDay()
 {
-	if( m_iDayToTrigger != m_iDay4ID )
+	if( m_bTriggerOnDay )
 	{
 		// Check if the day to trigger is the same as the current day.
 		if( m_iDayToTrigger == m_pcLevelManager->GetDayID() )
@@ -96,5 +99,4 @@ void ATriggerVolume_Sequence::OnChangedDay()
 			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 		}
 	}
-
 }

@@ -7,5 +7,7 @@ void UCinematic::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-
+	SetVisibility( ESlateVisibility::Hidden );
 }
+
+void UCinematic::SetAccessedFromMainMenu( bool bAccessedFromMainMenu ) { m_bAccessedFromMainMenu = bAccessedFromMainMenu; }
