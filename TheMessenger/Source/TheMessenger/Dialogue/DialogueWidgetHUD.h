@@ -25,7 +25,11 @@ private:
 	// This will check if the dialogue is already displayed on the screen.
 	bool m_bIsDialogueDisplayed;
 
-	// The rich text block component that will display the text.
+	// the rich text block that will display the character's name.
+	UPROPERTY( meta = ( BindWidget ) )
+		URichTextBlock* CharacterNameText;
+
+	// The rich text block component that will display the dialogue text.
 	UPROPERTY( meta = ( BindWidget ) )
 		URichTextBlock* DialogueText;
 

@@ -11,6 +11,7 @@
 class UImage;
 class URichTextBlock;
 class UWidgetAnimation;
+class USoundWave;
 
 // Forward class declarations (Game)
 class AHintsManager;
@@ -27,7 +28,7 @@ class THEMESSENGER_API UPlayerHUD : public UUserWidget
 	GENERATED_BODY()
 	
 private:
-	// 
+	// Is the animation playing is reverse or normally, to play the animation properly.
 	bool m_bIsAnimationInReverse;
 
 	// The duration of the hint displayed.
@@ -36,6 +37,11 @@ private:
 	// The hint manager to disable hint display to allow for the hint to be redisplayed.
 	AHintsManager* m_pcHintsManager;
 
+	// Sound that plays when a hint pops up
+	UPROPERTY( Category = "Properties|Sounds", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Hint Pop Up Sound", AllowPrivateAccess = true ) )
+		USoundWave* m_pcHintPopUpSound;
+
+	// The black background that covers the whole screen.
 	UPROPERTY( meta = ( BindWidget ) )
 		UImage* BlackBackground;
 
@@ -43,6 +49,7 @@ private:
 	UPROPERTY( meta = ( BindWidget ) )
 		UImage* HintIcon;
 
+	// 
 	UPROPERTY( meta = ( BindWidget ) )
 		URichTextBlock* HintText;
 
@@ -58,6 +65,7 @@ private:
 	//-----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION()
 		void AnimationFinished();
+
 protected:
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name		: NativeConstruct

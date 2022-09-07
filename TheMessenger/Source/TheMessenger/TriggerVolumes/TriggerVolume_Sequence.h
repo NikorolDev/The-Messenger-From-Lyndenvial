@@ -42,10 +42,10 @@ private:
 
 	// If required, which villager should the level sequencer interact with as soon as the player hits the trigger volume.
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Character To Interact" ) )
-		AVillager_Base* m_pcInteractedCharacter;
+		AVillager_Base* m_pcVillagerToInteract;
 
 	UFUNCTION()
-		void ChangeDay();
+		void OnChangedDay();
 
 protected:
 	//----------------------------------------------------------------------------------------------------------------------------

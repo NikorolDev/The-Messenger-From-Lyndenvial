@@ -3,7 +3,11 @@
 
 #include "TriggerVolume_Base.h"
 
-#include "Components/BoxComponent.h"
+#include <Components/BoxComponent.h>
+#include <Kismet/GameplayStatics.h>
+
+#include "TheMessenger/Level/LevelManager.h"
+
 
 ATriggerVolume_Base::ATriggerVolume_Base()
 {
@@ -35,3 +39,14 @@ ATriggerVolume_Base::ATriggerVolume_Base()
 		m_VisualMesh->SetupAttachment( m_BoxTriggerVolume );
 	}
 }
+
+void ATriggerVolume_Base::BeginPlay()
+{
+	// Calls the BeginPlay function from the UObject class.
+	Super::BeginPlay();
+
+	// Get the level manager that is active in the level.
+	m_pcLevelManager = Cast<ALevelManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ALevelManager::StaticClass() ) );
+}
+
+ALevelManager& ATriggerVolume_Base::GetLevelManager() const { return *m_pcLevelManager; }

@@ -86,4 +86,6 @@ public:
 	UFUNCTION( BlueprintCallable )
 		void SetCurrentDayTimeType( EDayTimeType eDayTimeType );
 
+	EDayTimeType GetCurrentDayTimeType() const;
+
 };

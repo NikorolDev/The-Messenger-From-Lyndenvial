@@ -6,6 +6,8 @@
 #include <Components/AudioComponent.h>
 #include <Components/BoxComponent.h>
 
+#include "TheMessenger/Level/LevelManager.h"
+
 ATriggerVolume_Ambience::ATriggerVolume_Ambience()
 {
 	// Create and setup...
@@ -17,7 +19,7 @@ ATriggerVolume_Ambience::ATriggerVolume_Ambience()
 void ATriggerVolume_Ambience::BeginPlay()
 {
 	// Call the base class's begin play function, which would be the AActor's one as the TriggerVolume_Base does not have one.
-	Super::BeginPlay();
+	ATriggerVolume_Base::BeginPlay();
 
 	// Check if the sound file has been set in the editor
 	if( m_pcAmbientSound != nullptr )
@@ -26,8 +28,18 @@ void ATriggerVolume_Ambience::BeginPlay()
 		m_pcAudioComponent->SetSound( m_pcAmbientSound );
 	}
 
-	// Setup an OnComponentBeginOverlap and OnComponentEndOverlap callback functions to be called when an overlap 
-	// begin and end is triggered.
+	// Get the level manager that was initialised in the base class.
+	m_pcLevelManager = &GetLevelManager();
+	
+	// Is this trigger volume triggerable at on time type.
+	if( m_bTriggerableOnTimeType )
+	{
+		// Bind the function to on changed day delegate.
+		m_pcLevelManager->OnChangedDay.AddUObject( this, &ATriggerVolume_Ambience::OnChangedDay );
+	}
+
+	// Setup an OnComponentBeginOverlap and OnComponentEndOverlap callback functions to be called when an overlap begin and 
+	// end is triggered.
 	m_BoxTriggerVolume->OnComponentBeginOverlap.AddDynamic( this, &ATriggerVolume_Ambience::OnBeginOverlapTrigger );
 	m_BoxTriggerVolume->OnComponentEndOverlap.AddDynamic( this, &ATriggerVolume_Ambience::OnEndOverlapTrigger );
 }
@@ -53,5 +65,20 @@ void ATriggerVolume_Ambience::OnEndOverlapTrigger( UPrimitiveComponent* Overlapp
 	{
 		// Fade out the ambient sound and stop playingwith a desired fade out duration.
 		m_pcAudioComponent->FadeOut( m_fFadeOutDuration, 0.0f );
+	}
+}
+
+void ATriggerVolume_Ambience::OnChangedDay()
+{
+	// Check if the current day time type is the same as the one to trigger on.
+	if( m_pcLevelManager->GetCurrentDayTimeType() == m_eDayToTrigger )
+	{
+		// Set collision to be querly only.
+		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
+	}
+	else
+	{
+		// Disable collision.
+		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 	}
 }

@@ -114,7 +114,11 @@ void AVillager_Base::Initialise()
 
 void AVillager_Base::OnDialogueFinished()
 {
-	m_pcCharacterOverHead->HideDialogue();
+	if( m_pcCharacterOverHead )
+	{
+		m_pcCharacterOverHead->HideDialogue();
+	}
+
 	m_bIsInSequence = false;
 	m_bInteracted = false;
 }

@@ -4,11 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "TriggerVolume_Base.h"
+#include "TheMessenger/Level/Enum_DayTimeType.h"
 #include "TriggerVolume_Ambience.generated.h"
 
 // Forward class declarations (Engine)
 class UAudioComponent;
 class USoundWave;
+
+// Forward class declarations (Game)
+class ALevelManager;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 // Class Name			: ATriggerVolume_Ambience
@@ -22,6 +26,9 @@ class THEMESSENGER_API ATriggerVolume_Ambience : public ATriggerVolume_Base
 	GENERATED_BODY()
 	
 private:
+	// The level manager to bind a function to trigger 
+	ALevelManager* m_pcLevelManager;
+
 	// The fade in duration for ambient sound to play when entering the trigger volume.
 	UPROPERTY( Category = "Properties|Audio", EditInstanceOnly, meta = ( DisplayName = "Fade In Duration" ))
 		float m_fFadeInDuration;
@@ -34,9 +41,26 @@ private:
 	UPROPERTY( Category = "Properties|Audio", EditInstanceOnly, meta = ( DisplayName = "Ambient Sound" ) )
 		USoundWave* m_pcAmbientSound;
 
+	// Is this trigger volume, triggerable on day and night
+	UPROPERTY( Category = "Properties|Trigger", EditInstanceOnly, meta = ( DisplayName = "Is Triggerable On Time Type" ))
+		bool m_bTriggerableOnTimeType;
+
+	// The day time type to trigger the ambient sound.
+	UPROPERTY( Category = "Properties|Trigger", EditInstanceOnly, meta = ( DisplayName = "Trigger At Time Type", EditCondition = "m_bTriggerableOnTimeType" ) )
+		EDayTimeType m_eDayToTrigger;
+
 	// Audio component responsible for playing the ambient sound and fading in as the player steps into the trigger volume.
 	UPROPERTY( Category = Components, EditDefaultsOnly, meta = ( DisplayName = "Audio Component" ) )
 		UAudioComponent* m_pcAudioComponent;
+
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: OnChangedDay()
+	// Author			: Unreal Engine 4
+	// Editors			: Nikodem Hamrol
+	// Purpose			: To set the collision based on the time type the level is on.
+	//----------------------------------------------------------------------------------------------------------------------------
+	UFUNCTION()
+		void OnChangedDay();
 
 protected:
 	//----------------------------------------------------------------------------------------------------------------------------

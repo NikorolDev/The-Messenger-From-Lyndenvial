@@ -27,6 +27,7 @@ void UPlayerHUD::NativeConstruct()
 
 void UPlayerHUD::DisplayHintPopUp()
 {
+	UGameplayStatics::PlaySound2D( GetWorld(), m_pcHintPopUpSound );
 	m_bIsAnimationInReverse = false;
 	PlayAnimation( DisplayHint );
 }

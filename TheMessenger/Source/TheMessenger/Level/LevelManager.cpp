@@ -35,8 +35,6 @@ void ALevelManager::SetNewDay()
 
 	ChangeTime();
 
-	OnChangedDay.Broadcast();
-
 	m_pcPlayer->SetLocationToSpawn();
 }
 
@@ -95,6 +93,8 @@ void ALevelManager::BeginPlay()
 
 void ALevelManager::ChangeTime()
 {
+	OnChangedDay.Broadcast();
+
 	for( int i = 0; i < m_aChangers.Num(); ++i )
 	{
 		m_aChangers[ i ]->ChangeOnTimeType( m_eCurrentDayTimeType );
@@ -131,3 +131,5 @@ void ALevelManager::ChangeTime()
 int ALevelManager::GetDayID() const										{ return m_iDayID; }
 
 void ALevelManager::SetCurrentDayTimeType( EDayTimeType eDayTimeType )	{ m_eCurrentDayTimeType = eDayTimeType; }
+
+EDayTimeType ALevelManager::GetCurrentDayTimeType() const				{ return m_eCurrentDayTimeType; }

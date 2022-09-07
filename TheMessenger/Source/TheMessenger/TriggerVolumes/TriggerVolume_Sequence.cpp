@@ -4,7 +4,6 @@
 #include "TriggerVolume_Sequence.h"
 
 #include <Components/BoxComponent.h>
-#include <Kismet/GameplayStatics.h>
 #include <LevelSequence/Public/LevelSequenceActor.h>
 #include <LevelSequence/Public/LevelSequencePlayer.h>
 
@@ -15,18 +14,27 @@
 void ATriggerVolume_Sequence::BeginPlay()
 {
 	// Call the base class's begin play function, which would be the AActor's one as the TriggerVolume_Base does not have one.
-	Super::BeginPlay();
+	ATriggerVolume_Base::BeginPlay();
 
 	// Create default sequence playback settings.
 	FMovieSceneSequencePlaybackSettings m_pfsLevelSequencePlaybackSettings;
 
+	// If a level sequence has been set in the editor
 	if( m_pcLevelSequenceToPlay != nullptr )
 	{
+		// Create level sequence player, to play the level sequence.
 		m_pcLevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer( GetWorld(), m_pcLevelSequenceToPlay->GetSequence(), m_pfsLevelSequencePlaybackSettings, m_pcLevelSequenceToPlay );
 	}
 
-	m_pcLevelManager = Cast<ALevelManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ALevelManager::StaticClass() ) );
-	m_pcLevelManager->OnChangedDay.AddUObject( this, &ATriggerVolume_Sequence::ChangeDay );
+	// Get the level manager that was initialised in the base class.
+	m_pcLevelManager = &GetLevelManager();
+
+	// Check if trigger volumes is triggerd is on a certain day.
+	if( m_bTriggerOnDay )
+	{
+		// Bind the function to on changed day delegate.
+		m_pcLevelManager->OnChangedDay.AddUObject( this, &ATriggerVolume_Sequence::OnChangedDay );
+	}
 
 	// Setup an OnComponentBeginOverlap callback function to be called when an overlap is triggered.
 	m_BoxTriggerVolume->OnComponentBeginOverlap.AddDynamic( this, &ATriggerVolume_Sequence::OnBeginOverlapTrigger );
@@ -39,39 +47,46 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 	// This will detect the player if it has that tag.
 	if( ( OtherActor != this ) && OtherActor->Tags.Contains( "Player" ) )
 	{
+		// Get the player from the actor that was collided and disable player input.
 		ATheMessengerCharacter* Player = Cast<ATheMessengerCharacter>( OtherActor );
-		Player->DisableInput( &Player->GetPlayerController() );
 
+		// Check if it's triggerd on any day.
 		if( m_bTriggerOnDay )
 		{
 			// Turn off collision. To not be called again.
 			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 		}
 
-		if( m_pcInteractedCharacter != nullptr )
+		// Check if the villager has been set in the editor.
+		if( m_pcVillagerToInteract != nullptr )
 		{
 			//Call the interaction function from the charatcer.
-			m_pcInteractedCharacter->OnInteract_Implementation( this );
+			m_pcVillagerToInteract->OnInteract_Implementation( this );
+			Player->DisableInput( &Player->GetPlayerController() );
 		}
 
+		// Check if the level sequencer has been set
 		if( m_pcLevelSequenceToPlay != nullptr )
 		{
+			// Play the level sequencer.
 			m_pcLevelSequencePlayer->Play();
+			Player->DisableInput( &Player->GetPlayerController() );
 		}
 	}
 }
 
-void ATriggerVolume_Sequence::ChangeDay()
+void ATriggerVolume_Sequence::OnChangedDay()
 {
-	if( m_bTriggerOnDay )
+	// Check if the day to trigger is the same as the current day.
+	if( m_iDayToTrigger == m_pcLevelManager->GetDayID() )
 	{
-		if( m_iDayToTrigger == m_pcLevelManager->GetDayID() )
-		{
-			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
-		}
-		else
-		{
-			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
-		}
+		// Enable collision.
+		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
 	}
+	else
+	{
+		// Disable collision.
+		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+	}
+
 }

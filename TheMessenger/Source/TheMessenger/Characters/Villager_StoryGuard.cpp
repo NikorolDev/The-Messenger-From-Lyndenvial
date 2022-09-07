@@ -7,6 +7,7 @@
 #include <LevelSequence/Public/LevelSequencePlayer.h>
 
 #include "CharacterOverHead.h"
+#include "TheMessenger/Dialogue/DialogueManager.h"
 
 void AVillager_StoryGuard::BeginPlay()
 {
@@ -19,6 +20,8 @@ void AVillager_StoryGuard::BeginPlay()
 	{
 		m_pcLevelSequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer( GetWorld(), m_pcLevelSequenceToPlay->GetSequence(), m_pfsLevelSequencePlaybackSettings, m_pcLevelSequenceToPlay );
 	}
+
+	GetDialogueManager().DialogueFinished.AddUObject( this, &AVillager_StoryGuard::OnDialogueFinished );
 }
 
 void AVillager_StoryGuard::OnDialogueFinished()

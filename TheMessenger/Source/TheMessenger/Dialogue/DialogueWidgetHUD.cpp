@@ -11,8 +11,6 @@ void UDialogueWidgetHUD::NativeConstruct()
 
 	// Hide the dialogue widget so it is not visible when the player starts the game.
 	HideDialogue();
-
-	UE_LOG( LogTemp, Display, TEXT( "[UDialogueWidgetHUD::NativeConstruct L.15] DIALOGUE WIDGET CONSTRUCTED" ) );
 }
 
 void UDialogueWidgetHUD::DisplayText( FString& rsCharacterName, FString& rsDialogueText )
@@ -24,22 +22,12 @@ void UDialogueWidgetHUD::DisplayText( FString& rsCharacterName, FString& rsDialo
 		// dialogue sequence is still playing.
 		SetVisibility( ESlateVisibility::Visible );
 		m_bIsDialogueDisplayed = true;
-
-		UE_LOG( LogTemp, Display, TEXT( "[UDialogueWidgetHUD::DisplayText L.28] DIALOGUE WIDGET IS NOW VISIBLE" ) );
 	}
 
-	//if( rsCharacterName.IsEmpty() )
-	//{
-	//	DialogueText->SetText( FText::FromString( rsDialogueText ) );
-	//}
-	//else
-	//{
-	//	// Set the text of the dialogue with the character name.
-	//	// Concatenate the text so the character name can be manipulated via "DT_WidgetTextData", which holds how text should look like.
-	//}
-		DialogueText->SetText( FText::FromString( "<Character>" + rsCharacterName + "</> " + rsDialogueText ) );
-
-	UE_LOG( LogTemp, Display, TEXT( "[UDialogueWidgetHUD::DisplayText L.34] NEW DIALOGUE TEXT DISPLAYED" ) );
+	// Display character's name and dialogue text.
+	CharacterNameText->SetText( FText::FromString( "<Character>" + rsCharacterName + "</>" ) );
+	//DialogueText->SetText( FText::FromString( "<Character>" + rsCharacterName + "</> " + rsDialogueText ) );
+	DialogueText->SetText( FText::FromString( rsDialogueText ) );
 }
 
 void UDialogueWidgetHUD::HideDialogue()
@@ -47,6 +35,4 @@ void UDialogueWidgetHUD::HideDialogue()
 	// Set visibility of the dialogue to be hidden and set the boolean to be false, so it can be redisplayed.
 	SetVisibility( ESlateVisibility::Hidden );
 	m_bIsDialogueDisplayed = false;
-
-	UE_LOG( LogTemp, Display, TEXT( "[UDialogueWidgetHUD::HideDialogue L.43] DIALOGUE WIDGET IS NOW HIDDEN" ) );
 }

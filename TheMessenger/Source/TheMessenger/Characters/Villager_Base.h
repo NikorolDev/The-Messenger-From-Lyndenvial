@@ -78,14 +78,14 @@ protected:
 	virtual void Initialise();
 
 	UFUNCTION()
-		virtual void OnDialogueFinished();
-
-	UFUNCTION()
 		virtual void AppearOnThisDay() {};
 
 public:
 	// Sets default values for this character's properties
 	AVillager_Base();
+
+	UFUNCTION()
+		virtual void OnDialogueFinished();
 
 	virtual void OnInteract_Implementation( AActor* Caller ) override;
 

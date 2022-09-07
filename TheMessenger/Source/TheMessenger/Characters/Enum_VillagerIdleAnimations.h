@@ -8,5 +8,6 @@ enum class EVillagerIdleAnimations : uint8
 {
 	FemaleStanding,
 	MaleStanding,
-	GuardStanding
+	GuardStanding,
+	MaleHandsBackStanding,
 };

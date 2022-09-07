@@ -56,6 +56,11 @@ void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
 	{
 		m_pcHintsManager->SetHint( ChoiceSelected->HintID );
 	}
+
+	for( int iChoiceBranch = 0; iChoiceBranch < m_aChoiceWidgets.Num(); ++iChoiceBranch )
+	{
+		m_aChoiceWidgets[ iChoiceBranch ]->SetVisibility( ESlateVisibility::Collapsed );
+	}
 	//
 	//// Check if the character affected is not nullptr to properly set the impact 
 	//if( ChoiceSelected->ChoiceImpactProperties.CharacterAffected != nullptr )
@@ -128,16 +133,6 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 				break;
 			}
 		}
-	
-		//DEPRECATED
-		//UChoiceWidget* ChoiceWidget = CreateWidget<UChoiceWidget>( this, m_tcChoiceWidget );
-		//ChoiceWidget->ChoiceSelected.AddDynamic( this, &UChoiceSelectionWidget::OnChoiceSelected );
-	
-		// Set the selection.
-		
-		//DEPRECATED
-		//m_aChoiceWidgets[iChoiceBranch]
-		//ChoiceBox->AddChildToVerticalBox( ChoiceWidget );
 	}
 
 	// When all buttons are set. Toggle mouse cursor visibility and set game input to UI only.

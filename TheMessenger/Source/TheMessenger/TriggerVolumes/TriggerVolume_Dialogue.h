@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "TriggerVolume_Base.h"
+#include "TheMessenger/Level/Enum_DayTimeType.h"
 #include "TriggerVolume_Dialogue.generated.h"
 
+// Forward class declarations (Game)
 class ADialogueManager;
+class ALevelManager;
 
 /**
  * 
@@ -17,11 +20,32 @@ class THEMESSENGER_API ATriggerVolume_Dialogue : public ATriggerVolume_Base
 	GENERATED_BODY()
 	
 private:
-
+	// The dialogue manager needed to initialise the dialogue manager.
 	ADialogueManager* m_pcDialogueManager;
 
+	// The level manager needed to set collision when the day time type changes.
+	ALevelManager* m_pcLevelManager;
+
+	// The Dialogue ID to initialise the dialogue sequence.
 	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue IDs" ) )
-		TArray<FName> m_aDialogueIDs;
+		FName m_nDialogueIDs;
+
+	// Is this trigger volume, triggerable on day and night
+	UPROPERTY( Category = "Properties|Trigger", EditInstanceOnly, meta = ( DisplayName = "Is Triggerable On Time Type" ) )
+		bool m_bTriggerableOnTimeType;
+
+	// The day time type to trigger the ambient sound.
+	UPROPERTY( Category = "Properties|Trigger", EditInstanceOnly, meta = ( DisplayName = "Trigger At Time Type", EditCondition = "m_bTriggerableOnTimeType" ) )
+		EDayTimeType m_eDayToTrigger;
+
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: OnChangedDay()
+	// Author			: Unreal Engine 4
+	// Editors			: Nikodem Hamrol
+	// Purpose			: To set the collision based on the time type the level is on.
+	//----------------------------------------------------------------------------------------------------------------------------
+	UFUNCTION()
+		void OnChangedDay();
 
 protected:
 	//----------------------------------------------------------------------------------------------------------------------------

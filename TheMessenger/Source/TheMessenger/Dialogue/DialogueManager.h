@@ -33,9 +33,9 @@ class THEMESSENGER_API ADialogueManager : public AActor
 	
 private:
 #pragma region Private Variables (not exposed to the editor)
-	// To check if the dialogue sequence has been initialised.
-	bool m_bIsDialogueSequenceInitialised;
-
+	// If the ambient dialogue is playing to hide the character overhead.
+	bool m_bIsAmbientDialoguePlaying;
+	
 	// The term time for the dialogue, which is calculated with the audio length and the desired delay.
 	float m_fDialogueTermTime;
 
@@ -50,6 +50,9 @@ private:
 	
 	// An instance of the dialogue.
 	FStructDialogueSequence* m_pfsDialogueSequence;
+
+	// Timer handle that deals with setting new dialogue term in a sequence.
+	FTimerHandle m_fsTimerHandleDialogueDuration;
 
 	// The current villager that is speaking through ambient dialogue.
 	AVillager_Base* m_pcCurrentVillagerSpeaking;

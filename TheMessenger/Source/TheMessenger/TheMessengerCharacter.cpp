@@ -112,7 +112,7 @@ void ATheMessengerCharacter::SetPlayerBackFromSequence()
 }
 
 ATheMessengerCharacter::ATheMessengerCharacter()
-	:m_fLineTraceDistance (2000.0f)
+	:m_fLineTraceDistance (1000.0f)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;

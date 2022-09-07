@@ -25,16 +25,6 @@ ADialogueManager::ADialogueManager()
 	// Audio Component (m_pcAudioComponent).
 	m_pcAudioComponent = CreateDefaultSubobject<UAudioComponent>( TEXT( "Audio Component" ) );
 	m_pcAudioComponent->SetupAttachment( m_pcIconBillboard );
-
-	// Find the icon for the dialogue manager using the asset address reference in the engine.
-	/*static ConstructorHelpers::FObjectFinder<UTexture2D> DialogueIcon(TEXT(""));
-
-	// Check if the icon was found.
-	if( DialogueIcon.Succeeded() )
-	{
-		// Set the sprite of the billboard to be the icon found.
-		m_pcIconBillboard->SetSprite( DialogueIcon.Object );
-	}*/
 }
 
 void ADialogueManager::BeginPlay()
@@ -58,35 +48,27 @@ void ADialogueManager::BeginPlay()
 
 void ADialogueManager::InitialiseDialogueSequence( const FName& rnDialogueID )
 {
-	// First check if the dialogue is not initialised
-	if( !m_bIsDialogueSequenceInitialised )
+	// Check if there is a dialogue sequence active.
+	if( m_pfsDialogueSequence )
 	{
-		// Reset the dialogue ID to 0 to get the first dialogue term in the sequence.
-		// Reset the dialogue term duration to 0 and find the correct dialogue in the table.
-		m_iDialogueID = 0;
-		m_fDialogueTermTime = 0.0f;
-		m_pfsDialogueSequence = m_tmDialogueTable.Find( rnDialogueID );
-
-		// Check if the dialogue sequence was found
-		if( m_pfsDialogueSequence )
-		{
-			// As the dialogue sequence was found, set the max number of dialogue terms in the sequence to check if the whole sequence
-			// is complete.
-			m_iNumberOfDialogueTerms = m_pfsDialogueSequence->DialogueSequence.Num();
-
-			// The dialogue seuqnce is now initialised.
-			m_bIsDialogueSequenceInitialised = true;
-
-			// Now set the dialogue term to play it.
-			SetDialogueTerm();
-		}
-		else // If it was not found
-		{
-			// Print a message onto the screen and on the output log if the dialogue sequence could not be found.
-			UE_LOG( LogTemp, Warning,
-				TEXT( "NO DIALOGUE FOUND | NONE MATCHING DATA ON THE TRIGGER VOLUME OR DIALOGUE MANAGER | POTENTIAL TYPO IN THE IDS" ) );
-		}
+		// If so, clear the timer handle as it will not trigger events happening after the dialogue is finished.
+		GetWorldTimerManager().ClearTimer( m_fsTimerHandleDialogueDuration );
+		//m_pfsDialogueSequence->DialogueSequence
 	}
+
+	// Reset the dialogue ID to 0 to get the first dialogue term in the sequence.
+	// Reset the dialogue term duration to 0 and find the correct dialogue in the table.
+	m_iDialogueID = 0;
+	m_fDialogueTermTime = 0.0f;
+	m_pfsDialogueSequence = m_tmDialogueTable.Find( rnDialogueID );
+
+	// As the dialogue sequence was found, set the max number of dialogue terms in the sequence to check if the whole sequence
+	// is complete.
+	m_iNumberOfDialogueTerms = m_pfsDialogueSequence->DialogueSequence.Num();
+
+	// Now set the dialogue term to play it.
+	SetDialogueTerm();
+
 }
 
 void ADialogueManager::PlayDialogueTerm()
@@ -94,15 +76,8 @@ void ADialogueManager::PlayDialogueTerm()
 	// Increment the dialogue ID to set the next one in the term.
 	m_iDialogueID++;
 
-	// Create a timer handle struct , which will be used to set the timer.
-	//FTimerHandle fsTimerHandleDialogueDuration;
-	FTimerHandle fsTimerHandle1;
-
-	// Set the timer, so it will hide the diaogue widget when dialogue audio finishes.
-	//GetWorldTimerManager().SetTimer( fsTimerHandleDialogueDuration, m_pcDialogueWidgetHUD, &UDialogueWidgetHUD::HideDialogue, m_fDialogueInitialDuration, false);
-
 	// Set the timer, so it will call "SetDialogueTerm" to set the next term.
-	GetWorldTimerManager().SetTimer( fsTimerHandle1, this, &ADialogueManager::SetDialogueTerm, m_fDialogueTermTime, false );
+	GetWorldTimerManager().SetTimer( m_fsTimerHandleDialogueDuration, this, &ADialogueManager::SetDialogueTerm, m_fDialogueTermTime, false );
 }
 
 void ADialogueManager::SetDialogueTerm()
@@ -115,6 +90,8 @@ void ADialogueManager::SetDialogueTerm()
 
 		if( dialogueTerm->CharacterToSpeak )
 		{
+			//m_bIsAmbientDialoguePlaying = true;
+
 			if( m_pcCurrentVillagerSpeaking )
 			{
 				m_pcCurrentVillagerSpeaking->GetCharatcerOverHead().HideDialogue();
@@ -157,10 +134,7 @@ void ADialogueManager::SetDialogueTerm()
 		PlayDialogueTerm();
 	}
 	else // If all dialogue terms were played.
-	{
-		// The dialogue is now uninitialised so it allow to play the next dialogue from the choice selected or another dialogue if needed.
-		m_bIsDialogueSequenceInitialised = false;
-		
+	{		
 		// Check if the choice is required for this sequence.
 		if( m_pfsDialogueSequence->bIsChoiceRequired )
 		{
@@ -169,8 +143,22 @@ void ADialogueManager::SetDialogueTerm()
 		}
 		else // If a choice is not required for this sequence.
 		{
+			//AVillager_Base* pcVillager = nullptr;
+			//
+			//if( m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID - 1 ].CharacterToSpeak != nullptr ||
+			//	m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID ].CharacterToSpeak != nullptr )
+			//{
+			//	pcVillager = m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID - 1 ].CharacterToSpeak;
+			//}
+
 			// Hide the dialogue widget and now the manager is ready to reintialised next dialogue.
 			m_pcDialogueWidgetHUD->HideDialogue();
+
+			//if( pcVillager )
+			//{
+			//	m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID ].CharacterToSpeak->OnDialogueFinished();
+			//}
+
 			DialogueFinished.Broadcast();
 		}
 	}
