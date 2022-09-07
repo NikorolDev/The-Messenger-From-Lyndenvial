@@ -37,7 +37,7 @@ void ATriggerVolume_Dialogue::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 	if( ( OtherActor != this ) && OtherActor->Tags.Contains( "Player" ) )
 	{
 		// Initialise dialogue sequence based on the ID the trigger volume holds.
-		m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueIDs );
+		m_pcDialogueManager->InitialiseDialogueSequence( m_nDialogueID );
 	}
 }
 

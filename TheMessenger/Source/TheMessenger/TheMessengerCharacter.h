@@ -29,6 +29,8 @@ private:
 
 	bool m_bInEndDaySequence;
 
+	FRotator m_v3SpawnRotation;
+
 	FVector m_v3SpawnLocation;
 
 	AActor* FocusedActor;

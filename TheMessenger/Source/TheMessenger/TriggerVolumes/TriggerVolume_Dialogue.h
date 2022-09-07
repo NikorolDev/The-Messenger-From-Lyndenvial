@@ -27,8 +27,8 @@ private:
 	ALevelManager* m_pcLevelManager;
 
 	// The Dialogue ID to initialise the dialogue sequence.
-	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue IDs" ) )
-		FName m_nDialogueIDs;
+	UPROPERTY( Category = "Properties|Dialogue", EditInstanceOnly, meta = ( DisplayName = "Dialogue ID" ) )
+		FName m_nDialogueID;
 
 	// Is this trigger volume, triggerable on day and night
 	UPROPERTY( Category = "Properties|Trigger", EditInstanceOnly, meta = ( DisplayName = "Is Triggerable On Time Type" ) )

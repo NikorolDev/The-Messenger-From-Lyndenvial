@@ -26,6 +26,8 @@ void AVillager_StoryGuard::BeginPlay()
 
 void AVillager_StoryGuard::OnDialogueFinished()
 {
+	AVillager_Base::OnDialogueFinished();
+
 	GetCharatcerOverHead().HideDialogue();
 
 	if( GetInteracted() )

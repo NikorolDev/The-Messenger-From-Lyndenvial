@@ -186,6 +186,7 @@ void ATheMessengerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	m_v3SpawnLocation = GetActorLocation();
+	m_v3SpawnRotation = GetActorRotation();
 
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 	m_pcPlayerController = Cast<APlayerController>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ) );
@@ -226,8 +227,8 @@ void ATheMessengerCharacter::SetInEndDaySequence( bool bInEndDaySequence )
 void ATheMessengerCharacter::SetLocationToSpawn()
 {
 	m_bInEndDaySequence = false;
-	SetActorLocation( FVector( 362, -20482, 650 ) );
-	m_pcPlayerController->SetControlRotation( FRotator( 0.0f, 90.0f, 0.0f ) );
+	SetActorLocation( m_v3SpawnLocation );
+	m_pcPlayerController->SetControlRotation( m_v3SpawnRotation );
 	EnableInput( m_pcPlayerController );
 	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
 }

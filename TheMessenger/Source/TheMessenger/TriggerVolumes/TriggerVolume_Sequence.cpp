@@ -70,23 +70,31 @@ void ATriggerVolume_Sequence::OnBeginOverlapTrigger( UPrimitiveComponent* Overla
 		{
 			// Play the level sequencer.
 			m_pcLevelSequencePlayer->Play();
-			Player->DisableInput( &Player->GetPlayerController() );
 		}
 	}
 }
 
+void ATriggerVolume_Sequence::OnImpactActor_Implementation()
+{
+	// Enable collision.
+	m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
+}
+
 void ATriggerVolume_Sequence::OnChangedDay()
 {
-	// Check if the day to trigger is the same as the current day.
-	if( m_iDayToTrigger == m_pcLevelManager->GetDayID() )
+	if( m_iDayToTrigger != m_iDay4ID )
 	{
-		// Enable collision.
-		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
-	}
-	else
-	{
-		// Disable collision.
-		m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+		// Check if the day to trigger is the same as the current day.
+		if( m_iDayToTrigger == m_pcLevelManager->GetDayID() )
+		{
+			// Enable collision.
+			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
+		}
+		else
+		{
+			// Disable collision.
+			m_BoxTriggerVolume->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+		}
 	}
 
 }
