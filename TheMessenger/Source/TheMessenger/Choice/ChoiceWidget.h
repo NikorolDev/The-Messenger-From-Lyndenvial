@@ -7,14 +7,20 @@
 #include "Struct_Choice.h"
 #include "ChoiceWidget.generated.h"
 
+// Forward class declarations (Engine)
 class UButton;
 class URichTextBlock;
 
+// Delegates
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FChoiceSelectedSignature, const int, iBranchID );
 
-/**
- * 
- */
+//-----------------------------------------------------------------------------------------------------------------------------
+// Class Name			: UChoiceWidget
+// Author				: Nikodem Hamrol
+// Classes Inherited	: UUserWidget
+// Purpose				: This class will be responsible for a choice selction and making sure they are represented by the
+//						,	correct choice.
+//-----------------------------------------------------------------------------------------------------------------------------
 UCLASS()
 class THEMESSENGER_API UChoiceWidget : public UUserWidget
 {
@@ -52,11 +58,24 @@ protected:
 		virtual void NativeConstruct() override;
 
 public:
-	// The choice selected signature that is used to 
+	// The choice selected signature that is used to broadcast to the selection widget.
 	UPROPERTY( BlueprintAssignable, BlueprintCallable )
 		FChoiceSelectedSignature ChoiceSelected;
 
-	void SetButtonText( int iChoiceCount, const FString& ChoiceDisplayText, FName& rnDialogueID );
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: SetButtonText( int iChoiceCount, const FString& ChoiceDisplayText )
+	// Author			: Nikodem Hamrol
+	// Purpose			: Sets the button text and the representation of the choice by a number.
+	// Parameters		: iChoiceCount - The representation of the from when the choice was displayed.
+	//					, ChoiceDisplayText - The text to display choice.
+	//-----------------------------------------------------------------------------------------------------------------------------
+	void SetButtonText( int iChoiceCount, const FString& ChoiceDisplayText );
 
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: SetTextColour( const FLinearColor& krfsTextColour )
+	// Author			: Nikodem Hamrol
+	// Purpose			: Sets the button text colour.
+	// Parameters		: krfsTextColour - The desired colour of the button text.
+	//-----------------------------------------------------------------------------------------------------------------------------
 	void SetTextColour( const FLinearColor& krfsTextColour );
 };

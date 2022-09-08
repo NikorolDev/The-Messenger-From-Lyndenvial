@@ -6,12 +6,16 @@
 #include "Blueprint/UserWidget.h"
 #include "CharacterOverHead.generated.h"
 
+// Forward class declarations (Engine)
 class UOverlay;
 class UTextBlock;
 
-/**
- * 
- */
+//-----------------------------------------------------------------------------------------------------------------------------
+// Class Name			: ADialogueManager
+// Author				: Nikodem Hamrol
+// Classes Inherited	: UUserWidget
+// Purpose				: This class display the dialogue, the charcter name and overlays over the character's head.
+//-----------------------------------------------------------------------------------------------------------------------------
 UCLASS()
 class THEMESSENGER_API UCharacterOverHead : public UUserWidget
 {
@@ -21,8 +25,7 @@ private:
 	// This will check if the dialogue is already displayed on the screen.
 	bool m_bIsDialogueDisplayed;
 
-	bool m_bIsDisplayed;
-
+	// The character name of the villager that this widget is attached to.
 	UPROPERTY( meta = ( BindWidget ) )
 		UTextBlock* CharacterName;
 
@@ -30,9 +33,11 @@ private:
 	UPROPERTY( meta = ( BindWidget ) )
 		UTextBlock* DialogueText;
 
+	// Interactable overlay showing the button to interact and interaction type.
 	UPROPERTY( meta = ( BindWidget ) )
 		UOverlay* InteractableOverlay;
 
+	// The focus overlay to show the character's name only.
 	UPROPERTY( meta = ( BindWidget ) )
 		UOverlay* OnFocusOverlay;
 
@@ -50,7 +55,7 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name	: DisplayText( FString& rsDialogueText )
 	// Author			: Nikodem Hamrol
-	// Purpose			: 
+	// Purpose			: To display the dialogue text that is passed from the villager.
 	// Parameters		: rsDialogueText - The dialogue text that needs to be displayed.
 	//-----------------------------------------------------------------------------------------------------------------------------
 	void DisplayText( FString& rsDialogueText );
@@ -58,11 +63,24 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name	: HideDialogue()
 	// Author			: Nikodem Hamrol
-	// Purpose			: To hide the widget when the dialogue finishes
+	// Purpose			: To hide the dialogue text when it is finished
 	//-----------------------------------------------------------------------------------------------------------------------------
 	void HideDialogue();
 
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: ToggleOnFocusOverlayVisibility( bool bIsVisible, bool bIsInteractable = false )
+	// Author			: Nikodem Hamrol
+	// Purpose			: To toggle on and off the overlays that are focus from the villager.
+	// Parameters		: bIsVisible		- To display the focus overlay.
+	//					, bIsInteractable	- To display the interactable overlay.
+	//-----------------------------------------------------------------------------------------------------------------------------
 	void ToggleOnFocusOverlayVisibility( bool bIsVisible, bool bIsInteractable = false );
 
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: HideDialogue()
+	// Author			: Nikodem Hamrol
+	// Purpose			: To set the character name to represent the villager.
+	// Parameters		: pnCharacterName - The desired character name.
+	//-----------------------------------------------------------------------------------------------------------------------------
 	void SetCharacterName( const FName& pnCharacterName );
 };

@@ -6,7 +6,12 @@
 #include "UObject/Interface.h"
 #include "InteractableInterface.generated.h"
 
-// This class does not need to be modified.
+//-----------------------------------------------------------------------------------------------------------------------------
+// Class Name			: UInteractableInterface
+// Author				: Nikodem Hamrol
+// Classes				: UInterface
+// Purpose				: An Interface to allow interaction with interactables.
+//-----------------------------------------------------------------------------------------------------------------------------
 UINTERFACE(MinimalAPI)
 class UInteractableInterface : public UInterface
 {
@@ -42,7 +47,7 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name		: LostFocus()
 	// Author				: Nikodem Hamrol
-	// Purpose				: Signature of the function which allows an interaction with another actor
+	// Purpose				: Signature of the function which allows the actor to be not focused
 	//-----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION( Category = "Interaction", BlueprintNativeEvent, BlueprintCallable )
 		void LostFocus();

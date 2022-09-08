@@ -19,98 +19,6 @@
 //////////////////////////////////////////////////////////////////////////
 // ATheMessengerCharacter
 
-void ATheMessengerCharacter::TraceForward()
-{
-	FHitResult OutHit;
-	FVector v3StartPosition = FollowCamera->GetComponentLocation();
-	FVector v3Forward = FollowCamera->GetForwardVector();
-	FVector v3EndPosition = v3StartPosition + ( v3Forward * m_fLineTraceDistance );
-
-	FCollisionQueryParams CollisionParams;
-	//CollisionParams.AddIgnoredActor( this->GetOwner() );
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel( OutHit, v3StartPosition, v3EndPosition, ECC_Visibility, CollisionParams );
-	//DrawDebugLine( GetWorld(), v3StartPosition, v3EndPosition, FColor::Green, false, 1.0f );
-
-	if( bHit )
-	{
-		//DrawDebugBox( GetWorld(), OutHit.ImpactPoint, FVector( 5, 5, 5 ), FColor::Red, false, 1.0f );
-
-		AActor* Interactable = OutHit.GetActor();
-
-		if( Interactable )
-		{
-			if( Interactable != FocusedActor )
-			{
-				if( FocusedActor )
-				{
-					IInteractableInterface* Interface = Cast<IInteractableInterface>( FocusedActor );
-					if( Interface )
-					{
-						Interface->LostFocus_Implementation();
-					}
-				}
-				IInteractableInterface* Interface = Cast<IInteractableInterface>( Interactable );
-				if( Interface )
-				{
-					Interface->OnFocus_Implementation();
-				}
-				FocusedActor = Interactable;
-			}
-		}
-		else
-		{
-			if( FocusedActor )
-			{
-				IInteractableInterface* Interface = Cast<IInteractableInterface>( FocusedActor );
-				if( Interface )
-				{
-					Interface->LostFocus_Implementation();
-				}
-			}
-			FocusedActor = nullptr;
-		}
-	}
-	else
-	{
-		if( FocusedActor )
-		{
-			IInteractableInterface* Interface = Cast<IInteractableInterface>( FocusedActor );
-			if( Interface )
-			{
-				Interface->LostFocus_Implementation();
-			}
-		}
-		FocusedActor = nullptr;
-	}
-}
-
-void ATheMessengerCharacter::OnInteractPressed()
-{
-	if( FocusedActor )
-	{
-		IInteractableInterface* Interface = Cast<IInteractableInterface>( FocusedActor );
-		if( Interface )
-		{
-			Interface->OnInteract_Implementation( FocusedActor );
-		}
-	}
-}
-
-void ATheMessengerCharacter::SetPlayerBackFromSequence()
-{
-	if( !m_bInEndDaySequence )
-	{
-		UE_LOG( LogTemp, Warning, TEXT( "Re-enabled Input" ) );
-
-		EnableInput( m_pcPlayerController );
-		m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
-		m_pcPlayerController->bShowMouseCursor = false;
-		//m_pcPlayerController->SetCinematicMode( false, false, false );
-	}
-
-	m_bIsMovementLocked = false;
-}
 
 ATheMessengerCharacter::ATheMessengerCharacter()
 	:m_fLineTraceDistance (1000.0f)
@@ -158,106 +66,188 @@ void ATheMessengerCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-
 	PlayerInputComponent->BindAction( "Interact", IE_Pressed, this, &ATheMessengerCharacter::OnInteractPressed );
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATheMessengerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATheMessengerCharacter::MoveRight);
 
-	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
-	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &ATheMessengerCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &ATheMessengerCharacter::LookUpAtRate);
-
-	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &ATheMessengerCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &ATheMessengerCharacter::TouchStopped);
-
-	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ATheMessengerCharacter::OnResetVR);
 }
 
 void ATheMessengerCharacter::BeginPlay()
 {
+	// Call the Actor's begin play.
 	Super::BeginPlay();
 
+	// Get the player's location and rotation.
 	m_v3SpawnLocation = GetActorLocation();
 	m_v3SpawnRotation = GetActorRotation();
 
+	// Get dialogue manager and the player controller.
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 	m_pcPlayerController = Cast<APlayerController>( UGameplayStatics::GetPlayerController( GetWorld(), 0 ) );
 
-	// Create the player widget and add it to the viewport.
+	// Create the player HUD widget and add it to the viewport.
 	m_pcPlayerHUD = CreateWidget<UPlayerHUD>( m_pcPlayerController, m_tcPlayerHUD );
 	m_pcPlayerHUD->AddToViewport(-1);
 
+	// Bind the function on dialogue finished to set the player back from sequence.
 	m_pcDialogueManager->DialogueFinished.AddUObject( this, &ATheMessengerCharacter::SetPlayerBackFromSequence );
 }
 
 
 void ATheMessengerCharacter::Tick( float DeltaTime )
 {
+	// Create a new line trace pre tick.
 	TraceForward();
+}
+
+void ATheMessengerCharacter::TraceForward()
+{
+	// Create all necessary values needed to create the line trace.
+	FHitResult OutHit;
+	FVector v3StartPosition = FollowCamera->GetComponentLocation();
+	FVector v3Forward		= FollowCamera->GetForwardVector();
+	FVector v3EndPosition	= v3StartPosition + ( v3Forward * m_fLineTraceDistance );
+	FCollisionQueryParams CollisionParams;
+
+	// Trace a line and check if it has hit something.
+	bool bHit = GetWorld()->LineTraceSingleByChannel( OutHit, v3StartPosition, v3EndPosition, ECC_Visibility, CollisionParams );
+	if( bHit )
+	{
+		// Get the actor detected from the hit result.
+		AActor* ActorDetected = OutHit.GetActor();
+
+		// Check if the actor is not nullptr.
+		if( ActorDetected )
+		{
+			// If actor detected is not the same as the currently focused actor.
+			if( ActorDetected != m_pcFocusedActor )
+			{
+				// Check if the focused actor is not nullptr.
+				if( m_pcFocusedActor )
+				{
+					// Cast the focused actor to an interactable interface. Then check if it is not a nullptr.
+					IInteractableInterface* InteractableActor = Cast<IInteractableInterface>( m_pcFocusedActor );
+					if( InteractableActor )
+					{
+						// The interactable has now lost focused.
+						InteractableActor->LostFocus_Implementation();
+					}
+				}
+
+				// Cast the actor detected to be an interactable.
+				IInteractableInterface* InteractableActor = Cast<IInteractableInterface>( ActorDetected );
+				if( InteractableActor )
+				{
+					// The interactable actor is now focused.
+					InteractableActor->OnFocus_Implementation();
+				}
+				// Set the focused actor to be the actor detected.
+				m_pcFocusedActor = ActorDetected;
+			}
+		}
+		else
+		{
+			// Check if the focused actor is not a nullptr
+			if( m_pcFocusedActor )
+			{
+				// Cast it as an interactable and if it is not a nullptr.
+				IInteractableInterface* InteractableActor = Cast<IInteractableInterface>( m_pcFocusedActor );
+				if( InteractableActor )
+				{
+					// Lose focus of the interactable.
+					InteractableActor->LostFocus_Implementation();
+				}
+			}
+			// Set the focused actor to be nullptr.
+			m_pcFocusedActor = nullptr;
+		}
+	}
+	else
+	{
+		// Check if the focused actor is not a nullptr
+		if( m_pcFocusedActor )
+		{
+			// Cast it as an interactable and if it is not a nullptr.
+			IInteractableInterface* InteractableActor = Cast<IInteractableInterface>( m_pcFocusedActor );
+			if( InteractableActor )
+			{
+				// Lose focus of the interactable.
+				InteractableActor->LostFocus_Implementation();
+			}
+		}
+		// Set the focused actor to be nullptr.
+		m_pcFocusedActor = nullptr;
+	}
+}
+
+void ATheMessengerCharacter::OnInteractPressed()
+{
+	// Check if the player is focusing on an interactable actor.
+	if( m_pcFocusedActor )
+	{
+		// Cast the focused to an interactrable,
+		IInteractableInterface* Interactable = Cast<IInteractableInterface>( m_pcFocusedActor );
+
+		// Check if the interactable is not nullptr;
+		if( Interactable )
+		{
+			// Interact with the actor.
+			Interactable->OnInteract_Implementation( m_pcFocusedActor );
+		}
+	}
+}
+
+void ATheMessengerCharacter::SetPlayerBackFromSequence()
+{
+	// Check if is not in an end day sequenece.
+	if( !m_bInEndDaySequence )
+	{
+		// Enable input for the controller and set the input on game only and hide the mouse cursor.
+		EnableInput( m_pcPlayerController );
+		m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+		m_pcPlayerController->bShowMouseCursor = false;
+	}
+
+	// Unlock movement.
+	m_bIsMovementLocked = false;
 }
 
 void ATheMessengerCharacter::SetPlayerForSequence( const FVector& v3PlayerPosition, float PlayerRotationYaw )
 {
+	// Lock the movement and disable input.
 	m_bIsMovementLocked = true;
 	DisableInput( m_pcPlayerController );
+
+	// Set the location and rotation of the player to be infornt of the villager.
 	SetActorLocation( v3PlayerPosition );
 	m_pcPlayerController->SetControlRotation( FRotator( 0, PlayerRotationYaw, 0 ) );
 }
 
-void ATheMessengerCharacter::SetInEndDaySequence( bool bInEndDaySequence )
-{
-	m_bInEndDaySequence = bInEndDaySequence;
-}
 
 void ATheMessengerCharacter::SetLocationToSpawn()
 {
+	// When the player is reset on the next day, it will not be in an end day sequence.
 	m_bInEndDaySequence = false;
+
+	// Set location and rotation of the player on the spawn values.
 	SetActorLocation( m_v3SpawnLocation );
 	m_pcPlayerController->SetControlRotation( m_v3SpawnRotation );
+
+	// Set input mode to be game only, hide mouse cursor, and enable input.
 	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
 	m_pcPlayerController->bShowMouseCursor = false;
 	EnableInput( m_pcPlayerController );
 }
 
-UPlayerHUD* ATheMessengerCharacter::GetPlayerHUD()
-{
-	return m_pcPlayerHUD;
-}
+void ATheMessengerCharacter::SetInEndDaySequence( bool bInEndDaySequence )	{ m_bInEndDaySequence = bInEndDaySequence; }
 
-APlayerController& ATheMessengerCharacter::GetPlayerController() const
-{
-	return *m_pcPlayerController;
-}
+UPlayerHUD* ATheMessengerCharacter::GetPlayerHUD()							{ return m_pcPlayerHUD; }
 
-void ATheMessengerCharacter::OnResetVR()
-{
-	// If TheMessenger is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in TheMessenger.Build.cs is not automatically propagated
-	// and a linker error will result.
-	// You will need to either:
-	//		Add "HeadMountedDisplay" to [YourProject].Build.cs PublicDependencyModuleNames in order to build successfully (appropriate if supporting VR).
-	// or:
-	//		Comment or delete the call to ResetOrientationAndPosition below (appropriate if not supporting VR)
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
-}
-
-void ATheMessengerCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		Jump();
-}
-
-void ATheMessengerCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		StopJumping();
-}
+APlayerController& ATheMessengerCharacter::GetPlayerController() const		{ return *m_pcPlayerController; }
 
 void ATheMessengerCharacter::TurnAtRate( float Rate )
 {

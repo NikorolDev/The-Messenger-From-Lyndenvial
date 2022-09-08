@@ -49,19 +49,26 @@ private:
 	UPROPERTY( meta = ( BindWidget ) )
 		UImage* HintIcon;
 
-	// 
+	// The hint text to display the hint.
 	UPROPERTY( meta = ( BindWidget ) )
 		URichTextBlock* HintText;
 
+	// The animation to display the hint pop up.
 	UPROPERTY( Transient, meta = ( BindWidgetAnim ) )
 		UWidgetAnimation* DisplayHint;
 
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// Function Name		: HideHintPopUp()
+	// Author				: Nikodem Hamrol
+	// Purpose				: Hides the hint pop up by playing the aniamtion in reverse.
+	//-----------------------------------------------------------------------------------------------------------------------------
 	void HideHintPopUp();
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name		: AnimationFinished()
 	// Author				: Nikodem Hamrol
-	// Purpose				: A callback function that will be triggered when aniamtion is finished, which will...
+	// Purpose				: A callback function that will be triggered when aniamtion is finished, which will set the timer for
+	//						,	the duration of the hint or hide the hint.
 	//-----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION()
 		void AnimationFinished();
@@ -76,11 +83,25 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// Function Name		: DisplayHintPopUp()
+	// Author				: Nikodem Hamrol
+	// Purpose				: Displays the hint pop up by playing the aniamtion and playing the sound.
+	//-----------------------------------------------------------------------------------------------------------------------------
 	void DisplayHintPopUp();
 
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// Function Name		: SetHintUIElements( const FHintProperties& krfsHintProperties )
+	// Author				: Nikodem Hamrol
+	// Purpose				: Sets the hint ui elements, such as the text and images.
+	//-----------------------------------------------------------------------------------------------------------------------------
 	void SetHintUIElements( const FHintProperties& krfsHintProperties );
 
+	//-----------------------------------------------------------------------------------------------------------------------------
+	// Function Name		: ToggleBlackBackground( bool bIsVisible )
+	// Author				: Nikodem Hamrol
+	// Purpose				: Toggles the black background for the whole screen, this is used only in the spy kidnapping scene.
+	//-----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION( BlueprintCallable )
 		void ToggleBlackBackground( bool bIsVisible );
 };

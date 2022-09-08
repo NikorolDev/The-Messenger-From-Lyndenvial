@@ -7,28 +7,33 @@
 #include "TheMessenger/Characters/InfluentiableThroughChoice.h"
 #include "TriggerVolume_Sequence.generated.h"
 
+// Forward class declarations (Engine)
 class ALevelSequenceActor;
 class ULevelSequencePlayer;
 
+// Forward class declarations (Game)
 class AVillager_Base;
 class ALevelManager;
 
-/**
- * 
- */
+//-----------------------------------------------------------------------------------------------------------------------------
+// Class Name			: ATriggerVolume_Sequence
+// Author				: Nikodem Hamrol
+// Classes Inherited	: ATriggerVolume_Base , IInfluentiableThroughChoice
+// Purpose				: This class is responsible for triggering level sequences.
+//----------------------------------------------------------------------------------------------------------------------------
 UCLASS()
 class THEMESSENGER_API ATriggerVolume_Sequence : public ATriggerVolume_Base, public IInfluentiableThroughChoice
 {
 	GENERATED_BODY()
 	
 private:
-	int m_iCurrentDay;
-
+	// Level manager needed to match the days with the day to trigger.
 	ALevelManager* m_pcLevelManager;
 
 	// The sequence player to play the final cutscene.
 	ULevelSequencePlayer* m_pcLevelSequencePlayer;
 
+	// Should it trigger on a day number
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Trigger On Specified Day" ) )
 		bool m_bTriggerOnDay;
 
@@ -44,6 +49,11 @@ private:
 	UPROPERTY( Category = "Properties|Interaction Sequence", EditInstanceOnly, meta = ( DisplayName = "Character To Interact" ) )
 		AVillager_Base* m_pcVillagerToInteract;
 
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: OnChangedDay()
+	// Author			: Nikodem Hamrol
+	// Purpose			: When the day changes it check if they can be triggered on the day.
+	//----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION()
 		void OnChangedDay();
 
@@ -66,6 +76,10 @@ protected:
 	virtual void OnBeginOverlapTrigger( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit ) override;
 
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: OnChangedDay()
+	// Author			: Nikodem Hamrol
+	// Purpose			: On impact actor from choice it wil set collisio to query only.
+	//----------------------------------------------------------------------------------------------------------------------------
 	virtual void OnImpactActor_Implementation() override;
-
 };

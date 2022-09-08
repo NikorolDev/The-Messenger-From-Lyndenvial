@@ -104,7 +104,7 @@ protected:
 	// Function Name	: BeginPlay() override
 	// Author			: Unreal Engine 4
 	// Editors			: Nikodem Hamrol
-	// Purpose			: 
+	// Purpose			: To create the dialogue widget for the story dialogues.
 	//----------------------------------------------------------------------------------------------------------------------------
 	virtual void BeginPlay() override;
 
@@ -120,13 +120,11 @@ public:
 	UPROPERTY( BlueprintAssignable, BlueprintCallable )
 		FDialogueUpdatedSignature DialogueUpdate;
 
+	// The delegate signature to be called when the dialogue sequence completely finishes with no choice required.
 	FDialogueFinished DialogueFinished;
 
-	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
-
 	//----------------------------------------------------------------------------------------------------------------------------
-	// Function Name	: InitialiseDialogueSequence()
+	// Function Name	: InitialiseDialogueSequence( const FName& rnDialogueID )
 	// Author			: Nikodem Hamrol
 	// Purpose			: To initialise the dialogue sequence based on the dialogue ID that was passed through.
 	// Parameters		: rnDialogueID - The ID that will find the dialogue sequence within the dialogue table.
@@ -134,5 +132,12 @@ public:
 	UFUNCTION( Category = Dialogue, BlueprintCallable )
 		void InitialiseDialogueSequence( const FName& rnDialogueID );
 
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: GetDialogueSequence( const FName& rnDialogueID )
+	// Author			: Nikodem Hamrol
+	// Purpose			: To get the dialogue sequence, for example to check if the interation is a sequence.
+	// Parameters		: rnDialogueID - The ID needed to get the sequence from the map.
+	// Returns			: Dialogue sequence containing all properties.
+	//----------------------------------------------------------------------------------------------------------------------------
 	FStructDialogueSequence& GetDialogueSequence( const FName& rnDialogueID );
 };

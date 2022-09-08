@@ -5,8 +5,10 @@
 
 void UCinematic::NativeConstruct()
 {
+	// Calls the native construct from UUserWidget.
 	Super::NativeConstruct();
 
+	// Hide the widget.
 	SetVisibility( ESlateVisibility::Hidden );
 }
 

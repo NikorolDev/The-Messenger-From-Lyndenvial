@@ -8,7 +8,6 @@
 
 #include "TheMessenger/TheMessengerCharacter.h"
 #include "TheMessenger/Dialogue/DialogueManager.h"
-#include "TheMessenger/Level/LevelManager.h"
 #include "TheMessenger/Player/PlayerHUD.h"
 
 // Sets default values
@@ -24,34 +23,24 @@ AHintsManager::AHintsManager()
 
 }
 
-void AHintsManager::DisplayHintPopUp()
-{
-	if( m_bHintDisplay )
-	{
-		UE_LOG( LogTemp, Display, TEXT( "DISPLAYING HINTS" ) );
-		m_pcPlayerHUD->DisplayHintPopUp();
-	}
-}
-
-// Called when the game starts or when spawned
 void AHintsManager::BeginPlay()
 {
-	//
+	// Call the Actor's begin play to initialise the class for the level.
 	Super::BeginPlay();
 
-	// Get the player character to get the HUD, to display the objectives.
-	//ATheMessengerCharacter* pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
-	//m_pcPlayerHUD = &pcPlayer->GetPlayerHUD();
-
+	// Get the dialogue manager and bind dispay hint pop up on dialogue finished delegate.
 	m_pcDialogueManager = Cast<ADialogueManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ADialogueManager::StaticClass() ) );
 	m_pcDialogueManager->DialogueFinished.AddUObject( this, &AHintsManager::DisplayHintPopUp );
-
-	//IntialiseForNewDay();
 }
 
-void AHintsManager::IntialiseForNewDay()
+void AHintsManager::DisplayHintPopUp()
 {
-	//m_pcDialogueManager = &m_pcLevelManager->GetCurrentDialogueManager();
+	// Check if the hint can be displayed
+	if( m_bHintDisplay )
+	{
+		// From the player HUD display the hint pop up.
+		m_pcPlayerHUD->DisplayHintPopUp();
+	}
 }
 
 void AHintsManager::SetHint( FName& rcnObjectiveID )
@@ -59,9 +48,10 @@ void AHintsManager::SetHint( FName& rcnObjectiveID )
 	// Set new objective by finding the objective struct 
 	m_pfsCurrentHint = m_tmHints.Find( rcnObjectiveID );
 
+	// If the player HUD has not been initialised to be used for this class
 	if( m_pcPlayerHUD == nullptr )
 	{
-		// Get the player character to get the HUD, to display the objectives.
+		// Get the player character to get the HUD, to display the hint.
 		ATheMessengerCharacter* pcPlayer = Cast<ATheMessengerCharacter>( UGameplayStatics::GetPlayerCharacter( GetWorld(), 0 ) );
 		m_pcPlayerHUD = pcPlayer->GetPlayerHUD();
 	}
@@ -69,6 +59,7 @@ void AHintsManager::SetHint( FName& rcnObjectiveID )
 	// Set Hint UI Elements
 	m_pcPlayerHUD->SetHintUIElements( *m_pfsCurrentHint );
 
+	// Allow the hint to be displayed.
 	m_bHintDisplay = true;
 }
 

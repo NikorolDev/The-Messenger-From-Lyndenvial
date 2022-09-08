@@ -21,9 +21,9 @@ AEndingManager::AEndingManager()
 	RootComponent = m_pcIconBillboard;
 }
 
-// Called when the game starts or when spawned
 void AEndingManager::BeginPlay()
 {
+	// Call the Actor's begin play.
 	Super::BeginPlay();
 	
 	// Create a widget from the subclass of the widget, which should be "BPW_Cinematic". This initialises the private 
@@ -37,14 +37,17 @@ void AEndingManager::BeginPlay()
 	// Get the level manager that is active in the level.
 	m_pcLevelManager = Cast<ALevelManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ALevelManager::StaticClass() ) );
 
-	// Set a dummy ending to check for ending trigger.
+	// Set a dummy ending to check for ending trigger. This specific ending will only get triggered at the end of the game.
+	// This allows the check to get the Day ID.
 	m_pfsEndingTriggered = m_tmEndings.Find( "Loyalty" );
 }
 
 const bool AEndingManager::DisplayEnding()
 {
+	// If the current day is the same as the day to trigger the ending
 	if( m_pfsEndingTriggered->DayToTrigger == m_pcLevelManager->GetDayID() )
 	{
+		// Play the cinematic, passing the ending properties.
 		m_pcCinematicWidget->PlayCinematic( *m_pfsEndingTriggered );
 		return true;
 	}
@@ -53,5 +56,6 @@ const bool AEndingManager::DisplayEnding()
 
 void AEndingManager::TriggerEnding( const FName& krnEndingID )
 {
+	// Find the ending properties based on the ending ID.
 	m_pfsEndingTriggered = m_tmEndings.Find( krnEndingID );
 }

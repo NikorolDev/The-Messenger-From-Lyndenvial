@@ -6,7 +6,12 @@
 #include "UObject/Interface.h"
 #include "InfluentiableThroughChoice.generated.h"
 
-// This class does not need to be modified.
+//-----------------------------------------------------------------------------------------------------------------------------
+// Class Name			: UInfluentiableThroughChoice
+// Author				: Nikodem Hamrol
+// Classes				: UInterface
+// Purpose				: An Interface to allow impact on actors from choice selected.
+//-----------------------------------------------------------------------------------------------------------------------------
 UINTERFACE(MinimalAPI)
 class UInfluentiableThroughChoice : public UInterface
 {
@@ -22,9 +27,20 @@ class THEMESSENGER_API IInfluentiableThroughChoice
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: OnImpactDialogue( const FName& krnDialogueID )
+	// Author			: Nikodem Hamrol
+	// Parameter		: krnDialogueID - The new dialogue ID to pass to the character.
+	// Purpose			: To change the dialogue based on choice selected.
+	//----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION( Category = "Choice Selected", BlueprintNativeEvent, BlueprintCallable )
 		void OnImpactDialogue( const FName& krnDialogueID );
 
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: OnImpactActor()
+	// Author			: Nikodem Hamrol
+	// Purpose			: To set a unique impact of the actor on choice selected.
+	//----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION( Category = "Choice Selected", BlueprintNativeEvent, BlueprintCallable )
 		void OnImpactActor();
 };

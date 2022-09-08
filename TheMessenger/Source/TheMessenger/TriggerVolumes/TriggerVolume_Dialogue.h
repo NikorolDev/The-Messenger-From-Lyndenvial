@@ -11,9 +11,12 @@
 class ADialogueManager;
 class ALevelManager;
 
-/**
- * 
- */
+//-----------------------------------------------------------------------------------------------------------------------------
+// Class Name			: ATriggerVolume_Dialogue
+// Author				: Nikodem Hamrol
+// Classes Inherited	: ATriggerVolume_Base
+// Purpose				: This class is responsible for dialogues that supports ambient and sequence dialogues.
+//----------------------------------------------------------------------------------------------------------------------------
 UCLASS()
 class THEMESSENGER_API ATriggerVolume_Dialogue : public ATriggerVolume_Base
 {

@@ -12,68 +12,6 @@
 #include "TheMessenger/Endings/EndingManager.h"
 #include "TheMessenger/Objectives/HintsManager.h"
 
-void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
-{
-	SetVisibility( ESlateVisibility::Hidden );
-	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
-	m_pcPlayerController->bShowMouseCursor = false;
-
-	// Create a temporary struct of the impact from the choice chosen. This is to minimise the search in the array.
-	FStructChoiceProperties* ChoiceSelected = &m_pfsChoices->ChoiceBranches[ iBranchID ];
-
-	// Set the input mode to be game only
-
-	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
-
-	int iImpactedActors = ChoiceSelected->ChoiceImpactProperties.Num();
-
-	if( iImpactedActors > 0 )
-	{
-		for( int iImpactedActorID = 0; iImpactedActorID < iImpactedActors; ++iImpactedActorID )
-		{
-			FChoiceImpactProperties* impactProperties = &ChoiceSelected->ChoiceImpactProperties[ iImpactedActorID ];
-
-			if( impactProperties->ChoiceInfluencedCharacter )
-			{
-				impactProperties->ChoiceInfluencedCharacter->OnImpactDialogue_Implementation( impactProperties->NewDialogueID );
-			}
-
-			if( impactProperties->ChoiceInfluencedActor )
-			{
-				IInfluentiableThroughChoice::Execute_OnImpactActor( impactProperties->ChoiceInfluencedActor.GetObject() );
-
-				//IInfluentiableThroughChoice test = Cast<IInfluentiableThroughChoice>(impactProperties->ChoiceInfluencedActor);
-				//IInfluentiableThroughChoice test = impactProperties->ChoiceInfluencedActor.GetInterface();
-				//impactProperties->ChoiceInfluencedActor
-			}
-
-			//mimpactProperties->ChoiceIDWithHiddenChoices
-		}
-	}
-
-	if( !ChoiceSelected->HintID.IsNone() )
-	{
-		m_pcHintsManager->SetHint( ChoiceSelected->HintID );
-	}
-
-	if( ChoiceSelected->TriggerEnding )
-	{
-		m_pcEndingManager->TriggerEnding( ChoiceSelected->EndingID );
-	}
-
-	for( int iChoiceBranch = 0; iChoiceBranch < m_aChoiceWidgets.Num(); ++iChoiceBranch )
-	{
-		m_aChoiceWidgets[ iChoiceBranch ]->SetVisibility( ESlateVisibility::Collapsed );
-	}
-	//
-	//// Check if the character affected is not nullptr to properly set the impact 
-	//if( ChoiceSelected->ChoiceImpactProperties.CharacterAffected != nullptr )
-	//{
-	//	// Set the new dialogue ID for the affected character.
-	//	//m_pcBranchManager->SetNewDialogueID( &ChoiceSelected->ChoiceImpactProperties );
-	//	ChoiceSelected->ChoiceImpactProperties.CharacterAffected->SetDialogueID( ChoiceSelected->ChoiceImpactProperties.NewDialogueID );
-	//}
-}
 
 void UChoiceSelectionWidget::NativeConstruct()
 {
@@ -94,10 +32,11 @@ void UChoiceSelectionWidget::NativeConstruct()
 		ChoiceBox->AddChildToVerticalBox( m_aChoiceWidgets[ i ] );
 	}
 
-	//m_pcBranchManager = Cast<ABranchManager>( UGameplayStatics::GetActorOfClass( GetWorld(), ABranchManager::StaticClass() ) );
-
+	// Get the Ending manager to set an ending. Get the hints manager to display the hint after dialogue finishes.
 	m_pcEndingManager		= Cast<AEndingManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AEndingManager::StaticClass() ) );
 	m_pcHintsManager		= Cast<AHintsManager>( UGameplayStatics::GetActorOfClass( GetWorld(), AHintsManager::StaticClass() ) );
+
+	// Get the player controller to set the input mode when selecting choices.
 	m_pcPlayerController	= UGameplayStatics::GetPlayerController( GetWorld(), 0 );
 
 	// Hide the widget as no choice scenario is active.
@@ -115,25 +54,33 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 		// Create a temporary choice properties struct to be set for each selection
 		FStructChoiceProperties& ChoiceProperties = m_pfsChoices->ChoiceBranches[ iChoiceBranch ];
 
-		m_aChoiceWidgets[iChoiceBranch]->SetButtonText(iChoiceBranch, ChoiceProperties.ChoiceDisplayText, ChoiceProperties.DialogueID);
+		// Set the button text, by passing the choice it represents and the choice text.
+		m_aChoiceWidgets[ iChoiceBranch ]->SetButtonText( iChoiceBranch, ChoiceProperties.ChoiceDisplayText );
 
+		// Switch based on the choice type.
 		switch( ChoiceProperties.eChoiceType )
 		{
+			// When choice is hidden.
 			case EChoiceType::Hidden:
 			{
+				// Collapse the choice.
 				m_aChoiceWidgets[ iChoiceBranch ]->SetVisibility( ESlateVisibility::Collapsed );
 				break;
 			}
 
+			// On main choice
 			case EChoiceType::Main:
 			{
+				// Set colour of the text.
 				m_aChoiceWidgets[ iChoiceBranch ]->SetTextColour( m_afsChoiceTextColours[ 0 ] );
 				break;
 			}
 
+			// On optional and exit choices
 			case EChoiceType::Optional:
 			case EChoiceType::Exit:
 			{
+				// Set colour of the text.
 				m_aChoiceWidgets[ iChoiceBranch ]->SetTextColour( m_afsChoiceTextColours[ 1 ] );
 				break;
 			}
@@ -145,6 +92,65 @@ void UChoiceSelectionWidget::CreateChoices( FStructChoiceBranches* pfsChoiceBran
 	m_pcPlayerController->bShowMouseCursor = true;
 }
 
-void UChoiceSelectionWidget::SetChoiceManager( AChoiceManager* krcChoiceManager )		{ m_pcChoiceManager = krcChoiceManager; }
+void UChoiceSelectionWidget::OnChoiceSelected( int iBranchID )
+{
+	// Hide the widget and set input mode to game only to hide the mouse cursor.
+	SetVisibility( ESlateVisibility::Hidden );
+	m_pcPlayerController->SetInputMode( FInputModeGameOnly() );
+	m_pcPlayerController->bShowMouseCursor = false;
+
+	// Create a temporary struct of the impact from the choice chosen. This is to minimise the search in the array.
+	FStructChoiceProperties* ChoiceSelected = &m_pfsChoices->ChoiceBranches[ iBranchID ];
+
+	// Initialise the dialogue.
+	m_pcDialogueManager->InitialiseDialogueSequence( ChoiceSelected->DialogueID );
+
+	// Get the number of actors that got impacted.
+	int iImpactedActors = ChoiceSelected->ChoiceImpactProperties.Num();
+
+	// Check if there's more than one actor impacted.
+	if( iImpactedActors > 0 )
+	{
+		// Loop through all impacted actors.
+		for( int iImpactedActorID = 0; iImpactedActorID < iImpactedActors; ++iImpactedActorID )
+		{
+			// Get impact properties form the choice selected that is currently in the loop.
+			FChoiceImpactProperties* impactProperties = &ChoiceSelected->ChoiceImpactProperties[ iImpactedActorID ];
+
+			// Check if there are any characters influenced.
+			if( impactProperties->ChoiceInfluencedCharacter )
+			{
+				// Impact the dialogue, which will set to a new dialogue.
+				impactProperties->ChoiceInfluencedCharacter->OnImpactDialogue_Implementation( impactProperties->NewDialogueID );
+			}
+
+			// Check if there are any any actors influenced
+			if( impactProperties->ChoiceInfluencedActor )
+			{
+				// Using the influentiable through choice interface execute on imapct actor. Get the object of the actor to do the execution.
+				IInfluentiableThroughChoice::Execute_OnImpactActor( impactProperties->ChoiceInfluencedActor.GetObject() );
+			}
+		}
+	}
+
+	// If there is a hint ID set.
+	if( !ChoiceSelected->HintID.IsNone() )
+	{
+		// Set hint passing throught the hint ID.
+		m_pcHintsManager->SetHint( ChoiceSelected->HintID );
+	}
+
+	// If the choice triggers an ending. Trigger the ending specified and apps the ID of that ending.
+	if( ChoiceSelected->TriggerEnding )
+	{
+		m_pcEndingManager->TriggerEnding( ChoiceSelected->EndingID );
+	}
+
+	// Loop through all the choice widget and collapse them so no previous choices show up.
+	for( int iChoiceBranch = 0; iChoiceBranch < m_aChoiceWidgets.Num(); ++iChoiceBranch )
+	{
+		m_aChoiceWidgets[ iChoiceBranch ]->SetVisibility( ESlateVisibility::Collapsed );
+	}
+}
 
 void UChoiceSelectionWidget::SetDialogueManager( ADialogueManager* pcDialogueManager )	{ m_pcDialogueManager = pcDialogueManager; }

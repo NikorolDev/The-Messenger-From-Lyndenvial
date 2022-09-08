@@ -83,5 +83,11 @@ public:
 	//----------------------------------------------------------------------------------------------------------------------------
 	ALevelManager& GetLevelManager() const;
 
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: GetTriggerBox()
+	// Author			: Nikodem Hamrol
+	// Returns			: Gets the box collider to enable collision, which is what the beggar class used it for.
+	// Purpose			: The box component that is used as a trigger.
+	//----------------------------------------------------------------------------------------------------------------------------
 	UBoxComponent& GetTriggerBox() const;
 };

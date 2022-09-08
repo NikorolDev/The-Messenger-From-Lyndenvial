@@ -12,7 +12,6 @@ class APlayerController;
 class UVerticalBox;
 
 // Forward class declarations (Game)
-class AChoiceManager;
 class ADialogueManager;
 class AEndingManager;
 class AHintsManager;
@@ -31,14 +30,13 @@ class THEMESSENGER_API UChoiceSelectionWidget : public UUserWidget
 	GENERATED_BODY()
 	
 private:
-
-	AChoiceManager*		m_pcChoiceManager;
-
 	// The dialogue manager needed to continue the dialogue after the choice was made.
 	ADialogueManager*		m_pcDialogueManager;
 
+	// The ending manager needed to set the ending of the game.
 	AEndingManager*			m_pcEndingManager;
 
+	// The hint manager needed to set the hints in the game.
 	AHintsManager*			m_pcHintsManager;
 
 	// The player controller needed to toggle cursor visibility and to toggle input mode from UI to Game.
@@ -65,7 +63,7 @@ private:
 		void OnChoiceSelected( int iBranchID );
 
 protected:
-
+	// The array of colours for the choice text.
 	UPROPERTY( Category = "Properties|Text Colour", EditDefaultsOnly, BlueprintReadOnly, meta = ( DisplayName = "Choice Text Colours" ) )
 		TArray<FLinearColor> m_afsChoiceTextColours;
 
@@ -89,9 +87,6 @@ public:
 	// Purpose			: This function will create choices based on the choice ID that was set in the choice manager.
 	//-----------------------------------------------------------------------------------------------------------------------------
 	void CreateChoices( FStructChoiceBranches* pfsChoiceBranches );
-
-
-	void SetChoiceManager( AChoiceManager* krcChoiceManager );
 
 	//-----------------------------------------------------------------------------------------------------------------------------
 	// Function Name	: SetDialogueManager(ADialogueManager* pcDialogueManager)

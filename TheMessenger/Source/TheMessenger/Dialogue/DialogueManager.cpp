@@ -53,7 +53,6 @@ void ADialogueManager::InitialiseDialogueSequence( const FName& rnDialogueID )
 	{
 		// If so, clear the timer handle as it will not trigger events happening after the dialogue is finished.
 		GetWorldTimerManager().ClearTimer( m_fsTimerHandleDialogueDuration );
-		//m_pfsDialogueSequence->DialogueSequence
 	}
 
 	// Reset the dialogue ID to 0 to get the first dialogue term in the sequence.
@@ -68,7 +67,6 @@ void ADialogueManager::InitialiseDialogueSequence( const FName& rnDialogueID )
 
 	// Now set the dialogue term to play it.
 	SetDialogueTerm();
-
 }
 
 void ADialogueManager::PlayDialogueTerm()
@@ -88,19 +86,23 @@ void ADialogueManager::SetDialogueTerm()
 		// Create an instance of dialogue properties struct.
 		FStructDialogueProperties* dialogueTerm = &m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID ];
 
+		// Chekc if the dialogue term has a character to speak set.
 		if( dialogueTerm->CharacterToSpeak )
 		{
-			//m_bIsAmbientDialoguePlaying = true;
-
+			// Check if there is a villager currently speaking.
 			if( m_pcCurrentVillagerSpeaking )
 			{
+				// Hide the dialogue from that villager.
 				m_pcCurrentVillagerSpeaking->GetCharatcerOverHead().HideDialogue();
 			}
 
+			// Set the new villager to speak
 			m_pcCurrentVillagerSpeaking = dialogueTerm->CharacterToSpeak;
 
+			// Check if audio is set.
 			if( dialogueTerm->DialogueAudio )
 			{
+				// So it can get the duration and then play ambient dialogue sequence.
 				m_fDialogueTermTime = dialogueTerm->DialogueAudio->GetDuration();
 				dialogueTerm->CharacterToSpeak->PlayAmbientDialogueSequence( dialogueTerm->DialogueText, dialogueTerm->DialogueAudio );
 			}
@@ -110,6 +112,7 @@ void ADialogueManager::SetDialogueTerm()
 			// Check if the dialogue text is not empty.
 			if( !dialogueTerm->DialogueText.IsEmpty() )
 			{
+				// Display the dialogue text passing over the dialogue text and character name.
 				m_pcDialogueWidgetHUD->DisplayText( dialogueTerm->CharacterName, dialogueTerm->DialogueText );
 			}
 
@@ -143,22 +146,10 @@ void ADialogueManager::SetDialogueTerm()
 		}
 		else // If a choice is not required for this sequence.
 		{
-			//AVillager_Base* pcVillager = nullptr;
-			//
-			//if( m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID - 1 ].CharacterToSpeak != nullptr ||
-			//	m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID ].CharacterToSpeak != nullptr )
-			//{
-			//	pcVillager = m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID - 1 ].CharacterToSpeak;
-			//}
-
 			// Hide the dialogue widget and now the manager is ready to reintialised next dialogue.
 			m_pcDialogueWidgetHUD->HideDialogue();
 
-			//if( pcVillager )
-			//{
-			//	m_pfsDialogueSequence->DialogueSequence[ m_iDialogueID ].CharacterToSpeak->OnDialogueFinished();
-			//}
-
+			// Broadcast the event, which will be retrieved by some actors, but primarily the player to unlock movement.
 			DialogueFinished.Broadcast();
 		}
 	}

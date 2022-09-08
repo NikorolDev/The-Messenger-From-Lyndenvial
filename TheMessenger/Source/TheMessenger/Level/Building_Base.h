@@ -8,25 +8,43 @@
 #include "TheMessenger/Characters/InfluentiableThroughChoice.h"
 #include "Building_Base.generated.h"
 
+// Forward class Declarations (Engine)
 class UStaticMeshComponent;
 
+//-----------------------------------------------------------------------------------------------------------------------------
+// Class Name			: ADialogueManager
+// Author				: Nikodem Hamrol
+// Classes Inherited	: AActor, IInfluentiableThroughChoice
+// Purpose				: This class holds just the functionality to change on time type or on day number for Blueprint actors.
+//-----------------------------------------------------------------------------------------------------------------------------
 UCLASS()
 class THEMESSENGER_API ABuilding_Base : public AActor, public IInfluentiableThroughChoice
 {
 	GENERATED_BODY()
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 public:	
-	// Sets default values for this actor's properties
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Constructor Name	: ADialogueManager()
+	// Author			: Nikodem Hamrol
+	// Notes			: Sets up the components and default values.
+	//----------------------------------------------------------------------------------------------------------------------------
 	ABuilding_Base();
 
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: ChangeOnTimeType( EDayTimeType eDayTimeType )
+	// Author			: Nikodem Hamrol
+	// Purpose			: To change on time type, mainly used on lampposts.
+	// Parameters		: eDayTimeType - The time type used to change appearance, like turning lights on.
+	//----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION( BlueprintImplementableEvent, BlueprintCallable )
-		void ChangeOnTimeType(EDayTimeType eDayTimeType);
-		void ChangeOnTimeType_Implementation( EDayTimeType eDayTimeType );
+		void ChangeOnTimeType( EDayTimeType eDayTimeType );
 
+	//----------------------------------------------------------------------------------------------------------------------------
+	// Function Name	: ChangeOnDayNumber( int iDayID )
+	// Author			: Nikodem Hamrol
+	// Purpose			: To change on day ID.
+	// Parameters		: iDayID - The desired day to change on.
+	//----------------------------------------------------------------------------------------------------------------------------
 	UFUNCTION( BlueprintImplementableEvent, BlueprintCallable )
 		void ChangeOnDayNumber( int iDayID );
 };
